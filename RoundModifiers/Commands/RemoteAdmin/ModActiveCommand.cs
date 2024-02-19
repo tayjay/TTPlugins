@@ -1,8 +1,8 @@
 ﻿using System;
 using CommandSystem;
-using TayTaySCPSL.Handlers;
+using RoundModifiers.API;
 
-namespace TayTaySCPSL.Commands
+namespace RoundModifiers.Commands.RemoteAdmin
 {
     public class ModActiveCommand : ICommand
     {
@@ -15,9 +15,9 @@ namespace TayTaySCPSL.Commands
             }
 
             response = "Modifiers: ";
-            foreach (RoundModifiers modifier in Plugin.Instance.RoundManager.CurrentRoundModifiers)
+            foreach (ModInfo modifier in RoundModifiers.Instance.RoundManager.ActiveModifiers)
             {
-                response += $"{modifier}, ";
+                response += $"{modifier.Name}, ";
             }
 
             response = response.Remove(response.Length - 2);

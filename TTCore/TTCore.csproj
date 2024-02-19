@@ -12,6 +12,7 @@
         <AssemblyName>TTCore</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,8 +34,14 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="0Harmony">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\0Harmony.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>..\..\REFERENCE\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
         <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\CommandSystem.Core.dll</HintPath>
@@ -60,27 +67,62 @@
         <Reference Include="Exiled.Permissions, Version=8.8.0.0, Culture=neutral, processorArchitecture=Amd64">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\Exiled.Permissions.dll</HintPath>
         </Reference>
+        <Reference Include="Mirror">
+          <HintPath>..\..\REFERENCE\Mirror.dll</HintPath>
+        </Reference>
         <Reference Include="NorthwoodLib, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\NorthwoodLib.dll</HintPath>
         </Reference>
         <Reference Include="PluginAPI, Version=13.1.2.0, Culture=neutral, processorArchitecture=Amd64">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\PluginAPI.dll</HintPath>
         </Reference>
+        <Reference Include="Pooling">
+          <HintPath>..\..\REFERENCE\Pooling.dll</HintPath>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AIModule">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\UnityEngine.AIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\..\REFERENCE\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+          <HintPath>..\..\REFERENCE\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
         <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="API\IRegistered.cs" />
+        <Compile Include="Commands\RemoteAdmin\Npc\NpcCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\Npc\RemoveNpc.cs" />
+        <Compile Include="Commands\RemoteAdmin\Npc\SpawnNpc.cs" />
+        <Compile Include="Commands\RemoteAdmin\ScaleCommand.cs" />
+        <Compile Include="Extensions\FirearmExtensions.cs" />
+        <Compile Include="Extensions\PlayerExtensions.cs" />
+        <Compile Include="Extensions\QuaternionExtensions.cs" />
+        <Compile Include="Handlers\NpcManager.cs" />
+        <Compile Include="Handlers\PlayerSizeManager.cs" />
+        <Compile Include="HUDs\HUD.cs" />
+        <Compile Include="HUDs\HUDLayout.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TTConfig.cs" />
         <Compile Include="TTCore.cs" />
+        <Compile Include="Utilities\TransformUtils.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Commands\Client\" />
+      <Folder Include="Patches\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

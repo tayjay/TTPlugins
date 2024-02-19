@@ -2,7 +2,7 @@
 using CommandSystem;
 using Exiled.Permissions.Extensions;
 
-namespace TayTaySCPSL.Commands
+namespace RoundModifiers.Commands.RemoteAdmin
 {
     public class ModClearCommand : ICommand
     {
@@ -16,7 +16,7 @@ namespace TayTaySCPSL.Commands
                     return false;
                 }
 
-                Plugin.Instance.RoundManager.ResetRoundModifier();
+                RoundModifiers.Instance.RoundManager.ClearRoundModifiers();
                 response = $"Removed all round modifiers.";
                 return true;
             }

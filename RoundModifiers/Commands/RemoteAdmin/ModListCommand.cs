@@ -1,9 +1,9 @@
 ﻿
 using System;
 using CommandSystem;
-using TayTaySCPSL.Handlers;
+using RoundModifiers.API;
 
-namespace TayTaySCPSL.Commands
+namespace RoundModifiers.Commands.RemoteAdmin
 {
     public class ModListCommand : ICommand
     {
@@ -17,9 +17,9 @@ namespace TayTaySCPSL.Commands
 
             response = "All Modifiers: ";
             
-            foreach (RoundModifiers modifier in Enum.GetValues(typeof(RoundModifiers)))
+            foreach (ModInfo modifier in RoundModifiers.Instance.Modifiers.Keys)
             {
-                response += $"\n{modifier}, ";
+                response += $"\n{modifier.Name}, ";
             }
 
             response = response.Remove(response.Length - 2);

@@ -1,7 +1,7 @@
 ﻿using Exiled.Events.EventArgs.Player;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
-namespace RoundModifiers.Modifiers.LevelUp.XP
+namespace RoundModifiers.Modifiers.LevelUp.XPs
 {
     public class UsedItemXP : XP, IUsedItemEvent
     {

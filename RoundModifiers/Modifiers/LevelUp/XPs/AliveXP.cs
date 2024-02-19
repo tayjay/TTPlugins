@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
-namespace RoundModifiers.Modifiers.LevelUp.XP
+namespace RoundModifiers.Modifiers.LevelUp.XPs
 {
     public class AliveXP : XP, IGameTickEvent
     {

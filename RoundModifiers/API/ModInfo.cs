@@ -1,10 +1,17 @@
 ﻿namespace RoundModifiers.API
 {
-    public struct IModInfo
+    public struct ModInfo
     {
-        public string Name { get; }
-        public string Description { get; }
-        public string[] Aliases { get; }
-        public ImpactLevel Impact { get; }
+        public string Name { get; set;  }
+        public string Description { get;set; }
+        public string[] Aliases { get; set;  }
+        public ImpactLevel Impact { get; set;  }
+        
+        public bool Equals(ModInfo other)
+        {
+            return Name == other.Name;
+        }
+
+        public bool MustPreload { get; set; }
     }
 }

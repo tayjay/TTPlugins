@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
 
-namespace RoundModifiers.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public abstract class Boost
     {

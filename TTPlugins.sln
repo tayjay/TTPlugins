@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTPlugins", "TTPlugins\TTPlugins.csproj", "{4F1E5BD4-F589-41C1-BDE0-D6A7B39F47D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTCore", "TTCore\TTCore.csproj", "{2E1376D2-D773-4E5A-9B12-D81172B75063}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RoundModifiers", "RoundModifiers\RoundModifiers.csproj", "{12B802DA-A9DC-4724-9E59-998857812D9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTAddons", "TTAddons\TTAddons.csproj", "{CF280D4E-E8E7-4E6B-B11A-69714EF3B69B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -8,9 +12,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4F1E5BD4-F589-41C1-BDE0-D6A7B39F47D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F1E5BD4-F589-41C1-BDE0-D6A7B39F47D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F1E5BD4-F589-41C1-BDE0-D6A7B39F47D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F1E5BD4-F589-41C1-BDE0-D6A7B39F47D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E1376D2-D773-4E5A-9B12-D81172B75063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E1376D2-D773-4E5A-9B12-D81172B75063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E1376D2-D773-4E5A-9B12-D81172B75063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E1376D2-D773-4E5A-9B12-D81172B75063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12B802DA-A9DC-4724-9E59-998857812D9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B802DA-A9DC-4724-9E59-998857812D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B802DA-A9DC-4724-9E59-998857812D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B802DA-A9DC-4724-9E59-998857812D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF280D4E-E8E7-4E6B-B11A-69714EF3B69B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF280D4E-E8E7-4E6B-B11A-69714EF3B69B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF280D4E-E8E7-4E6B-B11A-69714EF3B69B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF280D4E-E8E7-4E6B-B11A-69714EF3B69B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

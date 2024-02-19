@@ -1,10 +1,11 @@
 ﻿
 using System;
+using System.Collections.Generic;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using TayTaySCPSL.Handlers;
+using RoundModifiers.API;
 
-namespace TayTaySCPSL.Commands
+namespace RoundModifiers.Commands.RemoteAdmin
 {
     public class ModSetCommand : ICommand
     {
@@ -12,23 +13,29 @@ namespace TayTaySCPSL.Commands
         {
             if(sender.CheckPermission("RoundEvents") || sender.CheckPermission("modifier") || sender.CheckPermission("RoundEvents*"))
             {
-                if (arguments.Count != 1)
+                if (arguments.Count < 1)
                 {
                     response = "Usage: mod set <modifier>";
                     return false;
                 }
-
-                if (Enum.TryParse(arguments.At(0), out RoundModifiers modifier))
+                
+                List<ModInfo> modInfo = new List<ModInfo>();
+                
+                foreach (string strMod in arguments)
                 {
-                    Plugin.Instance.RoundManager.SetRoundModifier(modifier);
-                    response = $"Set modifier to {modifier}.";
-                    return true;
+                    if(RoundModifiers.Instance.TryGetModifier(strMod, out Modifier mod1))
+                    {
+                        modInfo.Add(mod1.ModInfo);
+                    }
                 }
-                else
+                RoundModifiers.Instance.RoundManager.SetRoundModifiers(modInfo);
+                response = $"Set modifier(s) to: ";
+                foreach (ModInfo mod in modInfo)
                 {
-                    response = "Invalid modifier.";
-                    return false;
+                    response += $"{mod.Name}, ";
                 }
+                return true;
+                
             }
             else
             {

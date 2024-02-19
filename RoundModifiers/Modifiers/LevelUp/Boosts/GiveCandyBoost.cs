@@ -1,7 +1,7 @@
 ﻿using Exiled.API.Features;
 using InventorySystem.Items.Usables.Scp330;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public class GiveCandyBoost : Boost
     {

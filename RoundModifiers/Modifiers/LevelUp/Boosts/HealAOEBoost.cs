@@ -1,8 +1,8 @@
 ﻿using Exiled.API.Features;
-using TayTaySCPSL.Modifiers.LevelUp.Interfaces;
+using RoundModifiers.Modifiers.LevelUp.Interfaces;
 using UnityEngine;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public class HealAOEBoost : Boost, IGameTickEvent
     {

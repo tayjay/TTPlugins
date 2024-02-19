@@ -2,9 +2,8 @@
 using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using TayTaySCPSL.Modifiers.LevelUp.Interfaces;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public class StatusEffectBoost : Boost
     {

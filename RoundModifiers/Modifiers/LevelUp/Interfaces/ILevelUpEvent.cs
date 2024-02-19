@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Interfaces
+namespace RoundModifiers.Modifiers.LevelUp.Interfaces
 {
     public interface ILevelUpEvent
     {

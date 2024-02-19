@@ -1,4 +1,4 @@
-﻿namespace TayTaySCPSL.Modifiers.LevelUp.Interfaces
+﻿namespace RoundModifiers.Modifiers.LevelUp.Interfaces
 {
     public interface IGameTickEvent
     {

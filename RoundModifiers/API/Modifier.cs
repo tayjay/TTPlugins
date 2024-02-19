@@ -1,17 +1,31 @@
-﻿namespace RoundModifiers.API
+﻿using TTCore.API;
+
+namespace RoundModifiers.API
 {
-    public interface IModifier
+    public abstract class Modifier :IRegistered
     {
-        void Register();
         
-        void Unregister();
+        protected abstract void RegisterModifier();
         
-        string Name { get; set; }
+        protected abstract void UnregisterModifier();
+
+
+        public void Register()
+        {
+            IsEnabled = true;
+            RegisterModifier();
+        }
+
+        public void Unregister()
+        {
+            if(!IsEnabled) return;
+            IsEnabled = false;
+            UnregisterModifier();
+        }
         
-        string Description { get; set; }
-        
-        ImpactLevel Impact { get; set; }
-        
+        public bool IsEnabled { get; private set; }
+
+        public abstract ModInfo ModInfo { get; }
     }
     public enum ImpactLevel
     {

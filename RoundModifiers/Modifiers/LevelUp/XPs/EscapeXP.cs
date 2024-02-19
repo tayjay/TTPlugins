@@ -4,9 +4,9 @@ using Exiled.Events.EventArgs.Player;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
 
-namespace RoundModifiers.Modifiers.LevelUp.XP
+namespace RoundModifiers.Modifiers.LevelUp.XPs
 {
-    public class EscapeXP : Modifiers.LevelUp.XP.XP, IEscapingEvent
+    public class EscapeXP : XP, IEscapingEvent
     {
         public List<uint> HasEscaped = new List<uint>();
         

@@ -1,9 +1,9 @@
 ﻿using System;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using TayTaySCPSL.Handlers;
+using RoundModifiers.API;
 
-namespace TayTaySCPSL.Commands
+namespace RoundModifiers.Commands.RemoteAdmin
 {
     public class ModAddCommand : ICommand
     {
@@ -17,9 +17,9 @@ namespace TayTaySCPSL.Commands
                     return false;
                 }
 
-                if (Enum.TryParse(arguments.At(0), out RoundModifiers modifier))
+                if (RoundModifiers.Instance.TryGetModifier(arguments.At(0), out Modifier modifier))
                 {
-                    Plugin.Instance.RoundManager.AddRoundModifier(modifier);
+                    RoundModifiers.Instance.RoundManager.AddRoundModifier(modifier.ModInfo);
                     response = $"Added modifier {modifier}.";
                     return true;
                 }

@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using TayTaySCPSL.Modifiers.LevelUp.Interfaces;
+using RoundModifiers.Modifiers.LevelUp.Interfaces;
 using UnityEngine;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     /**
      * When a player levels up, they will not be able to be insta-killed by any means.

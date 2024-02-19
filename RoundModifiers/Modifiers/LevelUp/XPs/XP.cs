@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 
-namespace RoundModifiers.Modifiers.LevelUp.XP
+namespace RoundModifiers.Modifiers.LevelUp.XPs
 {
     public abstract class XP
     {

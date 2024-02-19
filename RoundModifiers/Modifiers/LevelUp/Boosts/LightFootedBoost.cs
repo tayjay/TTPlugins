@@ -1,8 +1,9 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
-using TayTaySCPSL.Modifiers.LevelUp.Interfaces;
+using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Boost
+
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public class LightFootedBoost : Boost, IMakingNoiseEvent
     {

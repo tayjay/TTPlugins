@@ -6,7 +6,7 @@ using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using UnityEngine;
 
-namespace RoundModifiers.Handlers
+namespace TTCore.Handlers
 {
     public class PlayerSizeManager
     {

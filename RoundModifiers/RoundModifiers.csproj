@@ -33,8 +33,14 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="0Harmony">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\0Harmony.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>..\..\REFERENCE\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
         <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\CommandSystem.Core.dll</HintPath>
@@ -60,6 +66,9 @@
         <Reference Include="Exiled.Permissions, Version=8.8.0.0, Culture=neutral, processorArchitecture=Amd64">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\Exiled.Permissions.dll</HintPath>
         </Reference>
+        <Reference Include="Mirror">
+          <HintPath>..\..\REFERENCE\Mirror.dll</HintPath>
+        </Reference>
         <Reference Include="NorthwoodLib, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\NorthwoodLib.dll</HintPath>
         </Reference>
@@ -70,13 +79,99 @@
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
         <Reference Include="System.Xml"/>
+        <Reference Include="UnityEngine">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AIModule">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\UnityEngine.AIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\..\REFERENCE\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+          <HintPath>..\..\REFERENCE\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
         <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
           <HintPath>..\packages\EXILED.8.8.0\lib\net48\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="API\ModInfo.cs" />
+        <Compile Include="API\Modifier.cs" />
+        <Compile Include="Commands\Client\VoteCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModActiveCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModAddCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModClearCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModifierCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModListCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModNextCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModSetCommand.cs" />
         <Compile Include="Config.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Handlers\RoundManager.cs" />
+        <Compile Include="Modifiers\Blackout.cs" />
+        <Compile Include="Modifiers\FriendlyFire.cs" />
+        <Compile Include="Modifiers\Imposter.cs" />
+        <Compile Include="Modifiers\Insurrection.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\BecomeScpBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\Boost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\GiveCandyBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\GiveItemBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\HealAOEBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\LightFootedBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\NoInstaKillBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\StatusEffectBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\UpgradeKeycardBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\UpgradeWeaponBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\HUD\LevelUpHUDLayout.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IDiedEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IDyingEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IEscapingEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IEscapingPocketDimensionEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IGameTickEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IHandcuffingEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IHurtEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IHurtingEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\ILevelUpEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IMakingNoiseEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IUpgradingPlayerEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IUsedItemEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IUsingItemEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\LevelUp.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\AliveXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\DealDamageXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\DeathXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\EscapePocketDimensionXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\EscapeXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\ExploreZonesXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\HandcuffXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\Scp914UpgradingPlayerXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\UsedItemXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\XP.cs" />
+        <Compile Include="Modifiers\Medic.cs" />
+        <Compile Include="Modifiers\MicroHIV.cs" />
+        <Compile Include="Modifiers\MultiBall.cs" />
+        <Compile Include="Modifiers\NoDecontamination.cs" />
+        <Compile Include="Modifiers\NoKOS.cs" />
+        <Compile Include="Modifiers\NpScp914.cs" />
+        <Compile Include="Modifiers\Puppies.cs" />
+        <Compile Include="Modifiers\RadioSilent.cs" />
+        <Compile Include="Modifiers\Rainbow.cs" />
+        <Compile Include="Modifiers\RandomSpawnSize.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\Ability.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\ActivateNukeAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\AnnouncementAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\BlackoutAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\ChangeLightAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\ElevatorAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\LockDoorAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\LockdownRoomAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\Scp914Ability.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\TattleAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\TeslaGateAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\TouchRandomDoorAbility.cs" />
+        <Compile Include="Modifiers\RogueAI\RogueAI.cs" />
+        <Compile Include="Modifiers\Scp249.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="RoundModifiers.cs" />
     </ItemGroup>
     <ItemGroup>
@@ -87,6 +182,9 @@
         <Project>{2e1376d2-d773-4e5a-9b12-d81172b75063}</Project>
         <Name>TTCore</Name>
       </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Modifiers\CaptureTheFlag\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

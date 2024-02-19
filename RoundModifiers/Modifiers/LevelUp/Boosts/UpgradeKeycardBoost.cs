@@ -1,10 +1,8 @@
-﻿using Exiled.API.Extensions;
+﻿
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
-using InventorySystem;
-using InventorySystem.Items.Pickups;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public class UpgradeKeycardBoost : Boost
     {

@@ -3,7 +3,7 @@ using Exiled.API.Features;
 using PlayerRoles;
 using UnityEngine;
 
-namespace RoundModifiers.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public class BecomeScpBoost : Boost
     {

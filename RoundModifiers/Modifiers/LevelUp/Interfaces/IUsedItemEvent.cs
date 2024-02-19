@@ -1,6 +1,6 @@
 ﻿using Exiled.Events.EventArgs.Player;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Interfaces
+namespace RoundModifiers.Modifiers.LevelUp.Interfaces
 {
     public interface IUsedItemEvent
     {

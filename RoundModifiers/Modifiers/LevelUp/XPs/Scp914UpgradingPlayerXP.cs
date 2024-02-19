@@ -3,7 +3,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Scp914;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
-namespace RoundModifiers.Modifiers.LevelUp.XP
+namespace RoundModifiers.Modifiers.LevelUp.XPs
 {
     public class Scp914UpgradingPlayerXP : XP, IUpgradingPlayerEvent
     {

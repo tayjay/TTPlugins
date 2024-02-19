@@ -2,7 +2,7 @@
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 
-namespace TayTaySCPSL.Modifiers.LevelUp.Boost
+namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public class UpgradeWeaponBoost : Boost
     {

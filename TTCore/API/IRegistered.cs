@@ -2,6 +2,8 @@
 {
     public interface IRegistered
     {
+        void Register();
         
+        void Unregister();
     }
 }

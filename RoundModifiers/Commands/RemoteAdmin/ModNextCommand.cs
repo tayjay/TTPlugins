@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
-using TayTaySCPSL.Handlers;
+using RoundModifiers.API;
 
-namespace TayTaySCPSL.Commands
+namespace RoundModifiers.Commands.RemoteAdmin
 {
     public class ModNextCommand : ICommand
     {
@@ -17,27 +17,30 @@ namespace TayTaySCPSL.Commands
             }
             if (arguments.Count < 1)
             {
-                response = "Usage: mod next <modifier>";
+                response = "Usage: mod next <modifier>/clear";
                 return false;
             }
             if(arguments.At(0).ToLower() == "clear")
             {
-                Plugin.Instance.RoundManager.ClearNextRoundModifiers();
+                RoundModifiers.Instance.RoundManager.ClearNextRoundModifiers();
                 response = "Cleared modifiers for next round.";
                 return true;
             }
-            response = "Set modifiers for next round: \n";
-            List<RoundModifiers> modifiers = new List<RoundModifiers>();
+            List<ModInfo> modInfo = new List<ModInfo>();
+                
             foreach (string strMod in arguments)
             {
-                if(Enum.TryParse(strMod, out RoundModifiers modifier))
+                if(RoundModifiers.Instance.TryGetModifier(strMod, out Modifier mod1))
                 {
-                    response+= $"{modifier}, ";
-                    modifiers.Add(modifier);
+                    modInfo.Add(mod1.ModInfo);
                 }
             }
-            response = response.Remove(response.Length - 2);
-            Plugin.Instance.RoundManager.SetNextRoundModifiers(modifiers);
+            RoundModifiers.Instance.RoundManager.SetNextRoundModifiers(modInfo);
+            response = $"Set next round modifier(s) to: ";
+            foreach (ModInfo mod in modInfo)
+            {
+                response += $"{mod.Name}, ";
+            }
             return true;
         }
 

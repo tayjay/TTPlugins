@@ -1,8 +1,9 @@
 ﻿using System;
 using CommandSystem;
 
-namespace TTCore.Commands.RemoteAdmin
+namespace TTCore.Commands.RemoteAdmin.Npc
 {
+    [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class NpcCommand : ParentCommand
     {
         
@@ -13,7 +14,8 @@ namespace TTCore.Commands.RemoteAdmin
         
         public override void LoadGeneratedCommands()
         {
-            throw new NotImplementedException();
+            RegisterCommand(new SpawnNpc());
+            RegisterCommand(new RemoveNpc());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -22,8 +24,8 @@ namespace TTCore.Commands.RemoteAdmin
             return false;
         }
 
-        public override string Command { get; }
-        public override string[] Aliases { get; }
-        public override string Description { get; }
+        public override string Command { get; } = "npc";
+        public override string[] Aliases { get; } = new[] {"dummy", "bot"};
+        public override string Description { get; } = "Control the npcs.";
     }
 }
