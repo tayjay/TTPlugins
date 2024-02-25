@@ -1,13 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
+using PlayerRoles.PlayableScps.Scp079.Cameras;
 using RoundModifiers.API;
 using RoundModifiers.Modifiers.RogueAI.Abilities;
+using TTCore.Extensions;
+using TTCore.Utilities;
 using UnityEngine;
+using Camera = Exiled.API.Features.Camera;
 
 namespace RoundModifiers.Modifiers.RogueAI
 {
@@ -34,11 +41,12 @@ namespace RoundModifiers.Modifiers.RogueAI
         public Ability CurrentAbility = null;
         //Which side the AI is currently helping
         public Side CurrentSide = Side.None;
-        public CoroutineHandle AITickHandle;
+        public CoroutineHandle AITickHandle, FollowHandler;
+        public Npc npc;
+        public Scp079Role Scp079 => npc.Role as Scp079Role;
 
         public RogueAI()
         {
-            
             Abilities.Add(new LockDoorAbility());
             Abilities.Add(new LockDoorAbility());
             Abilities.Add(new LockDoorAbility());
@@ -67,6 +75,7 @@ namespace RoundModifiers.Modifiers.RogueAI
             
             Abilities.Add(new BlackoutAbility());
             Abilities.Add(new BlackoutAbility(Side.Scp, 7));
+            Abilities.Add(new ElevatorAbility());
         }
         
         public void OnRoundStart()
@@ -76,6 +85,8 @@ namespace RoundModifiers.Modifiers.RogueAI
             CurrentTick = 0;
             CurrentAbility = null;
             AITickHandle = Timing.RunCoroutine(AITick());
+            FollowHandler = Timing.RunCoroutine(FollowPlayer());
+            TTCore.TTCore.Instance.NpcManager.SpawnNpc("RogueAI", RoleTypeId.Scp079, Vector3.zero, out npc);
         }
 
         public IEnumerator<float> AITick()
@@ -117,6 +128,58 @@ namespace RoundModifiers.Modifiers.RogueAI
                 }
                 
                 yield return Timing.WaitForSeconds(1f);
+            }
+        }
+        
+        public IEnumerator<float> FollowPlayer()
+        {
+            Player target = null;
+            float lastUpdate = 0;
+            while (true)
+            {
+                if (npc == null)
+                {
+                    yield return Timing.WaitForSeconds(1f);
+                    continue;
+                }
+                if (Time.time - lastUpdate > 10f )
+                {
+                    lastUpdate = Time.time;
+                    target = Player.List.FirstOrDefault(x => x.Role.IsAlive && x.Role.Type!=RoleTypeId.Scp079);
+                    Log.Info("Looking for new target. "+target?.Nickname);
+                }
+
+                if (target == null)
+                {
+                    yield return Timing.WaitForSeconds(1f);
+                    continue;
+                }
+                Camera camera = target?.CurrentRoom.Cameras.FirstOrDefault();
+                if (camera != null)
+                {
+                    Scp079.Camera = camera;
+                }
+
+                try
+                {
+                    Log.Info("Starting to check for rotation.");
+                    Vector3 direction = target.Position - Scp079.CameraPosition;
+                    Quaternion quat = Quaternion.LookRotation(direction, Vector3.up);
+                    (ushort horizontal, ushort vertical) = quat.ToClientUShorts();
+                    npc.Rotation = quat;
+                    Scp079.Camera.Rotation = quat;
+                    Scp079.Camera.Transform.SetPositionAndRotation(Scp079.CameraPosition, quat);
+                    Scp079.Camera.Transform.rotation = quat;
+                    npc.ReferenceHub.PlayerCameraReference.rotation = quat;
+                    Scp079.CurrentCameraSync.CurrentCamera.HorizontalRotation = horizontal;
+                    Scp079.CurrentCameraSync.CurrentCamera.VerticalRotation = vertical;
+                    Log.Info("Finished rotation. "+Scp079.Camera.Rotation.eulerAngles+" in "+Scp079.Camera.Room.Type);
+                    
+                } catch (System.Exception e)
+                {
+                    Log.Error("Error rotating to target: "+e);
+                }
+                yield return Timing.WaitForSeconds(0.1f);
             }
         }
 
@@ -302,6 +365,7 @@ namespace RoundModifiers.Modifiers.RogueAI
             CurrentSide = Side.None;
             
             Timing.KillCoroutines(AITickHandle);
+            Timing.KillCoroutines(FollowHandler);
         }
 
         
@@ -309,8 +373,9 @@ namespace RoundModifiers.Modifiers.RogueAI
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "RogueAI",
+            FormattedName = "<color=red>Rogue AI</color>",
             Aliases = new []{"ai"},
-            Description = "An AI that will try to help or hinder the players based on the current game state.",
+            Description = "An AI that will try to help or hinder the players based on who is currently winning.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false
         };

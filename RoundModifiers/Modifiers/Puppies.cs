@@ -47,7 +47,9 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo
         {
             Name = "Puppies",
-            Description = "All SCPs are 939s",
+            FormattedName = "<color=red><size=85%>Puppies</size></color>",
+            Aliases = new []{"pup"},
+            Description = "All SCPs are mini 939s",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false
         };

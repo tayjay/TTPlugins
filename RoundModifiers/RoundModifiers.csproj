@@ -22,6 +22,7 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -152,7 +153,8 @@
         <Compile Include="Modifiers\MultiBall.cs" />
         <Compile Include="Modifiers\NoDecontamination.cs" />
         <Compile Include="Modifiers\NoKOS.cs" />
-        <Compile Include="Modifiers\NpScp914.cs" />
+        <Compile Include="Modifiers\NoScp914.cs" />
+        <Compile Include="Modifiers\PreBreach.cs" />
         <Compile Include="Modifiers\Puppies.cs" />
         <Compile Include="Modifiers\RadioSilent.cs" />
         <Compile Include="Modifiers\Rainbow.cs" />

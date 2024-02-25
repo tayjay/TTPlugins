@@ -105,6 +105,11 @@
         <Compile Include="Commands\RemoteAdmin\Npc\RemoveNpc.cs" />
         <Compile Include="Commands\RemoteAdmin\Npc\SpawnNpc.cs" />
         <Compile Include="Commands\RemoteAdmin\ScaleCommand.cs" />
+        <Compile Include="Components\AdminToyCollisionHandler.cs" />
+        <Compile Include="Components\ProjectileCollisionHandler.cs" />
+        <Compile Include="Events\EventArgs\AdminToyCollisionEventArgs.cs" />
+        <Compile Include="Events\EventArgs\Scp018BounceEventArgs.cs" />
+        <Compile Include="Events\Handlers\Custom.cs" />
         <Compile Include="Extensions\FirearmExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
         <Compile Include="Extensions\QuaternionExtensions.cs" />
@@ -116,6 +121,7 @@
         <Compile Include="TTConfig.cs" />
         <Compile Include="TTCore.cs" />
         <Compile Include="Utilities\TransformUtils.cs" />
+        <Compile Include="Utilities\Vector3Utils.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

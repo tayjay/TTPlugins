@@ -6,7 +6,7 @@ namespace RoundModifiers.Modifiers.RogueAI.Abilities
     public class ElevatorAbility : Ability
     {
         public Lift lift;
-        public ElevatorAbility(string name, string description, Side helpingSide, int aggressionLevel, int lifetime = 10) : base(name, description, helpingSide, aggressionLevel, lifetime)
+        public ElevatorAbility(int lifetime = 10) : base("Elevator", "Move an elevator", Side.None, 1, lifetime)
         {
         }
 
@@ -20,7 +20,7 @@ namespace RoundModifiers.Modifiers.RogueAI.Abilities
         public override void Start()
         {
             base.Start();
-            int destination = 0;
+            lift.TryStart((lift.CurrentLevel!=1)?1:0, true);
             
         }
         public override bool Update()

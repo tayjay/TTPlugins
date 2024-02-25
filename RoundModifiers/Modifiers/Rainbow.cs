@@ -78,11 +78,13 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "Rainbow",
+            FormattedName = "<color=red>R</color><color=orange>a</color><color=yellow>i</color><color=green>n</color><color=blue>b</color><color=purple>o</color><color=red>w</color>",
+            Aliases = new []{"colour"},
             Description = "The lights are changing colors!",
             Impact = ImpactLevel.Graphics,
             MustPreload = false
         };
-
+        
         /*public override string Name { get; } = "Rainbow";
         public override string Description { get; } = "The lights are changing colors!";
         public override string[] Aliases { get; } = {"rb"};

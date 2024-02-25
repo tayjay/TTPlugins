@@ -221,7 +221,10 @@ public class HUD
         {
             try
             {
-                HUD.GetHUD(player)?.ShowHint(text, duration);
+                if(HUD.TryGetHUD(player, out HUD hud))
+                    hud.ShowHint(text, duration);
+                else
+                    player.ShowHint(text, duration);
             } catch(Exception e)
             {
                 Log.Error("Error showing HUD hint: "+e);

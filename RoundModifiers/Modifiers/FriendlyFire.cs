@@ -37,6 +37,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "FriendlyFire",
+            FormattedName = "<color=green>Friendly Fire</color>",
             Aliases = new []{"ff"},
             Description = "Friendly fire is enabled.",
             Impact = ImpactLevel.MajorGameplay,

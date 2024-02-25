@@ -32,7 +32,7 @@ namespace RoundModifiers.Commands.RemoteAdmin
                 response = $"Set modifier(s) to: ";
                 foreach (ModInfo mod in modInfo)
                 {
-                    response += $"{mod.Name}, ";
+                    response += $"{mod.Name} {(mod.MustPreload?"(Must be preloaded)":"")}, ";
                 }
                 return true;
                 

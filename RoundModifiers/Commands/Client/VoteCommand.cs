@@ -11,6 +11,7 @@ namespace RoundModifiers.Commands.Client
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         { 
+            response = "";
             if(RoundModifiers.Instance.Config.IsEnabled==false)
             {
                 response = "Round Modifiers are disabled.";
@@ -24,15 +25,24 @@ namespace RoundModifiers.Commands.Client
 
             Player player = Player.Get(sender);
 
-            if (arguments.Count > 1)
+            if (arguments.Count == 0)
+            {
+                foreach(ModInfo mod in RoundModifiers.Instance.Modifiers.Keys)
+                {
+                    response += $"{mod.Name} - {mod.Description}\n";
+                }
+
+                return true;
+            }
+            else if (arguments.Count > 1)
             {
                 //a vote was specified
                 string selection = arguments.At(0).ToLower();
-                if (selection.Equals("none"))
+                if (selection.Equals("none") || selection.Equals("remove") || selection.Equals("clear"))
                 {
                     //remove vote
                     return RoundModifiers.Instance.RoundManager.RemoveVote(player, out response);
-                } else if (selection.Equals("random"))
+                } else if (selection.Equals("random") || selection.Equals("r"))
                 {
                     //random vote
                     return RoundModifiers.Instance.RoundManager.RandomVote(player, out response);

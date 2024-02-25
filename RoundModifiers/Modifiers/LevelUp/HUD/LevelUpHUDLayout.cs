@@ -17,7 +17,12 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
             XPNeeded = 0;
             ActivePerks = "";
         }
-        
+
+        public override bool ShouldDisplay(TTCore.HUDs.HUD hud)
+        {
+            return hud.Owner.Role.Team != Team.SCPs && hud.Owner.IsAlive;
+        }
+
         public override string BuildHUD()
         {
             /*

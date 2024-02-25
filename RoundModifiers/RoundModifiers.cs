@@ -67,10 +67,12 @@ namespace RoundModifiers
             AddModifier(new RandomSpawnSize());
             AddModifier(new Scp249());
             AddModifier(new MicroHIV());
-            AddModifier(new NpScp914());
+            AddModifier(new NoScp914());
             AddModifier(new NoKOS());
             AddModifier(new RadioSilent());
             AddModifier(new FriendlyFire());
+            AddModifier(new Medic());
+            
         }
         
         public void AddModifier(Modifier mod)
@@ -100,7 +102,7 @@ namespace RoundModifiers
                 {
                     modifier = Modifiers[mod];
                     return true;
-                } else if (!exact && mod.Name.StartsWith(name))
+                } else if (!exact && mod.Name.ToLower().StartsWith(name.ToLower()))
                 {
                     mods.Add(mod);
                 }

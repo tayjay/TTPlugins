@@ -25,6 +25,11 @@ public class HUDLayout
     {
         return DisplayingHint?.Text;
     }
+    
+    public virtual bool ShouldDisplay(HUD hud)
+    {
+        return true;
+    }
 
     public class StylizedString
     {

@@ -8,6 +8,7 @@ using MEC;
 using PlayerRoles;
 using Respawning;
 using RoundModifiers.API;
+using VoiceChat;
 
 namespace RoundModifiers.Modifiers
 {
@@ -178,6 +179,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "Imposter",
+            FormattedName = "<color=red>Imposter</color>",
             Aliases = new []{"imposter"},
             Description = "SCPs are disguised as humans.",
             Impact = ImpactLevel.MajorGameplay,
@@ -225,6 +227,7 @@ namespace RoundModifiers.Modifiers
                 revealTimer = 0;
                 Player.ShowHint("You have been disguised as a " + disguise.ToString());
                 Player.ChangeAppearance(disguise, playersToAffect:Player.List.Where(p=>p.Role.Team!=Team.SCPs));
+                Player.VoiceChannel = VoiceChatChannel.ScpChat;
             }
             
             public void Update()

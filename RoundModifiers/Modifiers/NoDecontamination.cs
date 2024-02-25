@@ -77,8 +77,9 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "NoDecontamination",
+            FormattedName = "<color=yellow>No Decontamination</color>",
             Aliases = new []{"nodecon", "decon"},
-            Description = "Disables decontamination and replaces it with a damaging effect.",
+            Description = "Disables decontamination and replaces it with a slow damaging effect.",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false
         };

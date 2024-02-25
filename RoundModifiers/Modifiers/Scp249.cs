@@ -6,6 +6,8 @@ using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
 using MEC;
 using RoundModifiers.API;
+using TTCore.Components;
+using TTCore.Events.EventArgs;
 using UnityEngine;
 
 namespace RoundModifiers.Modifiers
@@ -44,6 +46,8 @@ namespace RoundModifiers.Modifiers
                     Doors[i].Base.transform.eulerAngles*-1,
                 new Vector3(-1.4f, -2.5f, -0.005f), true);
                 DoorMarkers[i] = Primitive.Create(settings);
+                DoorMarkers[i].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[i].AdminToyBase);
+                Log.Info("Door in "+Doors[i].Room.Type);
             }
             LastPlaceTime = Time.time;
             _doorMovementCoroutine = Timing.RunCoroutine(MoveDoors());
@@ -78,8 +82,11 @@ namespace RoundModifiers.Modifiers
                         Doors[PlacingDoor].Base.transform.eulerAngles*-1,
                         new Vector3(-1.4f, -2.5f, -0.005f), true);
                     DoorMarkers[PlacingDoor] = Primitive.Create(settings);
+                    DoorMarkers[PlacingDoor].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[PlacingDoor].AdminToyBase);
                     LastPlaceTime = Time.time;
+                    Log.Info("New door in "+Doors[PlacingDoor].Room.Type);
                     PlacingDoor = (PlacingDoor + 1) % DoorCount;
+                    
                 }
                 
                 
@@ -97,11 +104,27 @@ namespace RoundModifiers.Modifiers
                 yield return Timing.WaitForOneFrame;
             }
         }
+
+        public void OnCollideDoor(AdminToyCollisionEventArgs ev)
+        {
+            if(ev.Player==null) return;
+
+            for (int i = 0; i < DoorCount; i++)
+            {
+                if(ev.AdminToy == DoorMarkers[i].AdminToyBase)
+                {
+                    Log.Info("Teleporting player");
+                    Door targetDoor = Doors[(i + 1) % DoorCount];
+                    ev.Player.Teleport(targetDoor.Position+Vector3.up+(targetDoor.Rotation*Vector3.forward));
+                    return;
+                }
+            }
+        }
         
         public IEnumerator<float> TeleportPlayers()
         {
             yield return Timing.WaitForSeconds(1f);
-            while (true)
+            /*while (true)
             {
                 yield return Timing.WaitForSeconds(RoundModifiers.Instance.Config.Scp249_TeleportCheckInterval);
                 foreach (Player player in Player.List)
@@ -116,10 +139,10 @@ namespace RoundModifiers.Modifiers
                     }
                     foreach (Door door in Doors)
                     {
-                        
+
                     }
                 }
-            }
+            }*/
         }
         
         
@@ -150,17 +173,20 @@ namespace RoundModifiers.Modifiers
         protected override void RegisterModifier()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+            TTCore.Events.Handlers.Custom.AdminToyCollision += OnCollideDoor;
         }
 
         protected override void UnregisterModifier()
         {
             Stop();
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+            TTCore.Events.Handlers.Custom.AdminToyCollision -= OnCollideDoor;
         }
 
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "SCP249",
+            FormattedName = "<color=purple>SCP-249</color>",
             Aliases = new []{"249"},
             Description = "SCP-249 is loose in the facility.",
             Impact = ImpactLevel.MajorGameplay,

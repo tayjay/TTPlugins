@@ -163,15 +163,20 @@ namespace RoundModifiers.Handlers
         //**********************************************
         public void AddRoundModifier(ModInfo modifier)
         {
-            if (!ActiveModifiers.Contains(modifier))
+            if (!ActiveModifiers.Contains(modifier) && RoundModifiers.Instance.TryGetModifier(modifier.Name, out Modifier mod, exact:true))
             {
+                mod.Register();
                 ActiveModifiers.Add(modifier);
             }
         }
         
         public void SetRoundModifiers(List<ModInfo> modifiers)
         {
-            ActiveModifiers = modifiers;
+            ClearRoundModifiers();
+            foreach(ModInfo mod in modifiers)
+            {
+                AddRoundModifier(mod);
+            }
         }
         
         public void RemoveRoundModifier(ModInfo modifier)
@@ -258,7 +263,7 @@ namespace RoundModifiers.Handlers
                 {
                     foreach(ModInfo modifier in ActiveModifiers)
                     {
-                        modString += $"'{modifier.Name}', ";
+                        modString += $"'{modifier.FormattedName}', ";
                     }
                     modString = modString.Remove(modString.Length - 2);
                 }
@@ -279,14 +284,14 @@ namespace RoundModifiers.Handlers
         
         public void OnRoundStart()
         {
-            Timing.KillCoroutines("LobbyModView");
+            Timing.KillCoroutines(LobbyModViewCoroutine);
             if (!RoundModifiers.Instance.Config.ShowRoundModInGame) return;
             string modString = "Modifiers:<size=75%> ";
             if (ActiveModifiers.Count > 0)
             {
                 foreach(ModInfo modifier in ActiveModifiers)
                 {
-                    modString += $"\n{modifier.Name}";
+                    modString += $"\n{modifier.FormattedName}";
                 }
             }
             else

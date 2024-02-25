@@ -40,6 +40,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "RadioSilent",
+            FormattedName = "<color=white>Radio Silent</color>",
             Aliases = new []{"noradio", "silentradio"},
             Description = "Players cannot use the radio.",
             Impact = ImpactLevel.MinorGameplay,

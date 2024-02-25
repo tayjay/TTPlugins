@@ -39,7 +39,7 @@ namespace RoundModifiers
         //RandomSpawnSize
         [Description("The minimum and maximum size of spawned items. Default is 0.5f and 2f")]
         public float RandomSpawnSize_SizeMin { get; set; } = 0.5f;
-        public float RandomSpawnSize_SizeMax { get; set; } = 2f;
+        public float RandomSpawnSize_SizeMax { get; set; } = 1.7f;
         
         
         //Rainbow

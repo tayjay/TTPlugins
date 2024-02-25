@@ -20,7 +20,12 @@ namespace RoundModifiers.Commands.RemoteAdmin
                 if (RoundModifiers.Instance.TryGetModifier(arguments.At(0), out Modifier modifier))
                 {
                     RoundModifiers.Instance.RoundManager.AddRoundModifier(modifier.ModInfo);
-                    response = $"Added modifier {modifier}.";
+                    if (modifier.ModInfo.MustPreload)
+                    {
+                        response = $"Added modifier {modifier.ModInfo.Name}. This modifier must be preloaded to work.";
+                        return false;
+                    }
+                    response = $"Added modifier {modifier.ModInfo.Name}.";
                     return true;
                 }
                 else

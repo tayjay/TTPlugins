@@ -3,6 +3,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Exiled.Permissions.Extensions;
 using InventorySystem.Items.Firearms.Modules;
+using PlayerRoles.Ragdolls;
 using UnityEngine;
 
 namespace TTCore.Extensions
@@ -28,7 +29,7 @@ namespace TTCore.Extensions
             if (!Physics.Raycast(new Ray(player.ReferenceHub.PlayerCameraReference.position + player.GameObject.transform.forward * 0.3f, player.ReferenceHub.PlayerCameraReference.forward), out RaycastHit hit, maxDistance))
                 return false;
 
-            target = Player.Get((hit.transform.gameObject));
+            target = Player.Get((hit.collider));
 
             return target != null;
         }
@@ -66,8 +67,21 @@ namespace TTCore.Extensions
             {
                 if (hit.transform == null)
                     continue;
+                Log.Info(hit.transform.name);
+                foreach(Ragdoll doll in Ragdoll.List)
+                {
+                    if (hit.transform.parent.gameObject.TryGetComponent(out BasicRagdoll checkDoll) && Ragdoll.Get(checkDoll) == doll)
+                    {
+                        ragdoll = doll;
+                        return true;
+                    }
+                    if (hit.transform.parent.gameObject == doll.GameObject)
+                    {
+                        ragdoll = doll;
+                        return true;
+                    }
+                }
                 
-                ragdoll = Ragdoll.List.Where(r => hit.transform.gameObject == r.GameObject).First();
                 if (ragdoll != null)
                     return true;
             }

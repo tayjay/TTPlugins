@@ -11,6 +11,11 @@ namespace TTCore.Handlers
         
         public List<Npc> Npcs;
         
+        public NpcManager()
+        {
+            Npcs = new List<Npc>();
+        }
+        
         public bool SpawnNpc(string npcName, RoleTypeId npcRole, Vector3 npcPosition, out Npc npc,
             bool roundIgnored = true)
         {
@@ -23,7 +28,6 @@ namespace TTCore.Handlers
             Timing.CallDelayed(1f, () =>
             {
                 newNpc.IsGodModeEnabled = true;
-                
             });
             npc = newNpc;
             Npcs.Add(npc);
@@ -35,6 +39,7 @@ namespace TTCore.Handlers
         {
             npc = Npc.Spawn(npcName, RoleTypeId.Spectator);
             npc.RemoteAdminPermissions = PlayerPermissions.AFKImmunity;
+            Npcs.Add(npc);
             return true;
         }
         

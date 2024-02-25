@@ -480,6 +480,7 @@ namespace RoundModifiers.Modifiers.LevelUp
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "LevelUp",
+            FormattedName = "<color=gold>Level Up</color>",
             Aliases = new []{"lvlup"},
             Description = "Players can level up and gain boosts.",
             Impact = ImpactLevel.MajorGameplay,

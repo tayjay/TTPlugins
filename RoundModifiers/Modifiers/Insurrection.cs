@@ -44,6 +44,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "Insurrection",
+            FormattedName = "<color=green>Insurrection</color>",
             Aliases = new []{"ins"},
             Description = "Facility Guards spawn as Chaos Insurgents.",
             Impact = ImpactLevel.MajorGameplay,

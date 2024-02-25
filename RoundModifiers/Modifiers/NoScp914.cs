@@ -3,7 +3,7 @@ using RoundModifiers.API;
 
 namespace RoundModifiers.Modifiers
 {
-    public class NpScp914 : Modifier
+    public class NoScp914 : Modifier
     {
         public void OnActivatingScp914(ActivatingEventArgs ev)
         {
@@ -24,6 +24,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "NoScp914",
+            FormattedName = "<color=purple>No Scp-914</color>",
             Aliases = new []{"914"},
             Description = "SCP-914 is out of order.",
             Impact = ImpactLevel.MinorGameplay,

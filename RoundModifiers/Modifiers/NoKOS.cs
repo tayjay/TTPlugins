@@ -45,8 +45,9 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "NoKOS",
+            FormattedName = "<color=green>No KOS</color>",
             Aliases = new[] { "kos" },
-            Description = "Class-D and Scientists cannot be killed unless holding an illegal item",
+            Description = "Class-D and Scientists cannot be killed and are arrested when shot, unless holding an illegal item",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false
         };
