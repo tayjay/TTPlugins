@@ -5,6 +5,7 @@ using Exiled.API.Features;
 using RoundModifiers.API;
 using RoundModifiers.Handlers;
 using RoundModifiers.Modifiers;
+using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.RogueAI;
 
 namespace RoundModifiers
@@ -60,6 +61,7 @@ namespace RoundModifiers
             AddModifier(new Rainbow());
             AddModifier(new Imposter());
             AddModifier(new RogueAI());
+            AddModifier(new LevelUp());
             AddModifier(new Insurrection());
             AddModifier(new MultiBall());
             AddModifier(new NoDecontamination());
@@ -71,7 +73,10 @@ namespace RoundModifiers
             AddModifier(new NoKOS());
             AddModifier(new RadioSilent());
             AddModifier(new FriendlyFire());
-            AddModifier(new Medic());
+            //AddModifier(new Medic());
+            AddModifier(new BoneZone());
+            AddModifier(new NoCassie());
+            //AddModifier(new Fun());
             
         }
         
@@ -143,6 +148,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(1, 0, 0);
+        public override System.Version Version { get; } = new System.Version(0, 1, 0);
     }
 }

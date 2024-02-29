@@ -63,16 +63,14 @@ namespace RoundModifiers.Modifiers.RogueAI
             Abilities.Add(new Scp914Ability());
             Abilities.Add(new Scp914Ability());
             Abilities.Add(new AnnouncementAbility(".", isNoisy:true, aggressionLevel: 4));
-            Abilities.Add(new AnnouncementAbility(".g1", isHeld: false));
+            Abilities.Add(new AnnouncementAbility(".g1", isHeld: true));
             Abilities.Add(new AnnouncementAbility(".g7", aggressionLevel: 4));
-            
             Abilities.Add(new AnnouncementAbility("XMAS_BOUNCYBALLS", aggressionLevel: 6));
             //Abilities.Add(new AnnouncementAbility("You think your safe . I see you there", aggressionLevel: 7));
             Abilities.Add(new AnnouncementAbility("security seriously needs to get their heads checked . psi", aggressionLevel: 8));
             Abilities.Add(new TattleAbility());
             Abilities.Add(new ActivateNukeAbility(Side.ChaosInsurgency));
             Abilities.Add(new ActivateNukeAbility(Side.Mtf));
-            
             Abilities.Add(new BlackoutAbility());
             Abilities.Add(new BlackoutAbility(Side.Scp, 7));
             Abilities.Add(new ElevatorAbility());
@@ -86,7 +84,7 @@ namespace RoundModifiers.Modifiers.RogueAI
             CurrentAbility = null;
             AITickHandle = Timing.RunCoroutine(AITick());
             FollowHandler = Timing.RunCoroutine(FollowPlayer());
-            TTCore.TTCore.Instance.NpcManager.SpawnNpc("RogueAI", RoleTypeId.Scp079, Vector3.zero, out npc);
+            //TTCore.TTCore.Instance.NpcManager.SpawnNpc("RogueAI", RoleTypeId.Scp079, Vector3.zero, out npc);
         }
 
         public IEnumerator<float> AITick()

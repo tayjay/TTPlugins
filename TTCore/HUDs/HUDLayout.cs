@@ -26,7 +26,7 @@ public class HUDLayout
         return DisplayingHint?.Text;
     }
     
-    public virtual bool ShouldDisplay(HUD hud)
+    public virtual bool ShouldDisplay()
     {
         return true;
     }

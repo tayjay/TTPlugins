@@ -11,29 +11,42 @@ namespace RoundModifiers.Modifiers
     public class RandomSpawnSize : Modifier
     {
         
+        public float SizeMin => RoundModifiers.Instance.Config.RandomSpawnSize_SizeMin;
+        public float SizeMax => RoundModifiers.Instance.Config.RandomSpawnSize_SizeMax;
+        public bool AffectPickups => RoundModifiers.Instance.Config.RandomSpawnSize_AffectPickups;
+        
         public void OnSpawned(SpawnedEventArgs ev)
         {
             Log.Debug("Setting " + ev.Player.Nickname + " size to random.");
             if (ev.Player.Role.Type != RoleTypeId.Scp079 && ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None && ev.Player.Role.Type != RoleTypeId.Filmmaker && !ev.Player.Role.IsDead)
             {
-                float random = Random.Range(RoundModifiers.Instance.Config.RandomSpawnSize_SizeMin, RoundModifiers.Instance.Config.RandomSpawnSize_SizeMax);
+                float random = Random.Range(SizeMin, SizeMax);
                 ev.Player.ChangeSize(random);
             }
         }
 
         public void OnSpawnItem(SpawningItemEventArgs ev)
         {
-            ev.Pickup.Scale = Vector3.one * Random.Range(RoundModifiers.Instance.Config.RandomSpawnSize_SizeMin, RoundModifiers.Instance.Config.RandomSpawnSize_SizeMax);
+            if(!AffectPickups) return;
+            ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
         }
         
         public void OnFillingLocker(FillingLockerEventArgs ev)
         {
-            ev.Pickup.Scale = Vector3.one * Random.Range(RoundModifiers.Instance.Config.RandomSpawnSize_SizeMin, RoundModifiers.Instance.Config.RandomSpawnSize_SizeMax);
+            if(!AffectPickups) return;
+            ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
         }
         
         public void OnDropItem(DroppedItemEventArgs ev)
         {
-            ev.Pickup.Scale = Vector3.one * Random.Range(RoundModifiers.Instance.Config.RandomSpawnSize_SizeMin, RoundModifiers.Instance.Config.RandomSpawnSize_SizeMax);
+            if(!AffectPickups) return;
+            ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+        }
+
+        public void OnThrowProjectile(ThrownProjectileEventArgs ev)
+        {
+            if(!AffectPickups) return;
+            ev.Projectile.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
         }
         
         
@@ -43,6 +56,7 @@ namespace RoundModifiers.Modifiers
             Exiled.Events.Handlers.Map.SpawningItem += OnSpawnItem;
             Exiled.Events.Handlers.Map.FillingLocker += OnFillingLocker;
             Exiled.Events.Handlers.Player.DroppedItem += OnDropItem;
+            Exiled.Events.Handlers.Player.ThrownProjectile += OnThrowProjectile;
         }
 
         protected override void UnregisterModifier()
@@ -51,6 +65,7 @@ namespace RoundModifiers.Modifiers
             Exiled.Events.Handlers.Map.SpawningItem -= OnSpawnItem;
             Exiled.Events.Handlers.Map.FillingLocker -= OnFillingLocker;
             Exiled.Events.Handlers.Player.DroppedItem -= OnDropItem;
+            Exiled.Events.Handlers.Player.ThrownProjectile -= OnThrowProjectile;
         }
 
         public override ModInfo ModInfo { get; } = new ModInfo()

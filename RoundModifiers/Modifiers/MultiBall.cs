@@ -1,5 +1,7 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using RoundModifiers.API;
@@ -14,8 +16,7 @@ namespace RoundModifiers.Modifiers
     {
 
         public float BallScale => RoundModifiers.Instance.Config.MultiBall_BallScale;
-        public int ExtraBallsMin => RoundModifiers.Instance.Config.MultiBall_ExtraBallsMin;
-        public int ExtraBallsMax => RoundModifiers.Instance.Config.MultiBall_ExtraBallsMax;
+        public float ExtraBallSpawnChance => RoundModifiers.Instance.Config.MultiBall_ExtraBallsChance;
         public float LockerSpawnChance => RoundModifiers.Instance.Config.MultiBall_LockerSpawnChance;
         
         public void OnFillingLocker(FillingLockerEventArgs ev)
@@ -55,7 +56,6 @@ namespace RoundModifiers.Modifiers
             {
                 ev.Pickup.Scale = Vector3.one * BallScale;
                 ev.Projectile.GameObject.AddComponent<ProjectileCollisionHandler>().Init((ev.Player ?? Exiled.API.Features.Server.Host).GameObject, ev.Projectile.Base);
-                int count = Random.Range(ExtraBallsMin, ExtraBallsMax);
                 /*Log.Debug("Spawning an extra "+count+" balls");
                 for (int i = 0; i < count; i++)
                 {
@@ -69,11 +69,18 @@ namespace RoundModifiers.Modifiers
 
         public void OnBounce(Scp018BounceEventArgs ev)
         {
-            
-            Pickup pu = Pickup.CreateAndSpawn(ItemType.SCP018, ev.Projectile.Position, ev.Projectile.Rotation,
+            if(Random.Range(0f,1f) <= ExtraBallSpawnChance)
+                SpawnExtraBall(ev);
+        }
+        
+        public void SpawnExtraBall(Scp018BounceEventArgs ev)
+        {
+            Projectile projectile = Projectile.CreateAndSpawn(ProjectileType.Scp018, ev.Projectile.Position, ev.Projectile.Rotation, true,
                 Player.Get(ev.Projectile.PreviousOwner));
-            pu.PhysicsModule.Rb.velocity = Vector3Utils.Random(5f,10f);
-            
+            projectile.PhysicsModule.Rb.velocity = Vector3Utils.Random(5f,10f);
+            //(projectile as Scp018Projectile).FuseTime = (Projectile.Get(ev.Projectile) as Scp018Projectile).FuseTime;
+            if(RoundModifiers.Instance.Config.MultiBall_Recursive)
+                projectile.GameObject.AddComponent<ProjectileCollisionHandler>().Init(ev.Owner, projectile.Base);
         }
 
         protected override void RegisterModifier()

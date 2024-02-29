@@ -12,6 +12,8 @@ namespace TTAddons
         
         public Unstuck Unstuck { get; private set; }
         public Scp3114Handler Scp3114Handler { get; private set; }
+        
+        public ClassDHandler ClassDHandler { get; private set; }
 
         private TTAddons()
         {
@@ -32,11 +34,13 @@ namespace TTAddons
             //Initialize objects
             Unstuck = new Unstuck();
             Scp3114Handler = new Scp3114Handler();
+            ClassDHandler = new ClassDHandler();
             
             
             //Register objects
             Unstuck.Register();
             Scp3114Handler.Register();
+            //ClassDHandler.Register();
         }
         
         private void ShutdownPlugin()
@@ -44,10 +48,12 @@ namespace TTAddons
             //Unregister objects
             Unstuck.Unregister();
             Scp3114Handler.Unregister();
+            //ClassDHandler.Unregister();
             
             //Dispose objects
             Unstuck = null;
             Scp3114Handler = null;
+            ClassDHandler = null;
         }
         
         public override void OnDisabled()

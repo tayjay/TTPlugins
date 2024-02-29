@@ -114,7 +114,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "Blackout",
-            FormattedName = "<color=gray>Blackout</color>",
+            FormattedName = "<color=#444444>Blackout</color>",
             Description = "The lights are out!",
             Aliases = new [] {"bo"},
             Impact = ImpactLevel.MinorGameplay,

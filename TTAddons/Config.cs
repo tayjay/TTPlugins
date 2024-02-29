@@ -16,5 +16,9 @@ namespace TTAddons
 
         [Description("Chance of a player spawning as SCP-3114 (0-1)f. Default is 0.05.")]
         public float Scp3114Chance { get; set; } = 0.05f;
+        [Description("Minimum players required to spawn SCP-3114. Default is 10.")]
+        public int Scp3114MinPlayers { get; set; } = 10;
+        [Description("True: Choose an SCP to replace with 3114, False: Choose a ClassD to replace with 3114. Default is false.")]
+        public bool Scp3114ReplaceScp { get; set; } = false;
     }
 }

@@ -29,7 +29,7 @@ namespace RoundModifiers.Handlers
             ActiveModifiers = new List<ModInfo>();
             NextRoundModifiers = new List<ModInfo>();
             VotingPlayers = new Dictionary<string, ModInfo>();
-            //BlacklistedModifiers = RoundModifiers.Instance.Config.DisabledModifiers.ToList();
+            BlacklistedModifiers = new List<string>(); //RoundModifiers.Instance.Config.DisabledModifiers.ToList();
         }
         
         //**********************************************
@@ -258,6 +258,7 @@ namespace RoundModifiers.Handlers
         {
             while (true)
             {
+                if(!Round.IsLobby) break;
                 string modString = "<size=75%>Modifiers: \n";
                 if (ActiveModifiers.Count > 0)
                 {
@@ -284,24 +285,31 @@ namespace RoundModifiers.Handlers
         
         public void OnRoundStart()
         {
-            Timing.KillCoroutines(LobbyModViewCoroutine);
-            if (!RoundModifiers.Instance.Config.ShowRoundModInGame) return;
-            string modString = "Modifiers:<size=75%> ";
-            if (ActiveModifiers.Count > 0)
+            try
             {
-                foreach(ModInfo modifier in ActiveModifiers)
+                Timing.KillCoroutines(LobbyModViewCoroutine);
+                if (!RoundModifiers.Instance.Config.ShowRoundModInGame) return;
+                string modString = "Modifiers:<size=75%> ";
+                if (ActiveModifiers.Count > 0)
                 {
-                    modString += $"\n{modifier.FormattedName}";
+                    foreach(ModInfo modifier in ActiveModifiers)
+                    {
+                        modString += $"\n{modifier.FormattedName}";
+                    }
                 }
-            }
-            else
-            {
-                modString += "None";
-            }
-            modString += "</size>";
+                else
+                {
+                    modString += "None";
+                }
+                modString += "</size>";
             
-            Broadcast.Singleton.RpcAddElement(modString, 10, Broadcast.BroadcastFlags.Normal);
-            Log.Debug("Round is starting.");
+                Broadcast.Singleton.RpcAddElement(modString, 10, Broadcast.BroadcastFlags.Normal);
+                Log.Debug("Round is starting.");
+            } catch (Exception e)
+            {
+                Log.Error("Error in OnRoundStart: " + e);
+            }
+            
         }
 
         public void OnRoundRestart()

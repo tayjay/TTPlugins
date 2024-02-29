@@ -34,7 +34,7 @@ namespace RoundModifiers.Commands.Client
 
                 return true;
             }
-            else if (arguments.Count > 1)
+            else if (arguments.Count > 0)
             {
                 //a vote was specified
                 string selection = arguments.At(0).ToLower();

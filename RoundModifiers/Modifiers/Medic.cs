@@ -29,24 +29,24 @@ namespace RoundModifiers.Modifiers
                     {
                         ev.IsAllowed = false;
                         Log.Info("Player is at full health");
-                        ev.Player.ShowHUDHint(target.Nickname + " is already at full health!", 3f);
+                        ev.Player.ShowHUDHint("<color=green>"+target.Nickname + " is already at full health!</color>", 3f);
                         return;
                     }
                     ev.IsAllowed = true;
-                    ev.Player.ShowHUDHint("Keep looking at " + target.Nickname +" to heal them.", 5f);
+                    ev.Player.ShowHUDHint("<color=green>Keep looking at " + target.Nickname +" to heal them.</color>", 5f);
                 } else if(ev.Player.TryGetRagdollOnSight(5f, out Ragdoll ragdoll))
                 {
                     if (ragdoll.Owner.IsDead)
                     {
                         ev.IsAllowed = true;
                         Log.Info("Player is dead");
-                        ev.Player.ShowHUDHint("Keep looking at " + ragdoll.Owner.Nickname +" to revive them.", 5f);
+                        ev.Player.ShowHUDHint("<color=green>Keep looking at " + ragdoll.Owner.Nickname +" to revive them.</color>", 5f);
                     }
                     else
                     {
                         ev.IsAllowed = false;
                         Log.Info("Player cannot be revived");
-                        ev.Player.ShowHUDHint("You can't revive " + ragdoll.Owner.Nickname + "!\nLook away to heal yourself.", 3f);
+                        ev.Player.ShowHUDHint("<color=red>You can't revive " + ragdoll.Owner.Nickname + "!\nLook away to heal yourself.</color>", 3f);
                     }
                 }
             }
@@ -63,7 +63,7 @@ namespace RoundModifiers.Modifiers
                     ev.Player.ShowHUDHint("You have healed " + target.Nickname +"!", 3f);
                     target.Heal(75f);
                     ev.Player.RemoveItem(ev.Item);
-                    if (RoundModifiers.Instance.IsModifierActive("LevelUp"))
+                    if (RoundModifiers.Instance.GetModifier<LevelUp.LevelUp>().IsEnabled)
                     {
                         //RoundModifiers.Instance.GetModifier<LevelUp.LevelUp>().PlayerXP[ev.Player.NetId] += 100;
                         CustomXP.GiveHealOtherXP(ev.Player);
@@ -77,7 +77,8 @@ namespace RoundModifiers.Modifiers
                         ragdoll.Owner.RoleManager.ServerSetRole(ragdoll.Role, RoleChangeReason.Revived, RoleSpawnFlags.None);
                         ragdoll.Owner.Teleport(ragdoll.Position+Vector3.up);
                         ev.Player.RemoveItem(ev.Item);
-                        if (RoundModifiers.Instance.IsModifierActive("LevelUp"))
+                        ragdoll.Destroy();
+                        if (RoundModifiers.Instance.GetModifier<LevelUp.LevelUp>().IsEnabled)
                         {
                             //RoundModifiers.Instance.GetModifier<LevelUp.LevelUp>().PlayerXP[ev.Player.NetId] += 100;
                             CustomXP.GiveRezXP(ev.Player);

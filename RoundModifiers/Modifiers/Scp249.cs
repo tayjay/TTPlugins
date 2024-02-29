@@ -80,13 +80,12 @@ namespace RoundModifiers.Modifiers
                     PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Cube, new Color(10f,10f,10f, 0.15f),
                         Doors[PlacingDoor].Position + new Vector3(0,1.2f,0)-(Doors[PlacingDoor].Rotation*new Vector3(0,0,0.001f)),
                         Doors[PlacingDoor].Base.transform.eulerAngles*-1,
-                        new Vector3(-1.4f, -2.5f, -0.005f), true);
+                        new Vector3(-1.4f, -2.5f, -0.05f), true);
                     DoorMarkers[PlacingDoor] = Primitive.Create(settings);
                     DoorMarkers[PlacingDoor].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[PlacingDoor].AdminToyBase);
                     LastPlaceTime = Time.time;
                     Log.Info("New door in "+Doors[PlacingDoor].Room.Type);
                     PlacingDoor = (PlacingDoor + 1) % DoorCount;
-                    
                 }
                 
                 
@@ -108,7 +107,7 @@ namespace RoundModifiers.Modifiers
         public void OnCollideDoor(AdminToyCollisionEventArgs ev)
         {
             if(ev.Player==null) return;
-
+            Log.Info("Hit on "+ev.Player?.Nickname);
             for (int i = 0; i < DoorCount; i++)
             {
                 if(ev.AdminToy == DoorMarkers[i].AdminToyBase)
@@ -124,25 +123,31 @@ namespace RoundModifiers.Modifiers
         public IEnumerator<float> TeleportPlayers()
         {
             yield return Timing.WaitForSeconds(1f);
-            /*while (true)
+            while (true)
             {
                 yield return Timing.WaitForSeconds(RoundModifiers.Instance.Config.Scp249_TeleportCheckInterval);
                 foreach (Player player in Player.List)
                 {
-                    for (int i = 0; i < DoorCount; i++)
+                    try
                     {
-                        if(Vector3.Distance(player.Position, Doors[i].Position) < 3.3f)
+                        for (int i = 0; i < DoorCount; i++)
                         {
-                            Door targetDoor = Doors[(i + 1) % DoorCount];
-                            player.Teleport(targetDoor.Position+Vector3.up+(targetDoor.Rotation*Vector3.forward));//Teleport to the next door
+                            if (Vector3.Distance(player.Position, Doors[i].Position + Vector3.up) < 0.65f)
+                            {
+                                Log.Info("Attempting to teleport " + player.Nickname);
+                                Door targetDoor = Doors[(i+1) % (Doors.Length)];
+                                player.Teleport(targetDoor.Position + Vector3.up +
+                                                (targetDoor.Rotation * Vector3.forward)); //Teleport to the next door
+                                break;
+                            }
                         }
                     }
-                    foreach (Door door in Doors)
+                    catch
                     {
-
+                        Log.Error("Error teleporting "+player.Nickname);
                     }
                 }
-            }*/
+            }
         }
         
         
@@ -173,14 +178,14 @@ namespace RoundModifiers.Modifiers
         protected override void RegisterModifier()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
-            TTCore.Events.Handlers.Custom.AdminToyCollision += OnCollideDoor;
+            //TTCore.Events.Handlers.Custom.AdminToyCollision += OnCollideDoor;
         }
 
         protected override void UnregisterModifier()
         {
             Stop();
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
-            TTCore.Events.Handlers.Custom.AdminToyCollision -= OnCollideDoor;
+            //TTCore.Events.Handlers.Custom.AdminToyCollision -= OnCollideDoor;
         }
 
         public override ModInfo ModInfo { get; } = new ModInfo()

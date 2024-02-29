@@ -2,6 +2,8 @@
 using Exiled.API.Features;
 using HarmonyLib;
 using TTCore.Handlers;
+using TTCore.HUDs;
+using TTCore.Npcs;
 
 namespace TTCore
 {
@@ -19,10 +21,10 @@ namespace TTCore
         private TTCore()
         {
             _harmony = new Harmony("ca.taytay.ttcore");
-            PlayerSizeManager = new PlayerSizeManager();
+            
         }
 
-        public override PluginPriority Priority { get; } = PluginPriority.First;
+        public override PluginPriority Priority { get; } = PluginPriority.Higher;
         
         public override void OnEnabled()
         {
@@ -50,7 +52,7 @@ namespace TTCore
         private void Setup()
         {
             _harmony.PatchAll();
-            
+            HUD.Register();
             PlayerSizeManager = new PlayerSizeManager();
             NpcManager = new NpcManager();
             
@@ -59,14 +61,14 @@ namespace TTCore
         private void Shutdown()
         {
             _harmony.UnpatchAll();
-            
+            HUD.Unregister();
             PlayerSizeManager = null;
             NpcManager = null;
         }
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(1, 0, 0);
+        public override System.Version Version { get; } = new System.Version(0, 1, 0);
         
     }
 }

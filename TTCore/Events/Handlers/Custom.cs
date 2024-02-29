@@ -11,6 +11,8 @@ public static class Custom
     
     public static Event<Scp018BounceEventArgs> Scp018Bounce { get; set; } = new Event<Scp018BounceEventArgs>();
     
+    public static Event<SetupNpcBrainEventArgs> SetupNpcBrain { get; set; } = new Event<SetupNpcBrainEventArgs>();
+    
     
     public static void OnAdminToyCollision(AdminToyCollisionEventArgs ev)
     {
@@ -20,5 +22,10 @@ public static class Custom
     public static void OnScp018Bounce(Scp018BounceEventArgs ev)
     {
         Scp018Bounce.InvokeSafely(ev);
+    }
+    
+    public static void OnSetupNpcBrain(SetupNpcBrainEventArgs ev)
+    {
+        SetupNpcBrain.InvokeSafely(ev);
     }
 }

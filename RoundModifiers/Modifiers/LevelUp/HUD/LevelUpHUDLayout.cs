@@ -18,9 +18,9 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
             ActivePerks = "";
         }
 
-        public override bool ShouldDisplay(TTCore.HUDs.HUD hud)
+        public override bool ShouldDisplay()
         {
-            return hud.Owner.Role.Team != Team.SCPs && hud.Owner.IsAlive;
+            return OwnerHUD.Owner.Role.Team != Team.SCPs && OwnerHUD.Owner.IsAlive;
         }
 
         public override string BuildHUD()
@@ -57,13 +57,29 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
                     color = "white";
                     break;
             }
-            return $"<color={color}><size=70%>Level: {Level}\n" +
-                   $"XP: {XP}/{XPNeeded}</size>\n"+
-                   "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+
+            string hud = $"<color={color}><size=70%>Level: {Level}\n" +
+                         $"XP: {XP}/{XPNeeded}</size><size=20%>\n";
+
+            float xpPerBar = XPNeeded / 10;
+            int bars = (int) (XP / xpPerBar);
+            for (int i = 0; i < 10; i++)
+            {
+                if (i <= bars)
+                    hud += $"<color={color}>█</color>";
+                else
+                    hud += $"<color=#333333>█</color>";
+            }
+            
+            hud += "</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
                    $"<size=75%>{(DisplayingHint == null ? " " : DisplayingHint.Text)}</size>\n" +
                    "\n<size=65%>" +
                    $"<align=right>Active Perks: \n{ActivePerks}</align>\n" +
-                   "\n\n\n\n\n\n\n\n\n</size></color>";
+                   "\n\n\n\n\n\n\n\n\n\n\n\n\n</size></color>";
+
+            return hud;
+
+
 
         }
     }

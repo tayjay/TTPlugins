@@ -23,6 +23,7 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,10 @@
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup>
+      <PostBuildEvent>xcopy /Y "E:\Projects\SCPSL\TTPlugins\TTCore\bin\Debug\TTCore.dll" "C:\Users\tayjm\AppData\Roaming\EXILED\Plugins"</PostBuildEvent>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
@@ -106,17 +111,30 @@
         <Compile Include="Commands\RemoteAdmin\Npc\SpawnNpc.cs" />
         <Compile Include="Commands\RemoteAdmin\ScaleCommand.cs" />
         <Compile Include="Components\AdminToyCollisionHandler.cs" />
+        <Compile Include="Components\AttachObjectToPlayerHandler.cs" />
         <Compile Include="Components\ProjectileCollisionHandler.cs" />
         <Compile Include="Events\EventArgs\AdminToyCollisionEventArgs.cs" />
         <Compile Include="Events\EventArgs\Scp018BounceEventArgs.cs" />
+        <Compile Include="Events\EventArgs\SetupNpcBrainEventArgs.cs" />
         <Compile Include="Events\Handlers\Custom.cs" />
+        <Compile Include="Events\Handlers\MapEvents.cs" />
         <Compile Include="Extensions\FirearmExtensions.cs" />
+        <Compile Include="Extensions\NpcExtensions.cs" />
         <Compile Include="Extensions\PlayerExtensions.cs" />
         <Compile Include="Extensions\QuaternionExtensions.cs" />
-        <Compile Include="Handlers\NpcManager.cs" />
         <Compile Include="Handlers\PlayerSizeManager.cs" />
         <Compile Include="HUDs\HUD.cs" />
         <Compile Include="HUDs\HUDLayout.cs" />
+        <Compile Include="Npcs\AI\Behaviours\AIBehaviour.cs" />
+        <Compile Include="Npcs\AI\Behaviours\DummyBehaviour.cs" />
+        <Compile Include="Npcs\AI\Brain.cs" />
+        <Compile Include="Npcs\AI\Pathing\AIPathFinder.cs" />
+        <Compile Include="Npcs\AI\Pathing\NavMeshBuilder.cs" />
+        <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshLink.cs" />
+        <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshModifier.cs" />
+        <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshModifierVolume.cs" />
+        <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshSurface.cs" />
+        <Compile Include="Npcs\NpcManager.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TTConfig.cs" />
         <Compile Include="TTCore.cs" />
@@ -129,6 +147,14 @@
     <ItemGroup>
       <Folder Include="Commands\Client\" />
       <Folder Include="Patches\" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshComponents.asmdef" />
+      <Content Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshComponents.asmdef.meta" />
+      <Content Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshLink.cs.meta" />
+      <Content Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshModifier.cs.meta" />
+      <Content Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshModifierVolume.cs.meta" />
+      <Content Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshSurface.cs.meta" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

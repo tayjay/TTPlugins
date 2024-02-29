@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using RoundModifiers.API;
 
@@ -11,7 +12,8 @@ namespace RoundModifiers.Commands.RemoteAdmin
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if(sender.CheckPermission("RoundEvents") || sender.CheckPermission("modifier") || sender.CheckPermission("RoundEvents*"))
+            Player player = Player.Get((CommandSender)sender);
+            if(player.CheckPermission("RoundEvents") || player.CheckPermission("modifier") || player.CheckPermission("RoundEvents*"))
             {
                 if (arguments.Count < 1)
                 {
@@ -39,7 +41,7 @@ namespace RoundModifiers.Commands.RemoteAdmin
             }
             else
             {
-                response = "You do not have permission to use this command.";
+                response = "You do not have permission to use this set command.";
                 return false;
             }
         }

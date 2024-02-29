@@ -2,9 +2,10 @@
 using Exiled.API.Features;
 using MEC;
 using PlayerRoles;
+using TTCore.Npcs.AI;
 using UnityEngine;
 
-namespace TTCore.Handlers
+namespace TTCore.Npcs
 {
     public class NpcManager
     {
@@ -17,7 +18,7 @@ namespace TTCore.Handlers
         }
         
         public bool SpawnNpc(string npcName, RoleTypeId npcRole, Vector3 npcPosition, out Npc npc,
-            bool roundIgnored = true)
+            bool isSmart = true, bool roundIgnored = true)
         {
             Npc newNpc = Npc.Spawn(npcName, npcRole, position: npcPosition);
             newNpc.RemoteAdminPermissions = PlayerPermissions.AFKImmunity;
@@ -28,6 +29,7 @@ namespace TTCore.Handlers
             Timing.CallDelayed(1f, () =>
             {
                 newNpc.IsGodModeEnabled = true;
+                if (isSmart) newNpc.GameObject.AddComponent<Brain>().Init(newNpc);
             });
             npc = newNpc;
             Npcs.Add(npc);

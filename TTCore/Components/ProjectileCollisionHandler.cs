@@ -34,7 +34,7 @@ public class ProjectileCollisionHandler : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Log.Info("Collision detected");
+        //Log.Info("Collision detected");
         try
         {
             if (!this.initialized)
@@ -53,7 +53,7 @@ public class ProjectileCollisionHandler : MonoBehaviour
             if ((UnityEngine.Object)collision.gameObject == (UnityEngine.Object)this.Owner ||
                 collision.gameObject.TryGetComponent<ThrownProjectile>(out ThrownProjectile _))
             {
-                Log.Info("Collision with owner or another projectile");
+                //Log.Info("Collision with owner or another projectile");
                 return;
             }
             //todo: Perform trigger code here. Create Event here
@@ -67,41 +67,41 @@ public class ProjectileCollisionHandler : MonoBehaviour
         {
             Log.Info("Error: " + ex);
         }
-        Log.Info("CollisionEnter end");
+        //Log.Info("CollisionEnter end");
     }
     
     private void OnCollisionStay(Collision other)
     {
-        Log.Info("Collision stay");
+        //Log.Info("Collision stay");
     }
 
     private void OnCollisionExit(Collision other)
     {
-        Log.Info("Collision exit");
+        //Log.Info("Collision exit");
     }
 
     private void OnDestroy()
     {
-        Log.Info("Destroyed");
+        //Log.Info("Destroyed");
     }
     
     private void OnDisable()
     {
-        Log.Info("Disabled");
+        //Log.Info("Disabled");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Log.Info("Trigger enter");
+        //Log.Info("Trigger enter");
         /*Pickup pu = Pickup.CreateAndSpawn(ItemType.SCP018, Projectile.Position, Projectile.Rotation,
             Player.Get(Projectile.PreviousOwner));
         pu.PhysicsModule.Rb.velocity = new Vector3(Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f)) * 5;*/
         Custom.OnScp018Bounce(new Scp018BounceEventArgs(Owner, Projectile, other));
-        Log.Info("SCP018 spawned");
+        //Log.Info("SCP018 spawned");
     }
 
     private void OnEnable()
     {
-        Log.Info("Enabled");
+        //Log.Info("Enabled");
     }
 }

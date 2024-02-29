@@ -22,6 +22,7 @@
         <DefineConstants>DEBUG;TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,10 @@
         <DefineConstants>TRACE</DefineConstants>
         <ErrorReport>prompt</ErrorReport>
         <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup>
+      <PostBuildEvent>xcopy /Y "E:\Projects\SCPSL\TTPlugins\TTAddons\bin\Debug\TTAddons.dll" "C:\Users\tayjm\AppData\Roaming\EXILED\Plugins"</PostBuildEvent>
     </PropertyGroup>
     <ItemGroup>
         <Reference Include="0Harmony">
@@ -98,6 +103,7 @@
     <ItemGroup>
         <Compile Include="Commands\Client\UnstuckCommand.cs" />
         <Compile Include="Config.cs" />
+        <Compile Include="Handlers\ClassDHandler.cs" />
         <Compile Include="Handlers\Scp3114Handler.cs" />
         <Compile Include="Handlers\Unstuck.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />

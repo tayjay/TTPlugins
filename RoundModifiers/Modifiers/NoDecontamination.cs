@@ -15,15 +15,8 @@ namespace RoundModifiers.Modifiers
         
         public void OnRoundStart()
         {
-            
-                FakeDecon = false;
-                DamageMultiplier = RoundModifiers.Instance.Config.NoDecon_DamageMultiplierMin;
-                /*Timing.CallDelayed(1f, () =>
-                {
-                    Log.Info("Disabling Decontamination.");
-                    DecontaminationController.Singleton.NetworkDecontaminationOverride = DecontaminationController.DecontaminationStatus.Disabled;
-                });*/
-            
+            FakeDecon = false;
+            DamageMultiplier = RoundModifiers.Instance.Config.NoDecon_DamageMultiplierMin;
         }
 
         public void OnRoundRestart()

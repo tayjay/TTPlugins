@@ -8,6 +8,7 @@ using MEC;
 using PlayerRoles;
 using Respawning;
 using RoundModifiers.API;
+using UnityEngine;
 using VoiceChat;
 
 namespace RoundModifiers.Modifiers
@@ -196,6 +197,7 @@ namespace RoundModifiers.Modifiers
             public Player Player;
             public bool IsHidden;
             public int revealTimer;
+            public float HideTime;
             public RoleTypeId disguise;
             public float DamageTimer;
             
@@ -204,6 +206,7 @@ namespace RoundModifiers.Modifiers
                 Player = player;
                 IsHidden = true;
                 revealTimer = 0;
+                HideTime = Time.time;
                 this.disguise = disguise;
                 DamageTimer = 0;
             }
@@ -218,13 +221,14 @@ namespace RoundModifiers.Modifiers
                 }
                 IsHidden = false;
                 revealTimer = time;
+                HideTime = Time.time+time;
                 
             }
             
             public void Hide()
             {
                 IsHidden = true;
-                revealTimer = 0;
+                HideTime = Time.time;
                 Player.ShowHint("You have been disguised as a " + disguise.ToString());
                 Player.ChangeAppearance(disguise, playersToAffect:Player.List.Where(p=>p.Role.Team!=Team.SCPs));
                 Player.VoiceChannel = VoiceChatChannel.ScpChat;
@@ -232,14 +236,21 @@ namespace RoundModifiers.Modifiers
             
             public void Update()
             {
-                
-                if (revealTimer > 0)
+                /*if (revealTimer > 0)
                 {
                     revealTimer--;
                     if (revealTimer == 0)
                     {
                         Hide();
                     }
+                }*/
+                if(Time.time-HideTime>0)
+                {
+                    if (!IsHidden)
+                    {
+                        Hide();
+                    }
+                    
                 }
             }
         }

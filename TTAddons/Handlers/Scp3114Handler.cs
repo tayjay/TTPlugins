@@ -20,10 +20,11 @@ namespace TTAddons.Handlers
         
         public void OnRoundStart()
         {
+            if(Server.PlayerCount<TTAddons.Instance.Config.Scp3114MinPlayers) return;
             double spawnChance = TTAddons.Instance.Config.Scp3114Chance;
             if (Random.Range(0f,1f) < spawnChance)
             {
-                SpawnScp3114(Player.List.Where(p=>p.Role==RoleTypeId.ClassD).GetRandomValue());
+                SpawnScp3114(Player.List.Where(p=>p.Role.Team==(TTAddons.Instance.Config.Scp3114ReplaceScp?Team.SCPs:Team.ClassD)).GetRandomValue());
             }
         }
         
