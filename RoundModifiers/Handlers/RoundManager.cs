@@ -17,6 +17,13 @@ namespace RoundModifiers.Handlers
         
         public List<ModInfo> NextRoundModifiers { get; private set; }
 
+        public static ModInfo NoneInfo = new ModInfo
+        {
+            Name = "None",
+            Description = "No modifier this round.",
+            FormattedName = "None"
+        };
+
         public int[] ModifierOrder;
         public int RoundNumber;
 
@@ -120,6 +127,12 @@ namespace RoundModifiers.Handlers
             //First see if admin has set mods for next round
             if (NextRoundModifiers.Count != 0)
             {
+                if (NextRoundModifiers.Contains(NoneInfo))
+                {
+                    ClearRoundModifiers();
+                    NextRoundModifiers.Clear();
+                    return;
+                }
                 SetRoundModifiers(NextRoundModifiers);
                 NextRoundModifiers.Clear();
                 return;
@@ -250,6 +263,7 @@ namespace RoundModifiers.Handlers
         {
             if (VotingPlayers.ContainsKey(ev.Player.Nickname))
             {
+                Log.Info("Clearing vote for leaving player " + ev.Player.Nickname);
                 VotingPlayers.Remove(ev.Player.Nickname);
             }
         }
@@ -264,7 +278,7 @@ namespace RoundModifiers.Handlers
                 {
                     foreach(ModInfo modifier in ActiveModifiers)
                     {
-                        modString += $"'{modifier.FormattedName}', ";
+                        modString += $"{modifier.FormattedName}, ";
                     }
                     modString = modString.Remove(modString.Length - 2);
                 }

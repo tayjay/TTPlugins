@@ -184,7 +184,7 @@ public class HUD
             {
                 foreach(HUD hud in Huds.Values)
                 {
-                    //if(!hud.Layout.ShouldDisplay(hud)) continue;
+                    if(!hud.Layout.ShouldDisplay()) continue;
                     hud.BehaviourUpdate();
                 }
 

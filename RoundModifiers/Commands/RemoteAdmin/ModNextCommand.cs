@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
 using RoundModifiers.API;
+using RoundModifiers.Handlers;
 
 namespace RoundModifiers.Commands.RemoteAdmin
 {
@@ -24,6 +25,13 @@ namespace RoundModifiers.Commands.RemoteAdmin
             {
                 RoundModifiers.Instance.RoundManager.ClearNextRoundModifiers();
                 response = "Cleared modifiers for next round.";
+                return true;
+            }
+
+            if (arguments.At(0).ToLower() == "none")
+            {
+                RoundModifiers.Instance.RoundManager.SetNextRoundModifiers(new List<ModInfo>(){RoundManager.NoneInfo});
+                response = "Set next round to have No modifiers.";
                 return true;
             }
             List<ModInfo> modInfo = new List<ModInfo>();

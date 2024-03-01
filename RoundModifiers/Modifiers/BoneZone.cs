@@ -15,7 +15,7 @@ namespace RoundModifiers.Modifiers
 {
     public class BoneZone : Modifier
     {
-        private RoomType[] scpSpawnRooms = new[] { RoomType.Hcz049, RoomType.Hcz096, RoomType.Hcz939, RoomType.HczNuke };
+        private RoomType[] scpSpawnRooms = new[] { RoomType.Hcz049, RoomType.Hcz939, RoomType.HczNuke };
         public void OnChoosingStartTeam(ChoosingStartTeamQueueEventArgs ev)
         {
             

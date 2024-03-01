@@ -46,14 +46,14 @@ public class Brain : MonoBehaviour
 
     public void FixedUpdate()
     {
-        Log.Debug("FixedUpdate for "+Behaviours.Count+" behaviours");
+        //Log.Debug("FixedUpdate for "+Behaviours.Count+" behaviours");
         foreach (var behaviour in Behaviours)
             behaviour.FixedUpdateBehaviour();
     }
     
     public void Update()
     {
-        Log.Debug("Update for "+Behaviours.Count+" behaviours");
+        //Log.Debug("Update for "+Behaviours.Count+" behaviours");
         foreach (var behaviour in Behaviours)
             behaviour.UpdateBehaviour();
     }

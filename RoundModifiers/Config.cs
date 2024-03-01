@@ -11,7 +11,7 @@ namespace RoundModifiers
         [Description("Whether players will be allowed to vote for what modifiers they would like to see next round. Default is true.")]
         public bool EnableVoting { get; set; } = true;
         
-        public string[] DisabledModifiers { get; set; } = new string[0];
+        //public string[] DisabledModifiers { get; set; } = new string[0];
         [Description("Whether a broadcast of what modifiers will be applied next round will appear during the lobby. Default is true.")]
         public bool ShowRoundModInLobby{ get; set; } = true;
         [Description("Whether a broadcast of what modifiers are currently active will appear at the start of the round. Default is true.")]
@@ -50,21 +50,23 @@ namespace RoundModifiers
         public float Rainbow_MinRGB { get; set; } = 0.1f;
         public float Rainbow_MaxRGB { get; set; } = 2f;
         
+        //Imposter
+        [Description("The amount of time in seconds an SCP is revealed after being hurt. Default is 30f.")]
+        public float Imposter_RevealTimeOnHurt { get; set; } = 30f;
+        [Description("Whether to skip the little jump when an SCP is revealed. True: No screen jump when hiding. False: Screen jump, possibly more reliable. Default is false.")]
+        public bool Imposter_SkipJump { get; set; } = false;
+        
         
         //MultiBall
         [Description("The scale of the MultiBall balls when thrown. Default is 3.")]
         public float MultiBall_BallScale { get; set; } = 3;
-        //[Description("The minimum amount of extra balls that can spawn after throwing. Default is 0")]
-        //public int MultiBall_ExtraBallsMin { get; set; } = 0;
-        //[Description("The maximum amount of extra balls that can spawn after throwing. Default is 6")]
-        //public int MultiBall_ExtraBallsMax { get; set; } = 6;
-        [Description("The chance of an SCP-018 ball spawning extra balls when it bounces. Default is 0.01. (0-1)f")]
-        public float MultiBall_ExtraBallsChance { get; set; } = 0.01f;
-        
         [Description("The chance of a locker spawning SCP-018 instead of the original item. Default is 0.01. (0-1)f")]
         public float MultiBall_LockerSpawnChance { get; set; } = 0.01f;
+        
+        [Description("The chance of an SCP-018 ball spawning extra balls when it bounces. Default is 0.01. (0-1)f")]
+        public float MultiBall_ExtraBallsChance { get; set; } = 0.01f;
         [Description("Do the bonus balls from SCP-018 spawn more balls? Default is false.")]
-        public bool MultiBall_Recursive { get; set; } = true;
+        public bool MultiBall_Recursive { get; set; } = false;
         
         
         //NoDecon

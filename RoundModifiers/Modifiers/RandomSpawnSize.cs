@@ -29,18 +29,21 @@ namespace RoundModifiers.Modifiers
         {
             if(!AffectPickups) return;
             ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+            ev.Pickup.Weight *= ev.Pickup.Scale.magnitude;
         }
         
         public void OnFillingLocker(FillingLockerEventArgs ev)
         {
             if(!AffectPickups) return;
             ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+            ev.Pickup.Weight *= ev.Pickup.Scale.magnitude;
         }
         
         public void OnDropItem(DroppedItemEventArgs ev)
         {
             if(!AffectPickups) return;
             ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+            ev.Pickup.Weight *= ev.Pickup.Scale.magnitude;
         }
 
         public void OnThrowProjectile(ThrownProjectileEventArgs ev)
