@@ -9,7 +9,7 @@ This SCP:SL EXILED plugin introduces a variety of gameplay modifiers to spice up
 * **Imposter:** SCPs walk among you, disguised as humans. Can you root out the imposters?
 * **Insurrection:**  Facility Guards will spawn as Chaos Insurgents, changing the balance of power.
 * **LevelUp:**  Players can level up during the round, gaining stat boosts and abilities.
-* **MicroHID:**  Be careful with the MicroHID – it now drains your health with each use.
+* **MicroHIV:**  Be careful with the MicroHID – it now drains your health with each use.
 * **MultiBall:**  SCP-018 goes wild! Lockers are full of them, and thrown balls spawn even more.
 * **NoDecontamination:**  Decontamination is disabled, replaced by a slow but steady damage effect.
 * **NoKOS:**  Class-D and Scientists become unkillable (unless holding illegal items), getting arrested when shot.
@@ -20,3 +20,5 @@ This SCP:SL EXILED plugin introduces a variety of gameplay modifiers to spice up
 * **RandomSpawnSize:**  Players spawn at random sizes – expect some hilarious (and strategic) consequences.
 * **RogueAI:**  An unpredictable AI roams the halls, randomly aiding or hindering players depending on the current game state.
 * **SCP249:**  Watch out! SCP-249 (the teleporting door) has decided to wreak havoc on the facility.
+* **BoneZone:** It just got a lot spookier in here. All SCPs are skeletons
+* **NoCassie:** CASSIE is unavailable at the moment, please leave a message after the beep...
