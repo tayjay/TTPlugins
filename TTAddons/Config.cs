@@ -20,5 +20,11 @@ namespace TTAddons
         public int Scp3114MinPlayers { get; set; } = 10;
         [Description("True: Choose an SCP to replace with 3114, False: Choose a ClassD to replace with 3114. Default is false.")]
         public bool Scp3114ReplaceScp { get; set; } = false;
+        
+        [Description("Enable spectator lobby game. Default is true.")]
+        public bool EnableSpectatorGame { get; set; } = true;
+        
+        [Description("Enable weapon stats. Default is true.")]
+        public bool EnableWeaponStats { get; set; } = true;
     }
 }

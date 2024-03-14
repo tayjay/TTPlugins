@@ -1,9 +1,22 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Cassie;
 using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Player;
+using InventorySystem;
+using InventorySystem.Items;
+using InventorySystem.Items.MarshmallowMan;
+using InventorySystem.Items.Pickups;
+using InventorySystem.Items.Usables.Scp330;
+using Mirror;
+using PluginAPI.Core.Items;
 using RoundModifiers.API;
+using TTCore.HUDs;
+using UnityEngine;
+using Item = Exiled.API.Features.Items.Item;
+using Object = UnityEngine.Object;
 
 namespace RoundModifiers.Modifiers
 {
@@ -27,18 +40,48 @@ namespace RoundModifiers.Modifiers
             //ev.Words = ".g7";
             Log.Info(ev.Words);
         }
+
+        public void OnCreatePickup(DroppedItemEventArgs ev)
+        {
+            foreach (Component c in ev.Pickup.GameObject.GetComponentsInChildren<Component>())
+            {
+                //Log.Info($"Destroying component: {c.name} {c.tag} {c.GetType().FullName}");
+                if (c != null)
+                {
+                    if (c.GetType().FullName.Contains("Rigidbody"))
+                    {
+                        Log.Info($"Destroying component: {c.name} {c.tag} {c.GetType().FullName}");
+                        NetworkServer.Destroy(c.gameObject);
+                        Object.Destroy(c);
+                    }
+                }
+                
+            }
+        }
+
+        public void OnSpawn(SpawnedEventArgs ev)
+        {
+
+            //ev.Player.AddItem((ItemType)55);
+            //ev.Player.ShowHUDHint($"You have been given a marshmallow! {ev.Player.CurrentItem.Base.name}", 5);
+            //Log.Info("Added marshmallow item to player inventory.");
+        }
         
         
         protected override void RegisterModifier()
         {
             Exiled.Events.Handlers.Map.AnnouncingNtfEntrance += OnNTFAnnouncement;
             Exiled.Events.Handlers.Cassie.SendingCassieMessage += OnCassieAnnouncement;
+            Exiled.Events.Handlers.Player.DroppedItem += OnCreatePickup;
+            Exiled.Events.Handlers.Player.Spawned += OnSpawn;
         }
 
         protected override void UnregisterModifier()
         {
             Exiled.Events.Handlers.Map.AnnouncingNtfEntrance -= OnNTFAnnouncement;
             Exiled.Events.Handlers.Cassie.SendingCassieMessage -= OnCassieAnnouncement;
+            Exiled.Events.Handlers.Player.DroppedItem -= OnCreatePickup;
+            Exiled.Events.Handlers.Player.Spawned -= OnSpawn;
         }
 
         public override ModInfo ModInfo { get; } = new ModInfo() {

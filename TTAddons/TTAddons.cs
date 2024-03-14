@@ -14,6 +14,8 @@ namespace TTAddons
         public Scp3114Handler Scp3114Handler { get; private set; }
         
         public ClassDHandler ClassDHandler { get; private set; }
+        public SpectatorHandler SpectatorHandler { get; private set; }
+        
 
         private TTAddons()
         {
@@ -35,12 +37,17 @@ namespace TTAddons
             Unstuck = new Unstuck();
             Scp3114Handler = new Scp3114Handler();
             ClassDHandler = new ClassDHandler();
+            SpectatorHandler = new SpectatorHandler();
             
             
             //Register objects
             Unstuck.Register();
             Scp3114Handler.Register();
+            if(Config.EnableSpectatorGame)
+                SpectatorHandler.Register();
             //ClassDHandler.Register();
+            if(Config.EnableWeaponStats)
+                WeaponStats.Register();
         }
         
         private void ShutdownPlugin()
@@ -48,12 +55,17 @@ namespace TTAddons
             //Unregister objects
             Unstuck.Unregister();
             Scp3114Handler.Unregister();
+            if(Config.EnableSpectatorGame)
+                SpectatorHandler.Unregister();
             //ClassDHandler.Unregister();
+            if(Config.EnableWeaponStats)
+                WeaponStats.Unregister();
             
             //Dispose objects
             Unstuck = null;
             Scp3114Handler = null;
             ClassDHandler = null;
+            SpectatorHandler = null;
         }
         
         public override void OnDisabled()

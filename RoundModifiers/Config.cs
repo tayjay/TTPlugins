@@ -79,8 +79,13 @@ namespace RoundModifiers
         //Puppies
         [Description("The scale SCPs should spawn as during the Puppies modifier. Default is 0.5f.")]
         public float Puppies_SCPScale { get; set; } = 0.5f;
-        [Description("Health Multiplier for SCPs during the Puppies modifier. Default is 0.5f.")]
-        public float Puppies_SCPHealthMultiplier { get; set; } = 0.5f;
+        //[Description("Health Multiplier for SCPs during the Puppies modifier. Default is 0.5f.")]
+        //public float Puppies_SCPHealthMultiplier { get; set; } = 0.5f;
+        [Description("How much HP SCP939 should start with during the Puppies modifier. Default is 750f.")]
+        public float Puppies_Scp939HealthStart { get; set; } = 750f;
+        [Description("How much Hume Shield SCP939 should start with during the Puppies modifier. Default is 500f.")]
+        public float Puppies_Scp939HumeStart { get; set; } = 500f;
+        
         [Description("Should Scp-079 (Computer) be converted by the Puppies modifier? Default is true.")]
         public bool Puppies_AffectScp079 { get; set; } = true;
         [Description("Should Scp-3114 (Skeleton) be converted by the Puppies modifier? Default is true.")]
@@ -93,5 +98,18 @@ namespace RoundModifiers
         public float Scp249_TeleportCheckInterval { get; set; } = 0.1f;
         [Description("Number of doors to place during the Scp249 modifier. Default is 2. Must be 2 or greater.")]
         public int Scp249_DoorCount { get; set; } = 2;
+        
+        //MysteryBox
+        [Description("Whether the MysteryBox modifier is enabled. Default is true.")]
+        public bool MysteryBox_Enable { get; set; } = true;
+        
+        
+        //HealthBars
+        [Description("Whether the HealthBars modifier is enabled. Default is true.")]
+        public bool HealthBars_Enable { get; set; } = true;
+        [Description("The length of the health bars. Default is 1f.")]
+        public float HealthBars_Length { get; set; } = 1f;
+        [Description("The vertical offset of the health bars. Default is 1f.")]
+        public float HealthBars_Height { get; set; } = 1f;
     }
 }

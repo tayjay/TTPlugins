@@ -14,7 +14,7 @@ namespace TTCore.Extensions
         {
             npc = null;
 
-            if (!Physics.Raycast(new Ray(player.ReferenceHub.PlayerCameraReference.position + player.GameObject.transform.forward * 0.3f, player.ReferenceHub.PlayerCameraReference.forward), out RaycastHit hit, maxDistance))
+            if (!Physics.Raycast(new Ray(player.ReferenceHub.PlayerCameraReference.position + player.GameObject.transform.forward * 0.3f, player.ReferenceHub.PlayerCameraReference.forward), out RaycastHit hit, maxDistance, LayerMask.GetMask("Player")))
                 return false;
 
             npc = Npc.Get((hit.transform.gameObject));
@@ -26,7 +26,7 @@ namespace TTCore.Extensions
         {
             target = null;
 
-            if (!Physics.Raycast(new Ray(player.ReferenceHub.PlayerCameraReference.position + player.GameObject.transform.forward * 0.3f, player.ReferenceHub.PlayerCameraReference.forward), out RaycastHit hit, maxDistance))
+            if (!Physics.Raycast(new Ray(player.ReferenceHub.PlayerCameraReference.position + player.GameObject.transform.forward * 0.3f, player.ReferenceHub.PlayerCameraReference.forward), out RaycastHit hit, maxDistance, LayerMask.GetMask("Player")))
                 return false;
 
             target = Player.Get((hit.collider));
@@ -60,7 +60,7 @@ namespace TTCore.Extensions
             ragdoll = null;
             
             RaycastHit[] hits = new RaycastHit[30];
-            Physics.RaycastNonAlloc(new Ray(player.ReferenceHub.PlayerCameraReference.position, player.ReferenceHub.PlayerCameraReference.forward), hits, maxDistance);
+            Physics.RaycastNonAlloc(new Ray(player.ReferenceHub.PlayerCameraReference.position, player.ReferenceHub.PlayerCameraReference.forward), hits, maxDistance, LayerMask.GetMask("Ragdoll"));
 
             
             foreach (RaycastHit hit in hits)

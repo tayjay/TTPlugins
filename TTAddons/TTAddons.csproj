@@ -105,7 +105,9 @@
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\ClassDHandler.cs" />
         <Compile Include="Handlers\Scp3114Handler.cs" />
+        <Compile Include="Handlers\SpectatorHandler.cs" />
         <Compile Include="Handlers\Unstuck.cs" />
+        <Compile Include="Handlers\WeaponStats.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="TTAddons.cs" />
     </ItemGroup>

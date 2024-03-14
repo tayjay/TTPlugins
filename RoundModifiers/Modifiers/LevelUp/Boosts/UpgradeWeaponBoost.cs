@@ -1,47 +1,66 @@
-﻿using Exiled.API.Enums;
+﻿using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
 namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
-    public class UpgradeWeaponBoost : Boost
+    public class UpgradeWeaponBoost : Boost, IGameTickEvent
     {
         public UpgradeWeaponBoost(Tier tier) : base(tier)
         {
         }
+        
+        
 
         public override bool AssignBoost(Player player)
         {
             if(player.IsCuffed) return false;
+            if(HasBoost.ContainsKey(player.NetId)) return false;
             return ApplyBoost(player);
         }
 
         public override bool ApplyBoost(Player player)
         {
-            //This will apply regardless of Tier
-            foreach (Item item in player.Items)
+            HasBoost[player.NetId] = true;
+            return true;
+        }
+        
+        public void OnGameTick()
+        {
+            foreach(uint netId in HasBoost.Keys.ToList())
             {
-                if(!item.IsWeapon) continue;
-                ItemType newWeapon = UpgradeWeapon(player.CurrentItem as Firearm);
-                if(newWeapon == ItemType.None) continue;
-                Firearm newFirearm = Item.Create(newWeapon) as Firearm;
-                player.RemoveItem(item);
-                player.AddItem(newFirearm);
-                player.AddAmmo(GetAmmoType(newFirearm), newFirearm.MaxAmmo);
-                return true;
-            }
+                Player player = Player.Get(netId);
+                if(player.CurrentItem.IsWeapon) continue; //Don't want to remove the item from player while using.
+                //This will apply regardless of Tier
+                foreach (Item item in player.Items)
+                {
+                    if(!item.IsWeapon) continue;
+                    ItemType newWeapon = UpgradeWeapon(player.CurrentItem as Firearm);
+                    if(newWeapon == ItemType.None) continue;
+                    Firearm newFirearm = Item.Create(newWeapon) as Firearm;
+                    player.RemoveItem(item);
+                    player.AddItem(newFirearm);
+                    player.AddAmmo(GetAmmoType(newFirearm), newFirearm.MaxAmmo);
+                    HasBoost.Remove(netId);
+                    break;
+                }
 
-            //Don't want to give away a free gun with the Common upgrade
-            if (Tier >= Tier.Uncommon)
-            {
-                player.AddItem(GenerateOutcome(ItemType.GunCOM15, ItemType.GunCOM18, ItemType.GunFSP9));
-                return true;
+                //Don't want to give away a free gun with the Common upgrade
+                if (Tier >= Tier.Uncommon)
+                {
+                    player.AddItem(GenerateOutcome(ItemType.GunCOM15, ItemType.GunCOM18, ItemType.GunFSP9));
+                    HasBoost.Remove(netId);
+                    break;
+                }
+                else
+                {
+                    player.AddItem(GenerateOutcome(ItemType.Radio, ItemType.Flashlight, ItemType.Medkit));
+                    HasBoost.Remove(netId);
+                    break;
+                }
             }
-            else
-            {
-                return false;
-            }
-
         }
 
         public ItemType UpgradeWeapon(Firearm firearm)
@@ -76,7 +95,6 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
         }
         
         
-        
         public ItemType GenerateOutcome(params ItemType[] outcomes)
         {
             return outcomes[UnityEngine.Random.Range(0, outcomes.Length)];
@@ -91,5 +109,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
         {
             throw new System.NotImplementedException();
         }
+
+        
     }
 }

@@ -77,7 +77,10 @@ namespace RoundModifiers
             AddModifier(new BoneZone());
             AddModifier(new NoCassie());
             //AddModifier(new Fun());
-            
+            //AddModifier(new BodyBlock());
+            //AddModifier(new Alive());
+            AddModifier(new MysteryBox());
+            AddModifier(new HealthBars());
         }
         
         public void AddModifier(Modifier mod)

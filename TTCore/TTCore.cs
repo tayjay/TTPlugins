@@ -4,6 +4,7 @@ using HarmonyLib;
 using TTCore.Handlers;
 using TTCore.HUDs;
 using TTCore.Npcs;
+using TTCore.Npcs.AI.Pathing;
 
 namespace TTCore
 {
@@ -17,6 +18,7 @@ namespace TTCore
         
         public PlayerSizeManager PlayerSizeManager { get; private set; }
         public NpcManager NpcManager { get; private set; }
+        public NavMeshBuilder NavMeshBuilder { get; private set; }
 
         private TTCore()
         {
@@ -55,6 +57,9 @@ namespace TTCore
             HUD.Register();
             PlayerSizeManager = new PlayerSizeManager();
             NpcManager = new NpcManager();
+            //NavMeshBuilder = new NavMeshBuilder();
+            
+            //NavMeshBuilder.Register();
             
         }
 
@@ -62,8 +67,10 @@ namespace TTCore
         {
             _harmony.UnpatchAll();
             HUD.Unregister();
+            //NavMeshBuilder.Unregister();
             PlayerSizeManager = null;
             NpcManager = null;
+            //NavMeshBuilder = null;
         }
 
         public override string Author { get; } = "TayTay";

@@ -113,7 +113,9 @@
         <Compile Include="Components\AdminToyCollisionHandler.cs" />
         <Compile Include="Components\AttachObjectToPlayerHandler.cs" />
         <Compile Include="Components\ProjectileCollisionHandler.cs" />
+        <Compile Include="Events\EventArgs\AccessFirearmBaseStatsEventArgs.cs" />
         <Compile Include="Events\EventArgs\AdminToyCollisionEventArgs.cs" />
+        <Compile Include="Events\EventArgs\InspectFirearmEventArgs.cs" />
         <Compile Include="Events\EventArgs\Scp018BounceEventArgs.cs" />
         <Compile Include="Events\EventArgs\SetupNpcBrainEventArgs.cs" />
         <Compile Include="Events\Handlers\Custom.cs" />
@@ -125,8 +127,11 @@
         <Compile Include="Handlers\PlayerSizeManager.cs" />
         <Compile Include="HUDs\HUD.cs" />
         <Compile Include="HUDs\HUDLayout.cs" />
+        <Compile Include="Npcs\AI\Behaviours\AgentLinkMover.cs" />
         <Compile Include="Npcs\AI\Behaviours\AIBehaviour.cs" />
         <Compile Include="Npcs\AI\Behaviours\DummyBehaviour.cs" />
+        <Compile Include="Npcs\AI\Behaviours\MoveBehaviour.cs" />
+        <Compile Include="Npcs\AI\Behaviours\WanderRoomBehaviour.cs" />
         <Compile Include="Npcs\AI\Brain.cs" />
         <Compile Include="Npcs\AI\Pathing\AIPathFinder.cs" />
         <Compile Include="Npcs\AI\Pathing\NavMeshBuilder.cs" />
@@ -135,6 +140,8 @@
         <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshModifierVolume.cs" />
         <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshSurface.cs" />
         <Compile Include="Npcs\NpcManager.cs" />
+        <Compile Include="Patches\FirearmBasicMessagesHandlerPatch.cs" />
+        <Compile Include="Patches\FirearmPatch.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TTConfig.cs" />
         <Compile Include="TTCore.cs" />
@@ -142,11 +149,11 @@
         <Compile Include="Utilities\Vector3Utils.cs" />
     </ItemGroup>
     <ItemGroup>
+      <None Include="App.config" />
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Commands\Client\" />
-      <Folder Include="Patches\" />
     </ItemGroup>
     <ItemGroup>
       <Content Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshComponents.asmdef" />

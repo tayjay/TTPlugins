@@ -10,7 +10,9 @@ namespace RoundModifiers.Modifiers
     public class Puppies : Modifier
     {
         public float Size => RoundModifiers.Instance.Config.Puppies_SCPScale;
-        public float HealthMultiplier => RoundModifiers.Instance.Config.Puppies_SCPHealthMultiplier;
+        //public float HealthMultiplier => RoundModifiers.Instance.Config.Puppies_SCPHealthMultiplier;
+        public float HealthStart => RoundModifiers.Instance.Config.Puppies_Scp939HealthStart;
+        public float HumeStart => RoundModifiers.Instance.Config.Puppies_Scp939HumeStart;
         public bool AffectScp079 => RoundModifiers.Instance.Config.Puppies_AffectScp079;
         public bool AffectScp3114 => RoundModifiers.Instance.Config.Puppies_AffectScp3114;
         public void OnChangingRole(ChangingRoleEventArgs ev)
@@ -27,8 +29,10 @@ namespace RoundModifiers.Modifiers
                 Timing.CallDelayed(1f, () =>
                 {
                     Log.Info("Setting " + ev.Player.Nickname + " size to "+Size);
-                    ev.Player.MaxHealth *= HealthMultiplier;
+                    ev.Player.MaxHealth = HealthStart;
                     ev.Player.Health = ev.Player.MaxHealth;
+                    //ev.Player.HumeShieldStat.CurValue = HumeStart;
+                    ev.Player.HumeShield = HumeStart;
                     ev.Player.ChangeSize(Size);
                 });
             }

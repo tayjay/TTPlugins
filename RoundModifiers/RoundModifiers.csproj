@@ -12,6 +12,7 @@
         <AssemblyName>RoundModifiers</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -113,11 +114,14 @@
         <Compile Include="Commands\RemoteAdmin\ModSetCommand.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\RoundManager.cs" />
+        <Compile Include="Modifiers\Alive.cs" />
         <Compile Include="Modifiers\Blackout.cs" />
+        <Compile Include="Modifiers\BodyBlock.cs" />
         <Compile Include="Modifiers\BoneZone.cs" />
         <Compile Include="Modifiers\Escape.cs" />
         <Compile Include="Modifiers\FriendlyFire.cs" />
         <Compile Include="Modifiers\Fun.cs" />
+        <Compile Include="Modifiers\HealthBars.cs" />
         <Compile Include="Modifiers\Imposter.cs" />
         <Compile Include="Modifiers\Insurrection.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\BecomeScpBoost.cs" />
@@ -158,10 +162,12 @@
         <Compile Include="Modifiers\Medic.cs" />
         <Compile Include="Modifiers\MicroHIV.cs" />
         <Compile Include="Modifiers\MultiBall.cs" />
+        <Compile Include="Modifiers\MysteryBox.cs" />
         <Compile Include="Modifiers\NoCassie.cs" />
         <Compile Include="Modifiers\NoDecontamination.cs" />
         <Compile Include="Modifiers\NoKOS.cs" />
         <Compile Include="Modifiers\NoScp914.cs" />
+        <Compile Include="Modifiers\Pills.cs" />
         <Compile Include="Modifiers\PreBreach.cs" />
         <Compile Include="Modifiers\Puppies.cs" />
         <Compile Include="Modifiers\RadioSilent.cs" />

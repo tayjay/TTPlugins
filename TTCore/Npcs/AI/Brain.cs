@@ -5,6 +5,7 @@ using PlayerRoles;
 using TTCore.Events.EventArgs;
 using TTCore.Events.Handlers;
 using TTCore.Npcs.AI.Behaviours;
+using TTCore.Npcs.AI.Pathing;
 using UnityEngine;
 
 namespace TTCore.Npcs.AI;
@@ -19,7 +20,8 @@ public class Brain : MonoBehaviour
     {
         
         Behaviours = new List<AIBehaviour>();
-        AddBehaviourOfType<DummyBehaviour>();
+        //AddBehaviourOfType<DummyBehaviour>();
+        //AddBehaviourOfType<MoveBehaviour>();
         
         if(Npc == null && GameObject != null)
             this.Npc = Player.Get(GameObject) as Npc;
@@ -71,6 +73,11 @@ public class Brain : MonoBehaviour
             Behaviours.Remove(behaviour);
             Destroy(behaviour);
         }
+    }
+    
+    public AIBehaviour GetBehaviourOfType<T>() where T : AIBehaviour
+    {
+        return Behaviours.Find(behaviour => behaviour.GetType() == typeof(T));
     }
 
     private void OnEnable()

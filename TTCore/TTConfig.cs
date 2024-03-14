@@ -9,6 +9,6 @@ namespace TTCore
         public bool Debug { get; set; } = false;
 
         [Description("Enable pathfinding for NPCs. Requires generating a NavMesh, takes awhile to load.")]
-        public bool EnablePathFinding = false;
+        public bool EnablePathFinding = true;
     }
 }

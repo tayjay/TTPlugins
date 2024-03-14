@@ -13,6 +13,9 @@ public static class Custom
     
     public static Event<SetupNpcBrainEventArgs> SetupNpcBrain { get; set; } = new Event<SetupNpcBrainEventArgs>();
     
+    public static Event<InspectFirearmEventArgs> InspectFirearm { get; set; } = new Event<InspectFirearmEventArgs>();
+    
+    public static Event<AccessFirearmBaseStatsEventArgs> AccessFirearmBaseStats { get; set; } = new Event<AccessFirearmBaseStatsEventArgs>();
     
     public static void OnAdminToyCollision(AdminToyCollisionEventArgs ev)
     {
@@ -27,5 +30,15 @@ public static class Custom
     public static void OnSetupNpcBrain(SetupNpcBrainEventArgs ev)
     {
         SetupNpcBrain.InvokeSafely(ev);
+    }
+
+    public static void OnInspectFirearm(InspectFirearmEventArgs ev)
+    {
+        InspectFirearm.InvokeSafely(ev);
+    }
+    
+    public static void OnAccessFirearmBaseStats(AccessFirearmBaseStatsEventArgs ev)
+    {
+        AccessFirearmBaseStats.InvokeSafely(ev);
     }
 }

@@ -27,7 +27,7 @@ public class AIPathFinder : MonoBehaviour
        navMeshAgent.stoppingDistance = 0.3f;
        navMeshAgent.baseOffset = 1;
        navMeshAgent.autoRepath = true;
-       navMeshAgent.autoTraverseOffMeshLink = false;
+       navMeshAgent.autoTraverseOffMeshLink = true;
        navMeshAgent.height = characterController.height;
        navMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
        navMeshAgent.agentTypeID = 0;
