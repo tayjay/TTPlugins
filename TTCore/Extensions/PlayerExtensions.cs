@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
 using Exiled.Permissions.Extensions;
 using InventorySystem.Items.Firearms.Modules;
@@ -87,6 +88,24 @@ namespace TTCore.Extensions
             }
 
             return ragdoll != null;
+        }
+        
+        public static bool TryGetDoorOnSight(this Player player, float maxDistance, out Door door)
+        {
+            door = null;
+            RaycastHit[] hits = new RaycastHit[30];
+            Physics.RaycastNonAlloc(new Ray(player.ReferenceHub.PlayerCameraReference.position, player.ReferenceHub.PlayerCameraReference.forward), hits, maxDistance, LayerMask.GetMask("Door"));
+
+            foreach (RaycastHit hit in hits)
+            {
+                Log.Debug(hit.transform?.name);
+                if (hit.collider == null)
+                    continue;
+                door = Door.Get(hit.collider.gameObject);
+                if (door != null)
+                    return true;
+            }
+            return door != null;
         }
         
         public static bool CanSee(this Player player, Player target, float range = 100)

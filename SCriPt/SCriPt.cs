@@ -5,7 +5,8 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using MoonSharp.Interpreter;
 using SCriPt.API.Lua;
-using EventHandler = SCriPt.Handlers.EventHandler;
+using SCriPt.Handlers;
+
 
 
 namespace SCriPt
@@ -15,9 +16,32 @@ namespace SCriPt
         private static readonly SCriPt Singleton = new SCriPt();
         public static SCriPt Instance => Singleton;
         
-        public EventHandler EventHandler { get; private set; }
+        public PlayerEvents PlayerEvents { get; private set; }
+        public ServerEvents ServerEvents { get; private set; }
+        public WarheadEvents WarheadEvents { get; private set; }
         
-        public List<Script> LoadedScripts { get; private set; }
+        public ItemEvents ItemEvents { get; private set; }
+        
+        public MapEvents MapEvents { get; private set; }
+        
+        public Scp049Events Scp049Events { get; private set; }
+        
+        //public Scp0492Events Scp0492Events { get; private set; }
+        
+        //public Scp079Events Scp079Events { get; private set; }
+        
+        //public Scp096Events Scp096Events { get; private set; }
+        
+        //public Scp106Events Scp106Events { get; private set; }
+        
+        //public Scp173Events Scp173Events { get; private set; }
+        
+        //public Scp939Events Scp939Events { get; private set; }
+        
+        public Scp3114Events Scp3114Events { get; private set; }
+        
+        
+        public List<Script> LoadedScripts { get; private set; } = new List<Script>();
 
         private SCriPt()
         {
@@ -54,8 +78,55 @@ namespace SCriPt
             Load();
         }
 
+        public void Register()
+        {
+            PlayerEvents = new PlayerEvents();
+            ServerEvents = new ServerEvents();
+            WarheadEvents = new WarheadEvents();
+            ItemEvents = new ItemEvents();
+            MapEvents = new MapEvents();
+            Scp049Events = new Scp049Events();
+            Scp3114Events = new Scp3114Events();
+            
+            
+            PlayerEvents.RegisterEvents();
+            PlayerEvents.RegisterEventTypes();
+            ServerEvents.RegisterEvents();
+            ServerEvents.RegisterEventTypes();
+            WarheadEvents.RegisterEvents();
+            WarheadEvents.RegisterEventTypes();
+            ItemEvents.RegisterEvents();
+            ItemEvents.RegisterEventTypes();
+            MapEvents.RegisterEvents();
+            MapEvents.RegisterEventTypes();
+            Scp049Events.RegisterEvents();
+            Scp049Events.RegisterEventTypes();
+            Scp3114Events.RegisterEvents();
+            Scp3114Events.RegisterEventTypes();
+        }
+        
+        public void Unregister()
+        {
+            PlayerEvents.UnregisterEvents();
+            ServerEvents.UnregisterEvents();
+            WarheadEvents.UnregisterEvents();
+            ItemEvents.UnregisterEvents();
+            MapEvents.UnregisterEvents();
+            Scp049Events.UnregisterEvents();
+            Scp3114Events.UnregisterEvents();
+            
+            PlayerEvents = null;
+            ServerEvents = null;
+            WarheadEvents = null;
+            ItemEvents = null;
+            MapEvents = null;
+            Scp049Events = null;
+            Scp3114Events = null;
+        }
+
         public void Load()
         {
+            Register();
             LoadedScripts = new List<Script>();
             try
             {
@@ -64,14 +135,14 @@ namespace SCriPt
                 Log.Info(rtnHelloWorld());
                 Log.Info("Global sum: "+globalSum(5, 5));
                 Log.Info(CallbackTest("Testing2"));
-                ScriptLoader.Load();
+                ScriptLoader.AutoLoad();
             } catch (IOException e)
             {
                 Log.Error("Error reading script file: "+e.Message);
             }
             
-            EventHandler = new EventHandler();
-            EventHandler.RegisterEvents();
+            //EventHandler = new EventHandler();
+            //EventHandler.RegisterEvents();
         }
 
         public string rtnHelloWorld()
@@ -127,13 +198,14 @@ namespace SCriPt
         
         public void Unload()
         {
-            EventHandler.UnregisterEvents();
+            //EventHandler.UnregisterEvents();
+            Unregister();
             /*LoadedScripts.Clear();
             
             LuaScriptExecutor = null;
             LuaScriptLoader = null;*/
             LoadedScripts.Clear();
-            EventHandler = null;
+            //EventHandler = null;
         }
         
         public override string Author { get; } = "TayTay";

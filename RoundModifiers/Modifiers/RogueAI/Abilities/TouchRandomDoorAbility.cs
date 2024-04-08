@@ -1,5 +1,8 @@
-﻿using Exiled.API.Enums;
+﻿using System.Collections.Generic;
+using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features.Doors;
+using PluginAPI.Core;
 
 namespace RoundModifiers.Modifiers.RogueAI.Abilities
 {
@@ -12,7 +15,7 @@ namespace RoundModifiers.Modifiers.RogueAI.Abilities
 
         public override bool Setup()
         {
-            door = Door.Random();
+            door = Exiled.API.Features.Player.List.GetRandomValue()?.CurrentRoom.Doors.GetRandomValue();
             if(door == null) return false;
             if(!door.AllowsScp106) return false;
             return true;

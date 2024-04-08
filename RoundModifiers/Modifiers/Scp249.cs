@@ -84,6 +84,7 @@ namespace RoundModifiers.Modifiers
                     DoorMarkers[PlacingDoor] = Primitive.Create(settings);
                     DoorMarkers[PlacingDoor].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[PlacingDoor].AdminToyBase);
                     LastPlaceTime = Time.time;
+                    Doors[PlacingDoor].IsOpen = true;
                     Log.Info("New door in "+Doors[PlacingDoor].Room.Type);
                     PlacingDoor = (PlacingDoor + 1) % DoorCount;
                 }
@@ -94,6 +95,7 @@ namespace RoundModifiers.Modifiers
                 {
                     //Want to start fading the door that is changing to red to indicate it will be the next door to move
                     DoorMarkers[PlacingDoor].Color = Color.Lerp(DoorMarkers[PlacingDoor].Color, new Color(0f,0f,0f, 0f), 0.1f);
+                    Doors[PlacingDoor].IsOpen = false;
                 } else if(Time.time-LastPlaceTime > RoundModifiers.Instance.Config.Scp249_MoveInterval-10f)
                 {
                     //Want to start fading the door that is changing to red to indicate it will be the next door to move
@@ -114,7 +116,7 @@ namespace RoundModifiers.Modifiers
                 {
                     Log.Info("Teleporting player");
                     Door targetDoor = Doors[(i + 1) % DoorCount];
-                    ev.Player.Teleport(targetDoor.Position+Vector3.up+(targetDoor.Rotation*Vector3.forward));
+                    ev.Player?.Teleport(targetDoor.Position+Vector3.up+(targetDoor.Rotation*Vector3.forward));
                     return;
                 }
             }
@@ -138,6 +140,7 @@ namespace RoundModifiers.Modifiers
                                 Door targetDoor = Doors[(i+1) % (Doors.Length)];
                                 player.Teleport(targetDoor.Position + Vector3.up +
                                                 (targetDoor.Rotation * Vector3.forward)); //Teleport to the next door
+                                player.Rotation = targetDoor.Rotation;
                                 break;
                             }
                         }
@@ -146,6 +149,8 @@ namespace RoundModifiers.Modifiers
                     {
                         Log.Error("Error teleporting "+player.Nickname);
                     }
+
+                    yield return Timing.WaitForOneFrame;
                 }
             }
         }

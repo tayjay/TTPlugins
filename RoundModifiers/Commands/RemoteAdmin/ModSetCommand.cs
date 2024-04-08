@@ -13,7 +13,7 @@ namespace RoundModifiers.Commands.RemoteAdmin
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get((CommandSender)sender);
-            if(player.CheckPermission("RoundEvents") || player.CheckPermission("modifier") || player.CheckPermission("RoundEvents*"))
+            if(sender.CheckPermission("RoundEvents") || sender.CheckPermission("modifier") || sender.CheckPermission("RoundEvents*"))
             {
                 if (arguments.Count < 1)
                 {

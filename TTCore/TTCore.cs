@@ -1,10 +1,13 @@
-﻿using Exiled.API.Enums;
+﻿using System.Reflection;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using HarmonyLib;
+using PlayerRoles.FirstPersonControl;
 using TTCore.Handlers;
 using TTCore.HUDs;
 using TTCore.Npcs;
 using TTCore.Npcs.AI.Pathing;
+using UnityEngine;
 
 namespace TTCore
 {
@@ -61,6 +64,7 @@ namespace TTCore
             
             //NavMeshBuilder.Register();
             
+
         }
 
         private void Shutdown()
@@ -75,7 +79,7 @@ namespace TTCore
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 1, 1);
+        public override System.Version Version { get; } = new System.Version(0, 2, 0);
         
     }
 }

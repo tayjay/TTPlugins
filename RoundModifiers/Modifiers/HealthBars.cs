@@ -105,10 +105,13 @@ public class HealthBars : Modifier
             //UpdatePositionAndRotation();
             //Log.Info("Updated HPBar Pos "+Player.Position+" "+FullBar.Position);
         }
+        
+        protected float lastUpdate = 0;
 
         private void FixedUpdate()
         {
             if (Player.IsDead) return;
+            if (Time.time - lastUpdate < 0.5f) return;
             UpdateHealth();
             //Log.Info("FixedUpdate HPBar");
         }
@@ -140,8 +143,9 @@ public class HealthBars : Modifier
 
         public void UpdateHealth()
         {
-            Log.Debug($"{Player.Nickname} HP: {Health}/{MaxHealth}");
+            //Log.Debug($"{Player.Nickname} HP: {Health}/{MaxHealth}");
             HealthBar.Scale = new Vector3((Health / MaxHealth)*-1*RoundModifiers.Instance.Config.HealthBars_Length, -0.05f, -0.05f);
+            lastUpdate = Time.time;
         }
     }
 }

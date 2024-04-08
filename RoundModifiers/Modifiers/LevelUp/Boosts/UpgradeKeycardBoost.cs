@@ -74,7 +74,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                 }
             }
             //If the player doesn't have a keycard, give them a keycard
-            player.AddItem(GenerateOutcome(ItemType.KeycardZoneManager, ItemType.KeycardScientist));
+            player.AddItem(GenerateOutcome(ItemType.KeycardZoneManager, ItemType.KeycardScientist, ItemType.KeycardGuard));
             return true;
         }
 

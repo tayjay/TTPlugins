@@ -16,25 +16,12 @@ namespace TTAddons.Handlers
 
         public void OnRespawnWave(RespawningTeamEventArgs ev)
         {
-            RoleTypeId tier1 = ev.NextKnownTeam == SpawnableTeamType.NineTailedFox
-                ? RoleTypeId.NtfCaptain
-                : RoleTypeId.ChaosMarauder;
-            RoleTypeId tier2 = ev.NextKnownTeam == SpawnableTeamType.NineTailedFox
-                ? RoleTypeId.NtfSergeant
-                : RoleTypeId.ChaosRifleman;
-            RoleTypeId tier3 = ev.NextKnownTeam == SpawnableTeamType.NineTailedFox
-                ? RoleTypeId.NtfPrivate
-                : RoleTypeId.ChaosRepressor;
-
+            
             Player[] oldPlayers = ev.Players.ToArray();
             
-            IOrderedEnumerable<Player> orderedPoints = spectatorPoints.Keys.OrderBy( x => spectatorPoints[x]);
+            IOrderedEnumerable<Player> orderedPoints = oldPlayers.OrderBy( GetPoints);
             ev.Players.Clear();
             ev.Players.AddRange(orderedPoints);
-            foreach (Player player in oldPlayers)
-            {
-                ev.Players.AddIfNotContains(player);
-            }
             spectatorPoints.Clear();
         }
 
@@ -45,6 +32,14 @@ namespace TTAddons.Handlers
                 spectatorPoints[player]++;
             }
             spectatorPoints[ev.Player] = 0;
+        }
+
+        private int GetPoints(Player player)
+        {
+            if(spectatorPoints.TryGetValue(player, out var points))
+                return points;
+            spectatorPoints[player] = 0;
+            return spectatorPoints[player];
         }
         
         public void OnRoundRestart()

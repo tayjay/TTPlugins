@@ -105,17 +105,41 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="API\Lua\Helpers\APIPlayer.cs" />
-        <Compile Include="API\Lua\Helpers\LuaAPI.cs" />
-        <Compile Include="API\Lua\Helpers\LuaPlayer.cs" />
-        <Compile Include="API\Lua\Helpers\LuaServer.cs" />
+        <Compile Include="API\Lua\Globals\LuaAPI.cs" />
+        <Compile Include="API\Lua\Globals\LuaCassie.cs" />
+        <Compile Include="API\Lua\Globals\LuaCoroutines.cs" />
+        <Compile Include="API\Lua\Globals\LuaDecon.cs" />
+        <Compile Include="API\Lua\Globals\LuaEvents.cs" />
+        <Compile Include="API\Lua\Globals\LuaFacility.cs" />
+        <Compile Include="API\Lua\Globals\LuaLobby.cs" />
+        <Compile Include="API\Lua\Globals\LuaPlayer.cs" />
+        <Compile Include="API\Lua\Globals\LuaRound.cs" />
+        <Compile Include="API\Lua\Globals\LuaServer.cs" />
+        <Compile Include="API\Lua\Globals\LuaWarhead.cs" />
+        <Compile Include="API\Lua\Proxy\Events\ProxyJumpingEventArgs.cs" />
+        <Compile Include="API\Lua\Proxy\ProxyDoor.cs" />
         <Compile Include="API\Lua\Proxy\ProxyItem.cs" />
+        <Compile Include="API\Lua\Proxy\ProxyNpc.cs" />
+        <Compile Include="API\Lua\Proxy\ProxyPickup.cs" />
         <Compile Include="API\Lua\Proxy\ProxyPlayer.cs" />
+        <Compile Include="API\Lua\Proxy\ProxyRoom.cs" />
+        <Compile Include="API\Lua\Proxy\ProxyTeslaGate.cs" />
         <Compile Include="API\Lua\ScriptLoader.cs" />
+        <Compile Include="Commands\RemoteAdmin\ScriptCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ScriptFCommand.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Extensions\DeconExtensions.cs" />
-        <Compile Include="Handlers\EventHandler.cs" />
+        <Compile Include="Handlers\CassieEvents.cs" />
+        <Compile Include="Handlers\EventManager.cs" />
         <Compile Include="Handlers\Events.cs" />
+        <Compile Include="Handlers\IEventHandler.cs" />
+        <Compile Include="Handlers\ItemEvents.cs" />
+        <Compile Include="Handlers\MapEvents.cs" />
+        <Compile Include="Handlers\PlayerEvents.cs" />
+        <Compile Include="Handlers\Scp049Events.cs" />
+        <Compile Include="Handlers\Scp3114Events.cs" />
+        <Compile Include="Handlers\ServerEvents.cs" />
+        <Compile Include="Handlers\WarheadEvents.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="SCriPt.cs" />
     </ItemGroup>
@@ -124,7 +148,7 @@
       <None Include="packages.config" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Examples\" />
+      <Content Include="Examples\Example.lua" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

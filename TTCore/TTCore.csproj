@@ -118,6 +118,8 @@
         <Compile Include="Events\EventArgs\InspectFirearmEventArgs.cs" />
         <Compile Include="Events\EventArgs\Scp018BounceEventArgs.cs" />
         <Compile Include="Events\EventArgs\SetupNpcBrainEventArgs.cs" />
+        <Compile Include="Events\EventArgs\ZombieAttackAbilityPatch.cs" />
+        <Compile Include="Events\EventArgs\ZombieAttackEventArgs.cs" />
         <Compile Include="Events\Handlers\Custom.cs" />
         <Compile Include="Events\Handlers\MapEvents.cs" />
         <Compile Include="Extensions\FirearmExtensions.cs" />
@@ -142,6 +144,7 @@
         <Compile Include="Npcs\NpcManager.cs" />
         <Compile Include="Patches\FirearmBasicMessagesHandlerPatch.cs" />
         <Compile Include="Patches\FirearmPatch.cs" />
+        <Compile Include="Patches\ScpAttackAbilityBasePatch.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TTConfig.cs" />
         <Compile Include="TTCore.cs" />

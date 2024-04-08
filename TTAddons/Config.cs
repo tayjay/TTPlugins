@@ -25,6 +25,6 @@ namespace TTAddons
         public bool EnableSpectatorGame { get; set; } = true;
         
         [Description("Enable weapon stats. Default is true.")]
-        public bool EnableWeaponStats { get; set; } = true;
+        public bool EnableWeaponStats { get; set; } = false;
     }
 }

@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Roles;
 using MoonSharp.Interpreter;
 using PlayerRoles;
+using PlayerRoles.FirstPersonControl;
 using UnityEngine;
 
 namespace SCriPt.API.Lua.Proxy
@@ -25,15 +30,89 @@ namespace SCriPt.API.Lua.Proxy
             get => Player.Health;
             set => Player.Health = value;
         }
-
-        public string Role
+        
+        /// <summary>Gets or sets the player's maximum health.</summary>
+        public float MaxHealth
         {
-            get => Player.Role.Type.ToString();
+            get => Player.MaxHealth;
+            set => Player.MaxHealth = value;
         }
+        
+        public float ArtificalHealth
+        {
+            get => Player.ArtificialHealth;
+            set => Player.ArtificialHealth = value;
+        }
+        
+        public float MaxArtificalHealth
+        {
+            get => Player.MaxArtificialHealth;
+            set => Player.MaxArtificialHealth = value;
+        }
+        
+        public float HumeShield
+        {
+            get => Player.HumeShield;
+            set => Player.HumeShield = value;
+        }
+
+        public Room Room => Player.CurrentRoom;
+        public ZoneType Zone => Player.Zone;
+        public Lift Lift => Player.Lift;
+        
+        public List<StatusEffectBase> StatusEffects => Player.ActiveEffects.ToList();
+        
+        public bool IsInPocketDimension => Player.IsInPocketDimension;
+
+        public bool IsInventoryEmpty => Player.IsInventoryEmpty;
+        public bool IsInventoryFull => Player.IsInventoryFull;
+        
+        public List<Player> CurrentSpectatingPlayers => Player.CurrentSpectatingPlayers.ToList();
+        
+        public bool IsSpawnProtected
+        {
+            get => Player.IsSpawnProtected;
+            set => Player.IsSpawnProtected = value;
+        }
+        
+        public bool GodMode
+        {
+            get => Player.IsGodModeEnabled;
+            set => Player.IsGodModeEnabled = value;
+        }
+        
+        public bool IsNoclipPermitted
+        {
+            get => Player.IsNoclipPermitted;
+            set => Player.IsNoclipPermitted = value;
+        }
+
+        public Role Role
+        {
+            get => Player.Role;
+        }
+        
+        public RoleTypeId RoleTypeId => Player.Role.Type;
+        
+        public Transform CameraTransform => Player.CameraTransform;
+        
+        public string AuthenticationType => Player.AuthenticationType.ToString();
+        
+        public Player Cuffer => Player.Cuffer;
         
         public void Kill()
         {
             Player.Kill(DamageType.Custom);
+        }
+        
+        public void Hurt(float damage, string damageReason = "Admin")
+        {
+            Player.Hurt(damage, damageReason);
+        }
+        
+        public void Heal(float amount, bool overrideMax = false)
+        {
+            Player.Heal(amount, overrideMax);
         }
 
         public void SetRole(string role, int flag)
@@ -44,7 +123,7 @@ namespace SCriPt.API.Lua.Proxy
         
         public void SetRole(string role)
         {
-            SetRole(role,-1);
+            SetRole(role,(int)RoleSpawnFlags.All);
         }
         
         public void ShowHint(string message, float duration)
@@ -57,6 +136,32 @@ namespace SCriPt.API.Lua.Proxy
             Player.Broadcast(duration, message);
         }
         
+        public void Handcuff()
+        {
+            Player.Handcuff();
+        }
+        
+        public void Teleport(Vector3 position)
+        {
+            Player.Teleport(position);
+        }
+
+        public bool IsJumping
+        {
+            get => Player.IsJumping;
+            set
+            {
+                var role = (Player.Role as FpcRole);
+                if (role != null) role.FirstPersonController.FpcModule.Motor.WantsToJump = value;
+            }
+        }
+        
+
+        public Vector3 Position
+        {
+            get => Player.Position;
+            set => Player.Position = value;
+        }
         
         public float PosX
         {
@@ -74,6 +179,12 @@ namespace SCriPt.API.Lua.Proxy
         {
             get => Player.Position.z;
             set => Player.Position = new Vector3(Player.Position.x,Player.Position.y,value);
+        }
+        
+        public Vector3 Scale
+        {
+            get => Player.Scale;
+            set => Player.Scale = value;
         }
         
         
@@ -96,5 +207,40 @@ namespace SCriPt.API.Lua.Proxy
         }
 
         public Item CurrentItem => Player.CurrentItem;
+        
+        public void GiveItem(ItemType type)
+        {
+            Player.AddItem(type);
+        }
+        
+        public bool ReloadWeapon()
+        {
+            return Player.ReloadWeapon();
+        }
+        
+        public bool UseCurrentItem()
+        {
+            return Player.UseItem(Player.CurrentItem);
+        }
+
+        public bool UseItem(Item item)
+        {
+            return Player.UseItem(item);
+        }
+        
+        public void Broadcast(string message)
+        {
+            Player.Broadcast(5, message);
+        }
+        
+        public void DropHeldItem(bool isThrown = false)
+        {
+            Player.DropHeldItem(isThrown);
+        }
+        
+        public Item AddItem(ItemType itemType)
+        {
+            return Player.AddItem(itemType);
+        }
     }
 }

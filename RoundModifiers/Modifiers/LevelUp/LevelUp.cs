@@ -47,9 +47,9 @@ namespace RoundModifiers.Modifiers.LevelUp
             _boosts.Add(new GiveItemBoost(ItemType.ArmorLight, Tier.Uncommon));
             _boosts.Add(new GiveItemBoost(ItemType.GunRevolver, Tier.Rare));
             _boosts.Add(new GiveItemBoost(ItemType.KeycardFacilityManager, Tier.Epic));
-            _boosts.Add(new GiveItemBoost(ItemType.KeycardGuard, Tier.Uncommon));
-            _boosts.Add(new GiveItemBoost(ItemType.KeycardZoneManager));
-            _boosts.Add(new GiveItemBoost(ItemType.KeycardScientist));
+            //_boosts.Add(new GiveItemBoost(ItemType.KeycardGuard, Tier.Uncommon));
+            //_boosts.Add(new GiveItemBoost(ItemType.KeycardZoneManager));
+            //_boosts.Add(new GiveItemBoost(ItemType.KeycardScientist));
             _boosts.Add(new GiveCandyBoost(CandyKindID.Pink, Tier.Epic));
             _boosts.Add(new GiveCandyBoost(CandyKindID.Blue, Tier.Uncommon));
             _boosts.Add(new GiveCandyBoost(CandyKindID.Rainbow, Tier.Uncommon));
@@ -71,6 +71,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             _boosts.Add(new BecomeScpBoost(Tier.Legendary));
             _boosts.Add(new UpgradeWeaponBoost(Tier.Common));
             _boosts.Add(new UpgradeWeaponBoost(Tier.Uncommon));
+            _boosts.Add(new ChangeSizeBoost());
         }
         
         //Store actions they have completed so they aren't completed more than once

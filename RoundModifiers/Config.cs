@@ -99,6 +99,9 @@ namespace RoundModifiers
         [Description("Number of doors to place during the Scp249 modifier. Default is 2. Must be 2 or greater.")]
         public int Scp249_DoorCount { get; set; } = 2;
         
+        [Description("How much health to give Scp-3114s during BoneZone. Default is 0.5f.")]
+        public float BoneZone_Scp3114HealthScale { get; set; } = 0.5f;
+        
         //MysteryBox
         [Description("Whether the MysteryBox modifier is enabled. Default is true.")]
         public bool MysteryBox_Enable { get; set; } = true;
@@ -111,5 +114,11 @@ namespace RoundModifiers
         public float HealthBars_Length { get; set; } = 1f;
         [Description("The vertical offset of the health bars. Default is 1f.")]
         public float HealthBars_Height { get; set; } = 1f;
+        
+        //MoonGravity
+        [Description("Whether the MoonGravity modifier is enabled. Default is true.")]
+        public bool MoonGravity_Enable { get; set; } = true;
+        [Description("The gravity to set during the MoonGravity modifier. Default is -10f. Normal Gravity is -19.6f.")]
+        public float MoonGravity_Gravity { get; set; } = -10.0f;
     }
 }

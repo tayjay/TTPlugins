@@ -16,6 +16,7 @@ public static class Custom
     public static Event<InspectFirearmEventArgs> InspectFirearm { get; set; } = new Event<InspectFirearmEventArgs>();
     
     public static Event<AccessFirearmBaseStatsEventArgs> AccessFirearmBaseStats { get; set; } = new Event<AccessFirearmBaseStatsEventArgs>();
+    public static Event<ZombieAttackEventArgs> ZombieAttack { get; set; } = new Event<ZombieAttackEventArgs>();
     
     public static void OnAdminToyCollision(AdminToyCollisionEventArgs ev)
     {
@@ -40,5 +41,10 @@ public static class Custom
     public static void OnAccessFirearmBaseStats(AccessFirearmBaseStatsEventArgs ev)
     {
         AccessFirearmBaseStats.InvokeSafely(ev);
+    }
+    
+    public static void OnZombieAttack(ZombieAttackEventArgs ev)
+    {
+        ZombieAttack.InvokeSafely(ev);
     }
 }

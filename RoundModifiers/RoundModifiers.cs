@@ -81,7 +81,11 @@ namespace RoundModifiers
             //AddModifier(new Alive());
             AddModifier(new MysteryBox());
             AddModifier(new HealthBars());
+            //AddModifier(new MoonGravity());
+            AddModifier(new WeaponStats());
+            AddModifier(new AntiCamping());
         }
+        
         
         public void AddModifier(Modifier mod)
         {
@@ -151,6 +155,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 1, 1);
+        public override System.Version Version { get; } = new System.Version(0, 2, 0);
     }
 }

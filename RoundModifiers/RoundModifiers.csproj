@@ -115,6 +115,7 @@
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\RoundManager.cs" />
         <Compile Include="Modifiers\Alive.cs" />
+        <Compile Include="Modifiers\AntiCamping.cs" />
         <Compile Include="Modifiers\Blackout.cs" />
         <Compile Include="Modifiers\BodyBlock.cs" />
         <Compile Include="Modifiers\BoneZone.cs" />
@@ -126,6 +127,7 @@
         <Compile Include="Modifiers\Insurrection.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\BecomeScpBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\Boost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\ChangeSizeBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\GiveCandyBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\GiveItemBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\HealAOEBoost.cs" />
@@ -161,6 +163,7 @@
         <Compile Include="Modifiers\LevelUp\XPs\XP.cs" />
         <Compile Include="Modifiers\Medic.cs" />
         <Compile Include="Modifiers\MicroHIV.cs" />
+        <Compile Include="Modifiers\MoonGravity.cs" />
         <Compile Include="Modifiers\MultiBall.cs" />
         <Compile Include="Modifiers\MysteryBox.cs" />
         <Compile Include="Modifiers\NoCassie.cs" />
@@ -187,6 +190,8 @@
         <Compile Include="Modifiers\RogueAI\Abilities\TouchRandomDoorAbility.cs" />
         <Compile Include="Modifiers\RogueAI\RogueAI.cs" />
         <Compile Include="Modifiers\Scp249.cs" />
+        <Compile Include="Modifiers\SpectatorGame.cs" />
+        <Compile Include="Modifiers\WeaponStats.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="RoundModifiers.cs" />
     </ItemGroup>

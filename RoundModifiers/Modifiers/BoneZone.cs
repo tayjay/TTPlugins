@@ -43,7 +43,7 @@ namespace RoundModifiers.Modifiers
                 {
                     Ragdoll.CreateAndSpawn(RoleTypeId.FacilityGuard, ev.Player.Nickname, "ded", ev.Player.Position+Vector3.up, ev.Player.Rotation);
                     Pickup.CreateAndSpawn(ItemType.GunFSP9, ev.Player.Position+Vector3.up, ev.Player.Rotation);
-                    ev.Player.MaxHealth /= 2;
+                    ev.Player.MaxHealth *= RoundModifiers.Instance.Config.BoneZone_Scp3114HealthScale;
                 });
             }
         }

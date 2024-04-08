@@ -1,0 +1,37 @@
+﻿using Exiled.API.Features;
+using TTCore.Extensions;
+
+namespace RoundModifiers.Modifiers.LevelUp.Boosts;
+
+public class ChangeSizeBoost : Boost
+{
+    public float NewScale { get; set; }
+    
+    public ChangeSizeBoost(float newScale = 0.5f) : base(Tier.Rare)
+    {
+        NewScale = newScale;
+    }
+
+    public override bool AssignBoost(Player player)
+    {
+        if(HasBoost.ContainsKey(player.NetId)) return false;
+        return ApplyBoost(player);
+    }
+
+    public override bool ApplyBoost(Player player)
+    {
+        HasBoost[player.NetId] = true;
+        player.ChangeSize(NewScale);
+        return true;
+    }
+
+    public override string GetName()
+    {
+        return "Size: "+NewScale;
+    }
+
+    public override string GetDescription()
+    {
+        return "Change the player's size to "+NewScale;
+    }
+}

@@ -13,7 +13,7 @@ namespace RoundModifiers.Modifiers;
 
 public class MysteryBox : Modifier
 {
-    public List<ItemType> PossibleItems { get; }
+    public List<ItemType> PossibleItems { get; } = new List<ItemType>();
     //OnFlipCoin
     public void OnFlipCoin(FlippingCoinEventArgs ev)
     {
