@@ -13,6 +13,7 @@ namespace SCriPt.API.Lua.Globals
     [MoonSharpUserData]
     public class LuaServer
     {
+        private static ServerConsoleSender _serverConsoleSender = new ServerConsoleSender();
         
         public static int PlayerCount => Exiled.API.Features.Player.List.Count;
         public static int NpcCount => Exiled.API.Features.Npc.List.Count;
@@ -22,12 +23,18 @@ namespace SCriPt.API.Lua.Globals
         public static int ScientistCount => Player.List.Count(p => p.Role.Team == Team.Scientists);
         public static int FoundationCount => Player.List.Count(p => p.Role.Team == Team.FoundationForces);
         public static int ChaosCount => Player.List.Count(p => p.Role.Team == Team.ChaosInsurgency);
+        
+        public static bool FriendlyFire
+        {
+            get => Server.FriendlyFire;
+            set => Server.FriendlyFire = value;
+        }
 
         public static List<Player> Players => Player.List.ToList();
         
         public static string RACommand(string command)
         {
-            return RemoteAdmin.CommandProcessor.ProcessQuery(command, new ServerConsoleSender());
+            return RemoteAdmin.CommandProcessor.ProcessQuery(command, _serverConsoleSender);
         }
 
         public static string LACommand(string command)
@@ -38,6 +45,16 @@ namespace SCriPt.API.Lua.Globals
         public static void Restart()
         {
             Server.Restart();
+        }
+        
+        public static void Shutdown()
+        {
+            Server.Shutdown();
+        }
+        
+        public static void SendBroadcast(string message, ushort duration)
+        {
+            Server.Broadcast.RpcAddElement(message,duration,Broadcast.BroadcastFlags.Normal);
         }
     }
 }

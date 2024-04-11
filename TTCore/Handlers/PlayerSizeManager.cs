@@ -11,29 +11,34 @@ namespace TTCore.Handlers
     public class PlayerSizeManager
     {
         //Need a list of player IDs and their associated sizes
-        public Dictionary<int, float> PlayerSizes;
+        public Dictionary<int, Vector3> PlayerSizes;
 
         public PlayerSizeManager()
         {
-            PlayerSizes = new Dictionary<int, float>();
+            PlayerSizes = new Dictionary<int, Vector3>();
         }
 
         //Need a method to get the size of a player
-        public float GetSize(Player player)
+        public Vector3 GetSize(Player player)
         {
             int playerId = player.Id;
             if (PlayerSizes.ContainsKey(playerId))
                 return PlayerSizes[playerId];
-            return 1.0f;
+            return Vector3.one;
+        }
+
+        public void SetSize(Player player, float size)
+        {
+            SetSize(player, new Vector3(size, size, size));
         }
 
         //Need a method to set the size of a player
-        public void SetSize(Player player, float size)
+        public void SetSize(Player player, Vector3 size)
         {
             int playerId = player.Id;
             PlayerSizes[playerId] = size;
             
-            Log.Info(player.Nickname + " size set to " + size + "!");
+            Log.Debug(player.Nickname + " size set to " + size + "!");
             //ChangePlayerScale(player, size);
             MEC.Timing.KillCoroutines("Resize"+playerId);
             MEC.Timing.RunCoroutine(ChangeOverTime(player, size), "Resize"+playerId);
@@ -47,8 +52,8 @@ namespace TTCore.Handlers
             if (PlayerSizes.ContainsKey(playerId))
                 PlayerSizes.Remove(playerId);
             MEC.Timing.KillCoroutines("Resize"+playerId);
-            ChangePlayerScale(player, 1.0f);
-            Log.Info(player.Nickname + " size set to 1.0!");
+            ChangePlayerScale(player, Vector3.one);
+            Log.Debug(player.Nickname + " size set to 1.0!");
         }
         
         public void ResetAll()
@@ -63,19 +68,32 @@ namespace TTCore.Handlers
             }
         }
 
-        private IEnumerator<float> ChangeOverTime(Player player, float targetSize)
+        private IEnumerator<float> ChangeOverTime(Player player, Vector3 targetSize)
         {
-            while(Math.Abs(player.Scale.y - targetSize) > 0.08)
+            /*while(Math.Abs(player.Scale.y - targetSize) > 0.08)
             {
                 float currentSize = player.Scale.y;
                 float newSize = Mathf.Lerp(currentSize, targetSize, Timing.DeltaTime);
                 player.Position += new Vector3(0, (newSize - currentSize)/2, 0);
                 ChangePlayerScale(player, newSize);
                 yield return Timing.WaitForOneFrame;
+            }*/
+            while (Vector3.Distance(player.Scale, targetSize) > 0.05)
+            {
+                float currX = player.Scale.x;
+                float currY = player.Scale.y;
+                float currZ = player.Scale.z;
+                float newX = Mathf.Lerp(currX, targetSize.x, Timing.DeltaTime);
+                float newY = Mathf.Lerp(currY, targetSize.y, Timing.DeltaTime);
+                float newZ = Mathf.Lerp(currZ, targetSize.z, Timing.DeltaTime);
+                if(newY>currY)
+                    player.Position += new Vector3(0, (newY - currY)/2, 0);
+                ChangePlayerScale(player, new Vector3(newX, newY, newZ));
+                yield return Timing.WaitForOneFrame;
             }
         }
 
-        private IEnumerator<float> MonitorPlayerSize(Player player)
+        /*private IEnumerator<float> MonitorPlayerSize(Player player)
         {
             while (Math.Abs(GetSize(player) - 1f) > 0.001f)
             {
@@ -100,20 +118,14 @@ namespace TTCore.Handlers
                 yield return Timing.WaitForSeconds(1f);
             }
             
-        }
+        }*/
         
         
-        private void ChangePlayerScale(Player player, float size)
+        private void ChangePlayerScale(Player player, Vector3 size)
         {
             float oldSize = player.Scale.y;
             //Change their physical size first
-            if (size > player.Scale.y)
-            {
-                //Need to move the player up as to not clip through the floor
-                float newY = (size - player.Scale.y)/2;
-                //player.Position += new Vector3(0, newY, 0);
-            }
-            player.Scale = new Vector3(size, size, size);
+            player.Scale = size;
             
             
             //For balance also need to change their stats

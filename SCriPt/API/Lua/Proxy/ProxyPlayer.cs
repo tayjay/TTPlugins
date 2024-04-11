@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CustomPlayerEffects;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Roles;
@@ -156,6 +157,11 @@ namespace SCriPt.API.Lua.Proxy
             }
         }
         
+        public float Stamina
+        {
+            get => Player.Stamina;
+            set => Player.Stamina = value;
+        }
 
         public Vector3 Position
         {
@@ -241,6 +247,12 @@ namespace SCriPt.API.Lua.Proxy
         public Item AddItem(ItemType itemType)
         {
             return Player.AddItem(itemType);
+        }
+        
+        
+        public void ChangeAppearance(RoleTypeId roleType)
+        {
+            Player.ChangeAppearance(roleType);
         }
     }
 }

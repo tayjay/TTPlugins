@@ -33,7 +33,7 @@ namespace SCriPt.API.Lua
         
         public static void AutoLoad()
         {
-            Script.DefaultOptions.DebugPrint = Log.Info;
+            Script.DefaultOptions.DebugPrint = s => Log.Send("[Lua] " + s, Discord.LogLevel.Debug, ConsoleColor.Green);;
             Script.DefaultOptions.ScriptLoader = new FileSystemScriptLoader();
             //UserData.RegistrationPolicy = InteropRegistrationPolicy.Automatic;
             RegisterTypes();
@@ -46,6 +46,10 @@ namespace SCriPt.API.Lua
             {
                 Directory.CreateDirectory("Scripts/AutoLoad");
             }
+            if(!Directory.Exists("Scripts/Globals"))
+            {
+                Directory.CreateDirectory("Scripts/Globals");
+            }
             
             Script = new Script();
             RegisterAPI(Script);
@@ -53,30 +57,77 @@ namespace SCriPt.API.Lua
             {
                 if(file.EndsWith(".lua"))
                 {
-                    //Script script = new Script();
-                    Script.DoFile(file);
-                    //SCriPt.Instance.LoadedScripts.Add(script);
-                    Log.Info("Loaded script: "+file);
+                    try
+                    {
+                        //Script script = new Script();
+                        Script.DoFile(file);
+                        //SCriPt.Instance.LoadedScripts.Add(script);
+                        Log.Info("Loaded script: " + file);
+                    }
+                    catch (ScriptRuntimeException e)
+                    {
+                        Log.Error(e.DecoratedMessage);
+                    }
                 }
             }
             SCriPt.Instance.LoadedScripts.Add(Script);
         }
 
+        public static void CustomAPIs(Script script)
+        {
+            foreach(string file in Directory.GetFiles("Scripts/Globals"))
+            {
+                if(file.EndsWith(".lua"))
+                {
+                    script.DoFile(file);
+                    Log.Info("Loaded Custom Global: "+file);
+                }
+            }
+        }
+
+        private static DynValue API;
+        private static DynValue Warhead;
+        private static DynValue Decon;
+        private static DynValue Lobby;
+        private static DynValue Round;
+        private static DynValue Facility;
+        private static DynValue Cassie;
+        private static DynValue Server;
+        private static DynValue Events;
+        private static DynValue Player;
+        private static DynValue Coroutines;
+        private static DynValue Role;
+
         public static void RegisterAPI(Script script)
         {
+            
+            if(API == null) API = UserData.CreateStatic<LuaAPI>();
+            if(Warhead == null) Warhead = UserData.CreateStatic<LuaWarhead>();
+            if(Decon == null) Decon = UserData.CreateStatic<LuaDecon>();
+            if(Lobby == null) Lobby = UserData.CreateStatic<LuaLobby>();
+            if(Round == null) Round = UserData.CreateStatic<LuaRound>();
+            if(Facility == null) Facility = UserData.CreateStatic<LuaFacility>();
+            if(Cassie == null) Cassie = UserData.CreateStatic<LuaCassie>();
+            if(Server == null) Server = UserData.CreateStatic<LuaServer>();
+            if(Events == null) Events = UserData.CreateStatic<LuaEvents>();
+            if(Player == null) Player = UserData.CreateStatic<LuaPlayer>();
+            if(Coroutines == null) Coroutines = UserData.CreateStatic<LuaCoroutines>();
+            if(Role == null) Role = UserData.CreateStatic<LuaRole>();
+            
             script.Globals["RegisterType"] = (Action<string,string>) RegisterType;
-            script.Globals["API"] = UserData.CreateStatic<LuaAPI>();
-            script.Globals["Warhead"] = UserData.CreateStatic<LuaWarhead>();
-            script.Globals["Decon"] = UserData.CreateStatic<LuaDecon>();
-            script.Globals["Lobby"] = UserData.CreateStatic<LuaLobby>();
-            script.Globals["Round"] = UserData.CreateStatic<LuaRound>();
-            script.Globals["Facility"] = UserData.CreateStatic<LuaFacility>();
-            script.Globals["Cassie"] = UserData.CreateStatic<LuaCassie>();
-            script.Globals["Server"] = UserData.CreateStatic<LuaServer>();
-            //script.Globals["Registry"] = UserData.CreateStatic<Registry>();
-            script.Globals["Events"] = UserData.CreateStatic<LuaEvents>();
-            script.Globals["Player"] = UserData.CreateStatic<LuaPlayer>();
-            script.Globals["Coroutines"] = UserData.CreateStatic<LuaCoroutines>();
+            script.Globals["API"] = API;
+            script.Globals["Warhead"] = Warhead;
+            script.Globals["Decon"] = Decon;
+            script.Globals["Lobby"] = Lobby;
+            script.Globals["Round"] = Round;
+            script.Globals["Facility"] = Facility;
+            script.Globals["Cassie"] = Cassie;
+            script.Globals["Server"] = Server;
+            script.Globals["Events"] = Events;
+            script.Globals["Player"] = Player;
+            script.Globals["Timing"] = Coroutines;
+            script.Globals["Role"] = Role;
+            CustomAPIs(script); 
         }
 
         private static void RegisterTypes()

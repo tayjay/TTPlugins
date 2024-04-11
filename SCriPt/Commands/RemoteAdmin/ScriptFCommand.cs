@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using MoonSharp.Interpreter;
 using SCriPt.API.Lua;
@@ -23,25 +24,34 @@ namespace SCriPt.Commands.RemoteAdmin
                 response = "Usage: scriptf <file_name.lua>";
                 return false;
             }
-            Script script = new Script();
-            ScriptLoader.RegisterAPI(script);
+            
             
             foreach(string file in Directory.GetFiles("Scripts"))
             {
-                if(file.ToLower().EndsWith(".lua"))
+                Log.Debug("Checking file: "+file);
+                if(file.EndsWith(".lua"))
                 {
-                    if(file.ToLower().Equals(arguments.At(0)))
+                    if(file.ToLower().Contains(arguments.At(0).ToLower()))
                     {
-                        //Script script = new Script();
-                        script.DoFile(file);
-                        //SCriPt.Instance.LoadedScripts.Add(script);
-                        response = "Loaded script: "+file;
-                        return true;
+                        try
+                        {
+                            Script script = new Script();
+                            ScriptLoader.RegisterAPI(script);
+                            //Script script = new Script();
+                            script.DoFile(file);
+                            //SCriPt.Instance.LoadedScripts.Add(script);
+                            response = "Loaded script: " + file;
+                            return true;
+                        }
+                        catch (ScriptRuntimeException e)
+                        {
+                            Log.Error(e.DecoratedMessage);
+                        }
                     }
                 }
             }
             
-            response = "File not found.";
+            response = $"File {arguments.At(0)} not found.";
             return false;
         }
 

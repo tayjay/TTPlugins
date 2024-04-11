@@ -22,7 +22,7 @@ namespace TTAddons
         public bool Scp3114ReplaceScp { get; set; } = false;
         
         [Description("Enable spectator lobby game. Default is true.")]
-        public bool EnableSpectatorGame { get; set; } = true;
+        public bool EnableSpectatorGame { get; set; } = false;
         
         [Description("Enable weapon stats. Default is true.")]
         public bool EnableWeaponStats { get; set; } = false;

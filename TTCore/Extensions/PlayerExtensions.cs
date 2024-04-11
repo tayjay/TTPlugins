@@ -137,6 +137,11 @@ namespace TTCore.Extensions
             TTCore.Instance.PlayerSizeManager.SetSize(player, size);
         }
         
+        public static void ChangeSize(this Player player, Vector3 size)
+        {
+            TTCore.Instance.PlayerSizeManager.SetSize(player, size);
+        }
+        
         /// <summary>
         /// Checks if the player has NPC permissions.
         /// If 'RequirePermission' is enabled and the player has 'npc' permission, it returns true.

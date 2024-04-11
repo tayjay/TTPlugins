@@ -29,6 +29,11 @@ namespace SCriPt.API.Lua.Globals
             Timing.CallDelayed(delay, () => closure.Call());
         }
         
+        public static void CallDelayed(float delay, Closure closure, object[] args)
+        {
+            Timing.CallDelayed(delay, () => closure.Call(args));
+        }
+        
         public static IEnumerator<float> Yield()
         {
             yield return 0;
@@ -37,7 +42,7 @@ namespace SCriPt.API.Lua.Globals
         private static IEnumerator<float> Coroutine(DynValue coroutine)
         {
             DynValue result = null;
-            yield return Timing.WaitForSeconds(2f);
+            //yield return Timing.WaitForSeconds(2f);
             
             
             /*
@@ -66,6 +71,27 @@ namespace SCriPt.API.Lua.Globals
             yield return Timing.WaitForOneFrame;
         }
 
+        private static IEnumerator<float> Coroutine(DynValue coroutine, object[] args)
+        {
+            DynValue result = null;
+            
+            while (true)
+            {
+                DynValue x;
+                if (coroutine.Coroutine.State == CoroutineState.NotStarted)
+                {
+                    x = coroutine.Coroutine.Resume(args);
+                }
+                else
+                {
+                    x = coroutine.Coroutine.Resume();
+                }
+                if(x.IsNil() || x.Number == 0)
+                    break;
+                yield return Timing.WaitForSeconds((float)x.Number);
+            }
+        }
+
         public static CoroutineHandle CallCoroutine(Closure closure)
         {
             if (closure == null)
@@ -73,6 +99,48 @@ namespace SCriPt.API.Lua.Globals
             DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
             coroutine.Coroutine.AutoYieldCounter = 0;
             return Timing.RunCoroutine(Coroutine(coroutine));
+        }
+        
+        public static CoroutineHandle CallCoroutine(Closure closure, object[] args)
+        {
+            if (closure == null)
+                throw new NullReferenceException("Closure cannot be null.");
+            //Exiled.API.Features.Log.Debug("Calling coroutine with args. "+args.Length+" args.");
+            if (args == null || args.Length == 0)
+            {
+                return CallCoroutine(closure);
+            }
+            DynValue coroutine = closure.OwnerScript.CreateCoroutine(closure);
+            coroutine.Coroutine.AutoYieldCounter = 0;
+            return Timing.RunCoroutine(Coroutine(coroutine, args));
+        }
+        
+        public static CoroutineHandle CallContinuously(float timeframe, Closure closure)
+        {
+            if (closure == null)
+                throw new NullReferenceException("Closure cannot be null.");
+            return Timing.CallContinuously(timeframe, () => closure.Call());
+        }
+        
+        public static CoroutineHandle CallContinuously(float timeframe, Closure closure, object[] args)
+        {
+            if (closure == null)
+                throw new NullReferenceException("Closure cannot be null.");
+            return Timing.CallContinuously(timeframe, () => closure.Call(args));
+        }
+        
+        public static CoroutineHandle CallPeriodically(float timeframe, float period, Closure closure)
+        {
+            if (closure == null)
+                throw new NullReferenceException("Closure cannot be null.");
+            return Timing.CallPeriodically(timeframe, period, () => closure.Call());
+        }
+        
+        public static CoroutineHandle CallPeriodically(float timeframe, float period, Closure closure, object[] args)
+        {
+            if (closure == null)
+                throw new NullReferenceException("Closure cannot be null.");
+            return Timing.CallPeriodically(timeframe, period, () => closure.Call(args));
         }
         
     }

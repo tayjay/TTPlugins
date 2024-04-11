@@ -1,12 +1,4 @@
-﻿example = {
-    name = "Example",
-    description = "This is an example of a mod",
-    author = "Author",
-    version = "1.0",
-    dependencies = {
-        "ExampleDependency"
-    }
-}
+﻿example = {}
     
     
 function example:load()

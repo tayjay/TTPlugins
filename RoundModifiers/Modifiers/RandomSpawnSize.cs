@@ -14,6 +14,7 @@ namespace RoundModifiers.Modifiers
         public float SizeMin => RoundModifiers.Instance.Config.RandomSpawnSize_SizeMin;
         public float SizeMax => RoundModifiers.Instance.Config.RandomSpawnSize_SizeMax;
         public bool AffectPickups => RoundModifiers.Instance.Config.RandomSpawnSize_AffectPickups;
+        public bool UniformSize => RoundModifiers.Instance.Config.RandomSpawnSize_Uniform;
         
         public void OnSpawned(SpawnedEventArgs ev)
         {
@@ -21,35 +22,61 @@ namespace RoundModifiers.Modifiers
             if (ev.Player.Role.Type != RoleTypeId.Scp079 && ev.Player.Role.Type != RoleTypeId.Spectator && ev.Player.Role.Type != RoleTypeId.None && ev.Player.Role.Type != RoleTypeId.Filmmaker && !ev.Player.Role.IsDead)
             {
                 float random = Random.Range(SizeMin, SizeMax);
-                ev.Player.ChangeSize(random);
+                float x = Random.Range(SizeMin, SizeMax);
+                float y = Random.Range(SizeMin, SizeMax);
+                float z = Random.Range(SizeMin, SizeMax);
+                if(UniformSize)
+                    ev.Player.ChangeSize(random);
+                else
+                    ev.Player.ChangeSize(new Vector3(x, y, z));
             }
         }
 
         public void OnSpawnItem(SpawningItemEventArgs ev)
         {
             if(!AffectPickups) return;
-            ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+            float x = Random.Range(SizeMin, SizeMax);
+            float y = Random.Range(SizeMin, SizeMax);
+            float z = Random.Range(SizeMin, SizeMax);
+            if(UniformSize)
+                x=y=z;
+            ev.Pickup.Scale = new Vector3(x,y,z);
             ev.Pickup.Weight *= ev.Pickup.Scale.magnitude;
         }
         
         public void OnFillingLocker(FillingLockerEventArgs ev)
         {
             if(!AffectPickups) return;
-            ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+            float x = Random.Range(SizeMin, SizeMax);
+            float y = Random.Range(SizeMin, SizeMax);
+            float z = Random.Range(SizeMin, SizeMax);
+            if(UniformSize)
+                x=y=z;
+            ev.Pickup.Scale = new Vector3(x,y,z);
             ev.Pickup.Weight *= ev.Pickup.Scale.magnitude;
         }
         
         public void OnDropItem(DroppedItemEventArgs ev)
         {
             if(!AffectPickups) return;
-            ev.Pickup.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+            float x = Random.Range(SizeMin, SizeMax);
+            float y = Random.Range(SizeMin, SizeMax);
+            float z = Random.Range(SizeMin, SizeMax);
+            if(UniformSize)
+                x=y=z;
+            ev.Pickup.Scale = new Vector3(x,y,z);
             ev.Pickup.Weight *= ev.Pickup.Scale.magnitude;
         }
 
         public void OnThrowProjectile(ThrownProjectileEventArgs ev)
         {
             if(!AffectPickups) return;
-            ev.Projectile.Scale = Vector3.one * Random.Range(SizeMin, SizeMax);
+            float x = Random.Range(SizeMin, SizeMax);
+            float y = Random.Range(SizeMin, SizeMax);
+            float z = Random.Range(SizeMin, SizeMax);
+            if(UniformSize)
+                x=y=z;
+            ev.Projectile.Scale = new Vector3(x,y,z);
         }
         
         

@@ -42,7 +42,8 @@ namespace SCriPt.API.Lua.Proxy
         
         public void TurnLightsOn()
         {
-            Room.TurnOffLights(0);
+            if(AreLightsOff)
+                Room.TurnOffLights(0);
         }
         
         

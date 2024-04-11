@@ -113,7 +113,9 @@
         <Compile Include="API\Lua\Globals\LuaFacility.cs" />
         <Compile Include="API\Lua\Globals\LuaLobby.cs" />
         <Compile Include="API\Lua\Globals\LuaPlayer.cs" />
+        <Compile Include="API\Lua\Globals\LuaRole.cs" />
         <Compile Include="API\Lua\Globals\LuaRound.cs" />
+        <Compile Include="API\Lua\Globals\LuaScp.cs" />
         <Compile Include="API\Lua\Globals\LuaServer.cs" />
         <Compile Include="API\Lua\Globals\LuaWarhead.cs" />
         <Compile Include="API\Lua\Proxy\Events\ProxyJumpingEventArgs.cs" />
@@ -136,8 +138,17 @@
         <Compile Include="Handlers\ItemEvents.cs" />
         <Compile Include="Handlers\MapEvents.cs" />
         <Compile Include="Handlers\PlayerEvents.cs" />
+        <Compile Include="Handlers\Scp0492Events.cs" />
         <Compile Include="Handlers\Scp049Events.cs" />
+        <Compile Include="Handlers\Scp079Events.cs" />
+        <Compile Include="Handlers\Scp096Events.cs" />
+        <Compile Include="Handlers\Scp106Events.cs" />
+        <Compile Include="Handlers\Scp173Events.cs" />
+        <Compile Include="Handlers\Scp244Events.cs" />
         <Compile Include="Handlers\Scp3114Events.cs" />
+        <Compile Include="Handlers\Scp330Events.cs" />
+        <Compile Include="Handlers\Scp914Events.cs" />
+        <Compile Include="Handlers\Scp939Events.cs" />
         <Compile Include="Handlers\ServerEvents.cs" />
         <Compile Include="Handlers\WarheadEvents.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>

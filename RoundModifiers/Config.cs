@@ -39,6 +39,8 @@ namespace RoundModifiers
         public float RandomSpawnSize_SizeMax { get; set; } = 1.2f;
         [Description("Should the RandomSpawnSize modifier affect pickups? Default is true.")]
         public bool RandomSpawnSize_AffectPickups { get; set; } = true;
+        [Description("Should the RandomSpawnSize modifier scale uniformly? Default is false.")]
+        public bool RandomSpawnSize_Uniform { get; set; } = false;
         
         
         //Rainbow

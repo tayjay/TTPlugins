@@ -170,6 +170,7 @@
         <Compile Include="Modifiers\NoDecontamination.cs" />
         <Compile Include="Modifiers\NoKOS.cs" />
         <Compile Include="Modifiers\NoScp914.cs" />
+        <Compile Include="Modifiers\Paper.cs" />
         <Compile Include="Modifiers\Pills.cs" />
         <Compile Include="Modifiers\PreBreach.cs" />
         <Compile Include="Modifiers\Puppies.cs" />
