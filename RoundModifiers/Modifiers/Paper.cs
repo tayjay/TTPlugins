@@ -33,6 +33,7 @@ public class Paper : Modifier
 
     protected override void UnregisterModifier()
     {
+        TTCore.TTCore.Instance.PlayerSizeManager.ResetAll();
         Exiled.Events.Handlers.Player.Spawned -= OnSpawn;
     }
 

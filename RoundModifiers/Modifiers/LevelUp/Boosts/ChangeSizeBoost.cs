@@ -1,5 +1,7 @@
 ﻿using Exiled.API.Features;
 using TTCore.Extensions;
+using TTCore.Handlers;
+using UnityEngine;
 
 namespace RoundModifiers.Modifiers.LevelUp.Boosts;
 
@@ -21,7 +23,8 @@ public class ChangeSizeBoost : Boost
     public override bool ApplyBoost(Player player)
     {
         HasBoost[player.NetId] = true;
-        player.ChangeSize(NewScale);
+        //player.ChangeSize(NewScale);
+        player.Scale = Vector3.one * NewScale;
         return true;
     }
 

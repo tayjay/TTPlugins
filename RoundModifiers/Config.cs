@@ -58,6 +58,12 @@ namespace RoundModifiers
         [Description("Whether to skip the little jump when an SCP is revealed. True: No screen jump when hiding. False: Screen jump, possibly more reliable. Default is false.")]
         public bool Imposter_SkipJump { get; set; } = false;
         
+        //LevelUp
+        [Description("The base amount of XP needed to level up. Default is 75")]
+        public float LevelUp_BaseXP { get; set; } = 75;
+        [Description("The amount of XP needed to level up per level. Default is 25")]
+        public float LevelUp_XPPerLevel { get; set; } = 25;
+        
         
         //MultiBall
         [Description("The scale of the MultiBall balls when thrown. Default is 3.")]

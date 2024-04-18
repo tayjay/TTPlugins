@@ -52,7 +52,8 @@ namespace TTCore.Handlers
             if (PlayerSizes.ContainsKey(playerId))
                 PlayerSizes.Remove(playerId);
             MEC.Timing.KillCoroutines("Resize"+playerId);
-            ChangePlayerScale(player, Vector3.one);
+            //ChangePlayerScale(player, Vector3.one);
+            player.Scale = Vector3.one;
             Log.Debug(player.Nickname + " size set to 1.0!");
         }
         
@@ -78,8 +79,13 @@ namespace TTCore.Handlers
                 ChangePlayerScale(player, newSize);
                 yield return Timing.WaitForOneFrame;
             }*/
-            while (Vector3.Distance(player.Scale, targetSize) > 0.05)
+            float startTime = Time.time;
+            while (Vector3.Distance(player.Scale, targetSize) > Timing.DeltaTime+0.01f)
             {
+                if (Time.time - startTime > 5.0f)
+                { 
+                    break;
+                }
                 float currX = player.Scale.x;
                 float currY = player.Scale.y;
                 float currZ = player.Scale.z;
@@ -88,9 +94,12 @@ namespace TTCore.Handlers
                 float newZ = Mathf.Lerp(currZ, targetSize.z, Timing.DeltaTime);
                 if(newY>currY)
                     player.Position += new Vector3(0, (newY - currY)/2, 0);
+                
                 ChangePlayerScale(player, new Vector3(newX, newY, newZ));
+                
                 yield return Timing.WaitForOneFrame;
             }
+            ChangePlayerScale(player, targetSize);
         }
 
         /*private IEnumerator<float> MonitorPlayerSize(Player player)

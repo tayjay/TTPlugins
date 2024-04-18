@@ -218,6 +218,12 @@ namespace SCriPt.API.Lua.Proxy
         {
             Player.AddItem(type);
         }
+
+        public void GiveItem(string type)
+        {
+            if(Enum.TryParse(type, out ItemType itemType))
+                Player.AddItem(itemType);
+        }
         
         public bool ReloadWeapon()
         {
@@ -237,6 +243,21 @@ namespace SCriPt.API.Lua.Proxy
         public void Broadcast(string message)
         {
             Player.Broadcast(5, message);
+        }
+
+        public void RemoteAdminMessage(string message, bool success = true, string pluginName = null)
+        {
+            Player.RemoteAdminMessage(message, success, pluginName);
+        }
+        
+        public bool SendStaffMessage(string message, EncryptedChannelManager.EncryptedChannel channel = EncryptedChannelManager.EncryptedChannel.AdminChat)
+        {
+            return Player.SendStaffMessage(message, channel);
+        }
+        
+        public bool SendStaffPing(string message, EncryptedChannelManager.EncryptedChannel channel = EncryptedChannelManager.EncryptedChannel.AdminChat)
+        {
+            return Player.SendStaffPing(message, channel);
         }
         
         public void DropHeldItem(bool isThrown = false)

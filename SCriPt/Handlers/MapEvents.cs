@@ -10,7 +10,7 @@ namespace SCriPt.Handlers
     {
         [MoonSharpVisible(true)] public event EventHandler<PlacingBulletHoleEventArgs> PlacingBulletHole;
         
-        [MoonSharpVisible(true)]
+        [MoonSharpHidden]
         public void OnPlacingBulletHole(PlacingBulletHoleEventArgs ev)
         {
             PlacingBulletHole?.Invoke(this, ev);

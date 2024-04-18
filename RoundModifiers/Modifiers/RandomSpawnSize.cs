@@ -91,6 +91,7 @@ namespace RoundModifiers.Modifiers
 
         protected override void UnregisterModifier()
         {
+            TTCore.TTCore.Instance.PlayerSizeManager.ResetAll();
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
             Exiled.Events.Handlers.Map.SpawningItem -= OnSpawnItem;
             Exiled.Events.Handlers.Map.FillingLocker -= OnFillingLocker;

@@ -17,6 +17,7 @@ namespace SCriPt.API.Lua.Globals
         public static Scp0492Events Zombie => SCriPt.Instance.Scp0492Events;
         public static Scp079Events Scp079 => SCriPt.Instance.Scp079Events;
         public static Scp079Events Computer => SCriPt.Instance.Scp079Events;
+        public static Scp079Events Camera => SCriPt.Instance.Scp079Events;
         public static Scp096Events Scp096 => SCriPt.Instance.Scp096Events;
         public static Scp096Events ShyGuy => SCriPt.Instance.Scp096Events;
         public static Scp106Events Scp106 => SCriPt.Instance.Scp106Events;
@@ -24,6 +25,7 @@ namespace SCriPt.API.Lua.Globals
         public static Scp173Events Scp173 => SCriPt.Instance.Scp173Events;
         public static Scp173Events Peanut => SCriPt.Instance.Scp173Events;
         public static Scp244Events Scp244 => SCriPt.Instance.Scp244Events;
+        public static Scp244Events Vase => SCriPt.Instance.Scp244Events;
         public static Scp330Events Scp330 => SCriPt.Instance.Scp330Events;
         public static Scp330Events Candy => SCriPt.Instance.Scp330Events;
         public static Scp914Events Scp914 => SCriPt.Instance.Scp914Events;

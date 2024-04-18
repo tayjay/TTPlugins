@@ -45,10 +45,12 @@ public class Pills : Modifier
             candies.Add(CandyKindID.Purple);
             candies.Add(CandyKindID.Red);
             candies.Add(CandyKindID.Yellow);
-            if(pillCount[player.NetId] >= 3)
+            if(pillCount[player.NetId] >= 1)
             {
-                candies.Add(CandyKindID.None);
-                candies.Add(CandyKindID.None);
+                for(int i =0;i<pillCount[player.NetId];i++)
+                {
+                    candies.Add(CandyKindID.None);
+                }
             }
             if(pillCount[player.NetId] >= 5)
             {
@@ -57,9 +59,38 @@ public class Pills : Modifier
             CandyKindID candy = candies.RandomItem();
             if (candy == CandyKindID.None)
             {
-                EffectCategory category = EffectCategory.Positive;
-                EffectType effect = player.ApplyRandomEffect(category, 1, 0, true);
-                player.ShowHUDHint("You feel "+effect.ToString(), 5f);
+                List<EffectCategory> categories = new List<EffectCategory>();
+                categories.Add(EffectCategory.Positive);
+                if (pillCount[player.NetId] >= 2)
+                {
+                    categories.Add(EffectCategory.Positive);
+                    categories.Add(EffectCategory.Movement);
+                }
+                if(pillCount[player.NetId] >= 3)
+                {
+                    categories.Add(EffectCategory.Positive);
+                    categories.Add(EffectCategory.Negative);
+                }
+                if(pillCount[player.NetId] >= 4)
+                {
+                    categories.Add(EffectCategory.Positive);
+                    categories.Add(EffectCategory.Harmful);
+                }
+                EffectCategory category = categories.RandomItem();
+                float duration = 0f;
+                if (category == EffectCategory.Harmful)
+                {
+                    duration = 5f;
+                }
+                else if (category == EffectCategory.Negative || category == EffectCategory.Movement)
+                {
+                    duration = 30f;
+                }
+                else if (category == EffectCategory.Positive)
+                {
+                    duration = 120f;
+                }
+                EffectType effect = player.ApplyRandomEffect(categories.RandomItem(), duration);
             }
             else
             {

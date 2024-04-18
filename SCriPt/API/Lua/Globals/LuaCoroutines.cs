@@ -34,11 +34,6 @@ namespace SCriPt.API.Lua.Globals
             Timing.CallDelayed(delay, () => closure.Call(args));
         }
         
-        public static IEnumerator<float> Yield()
-        {
-            yield return 0;
-        }
-        
         private static IEnumerator<float> Coroutine(DynValue coroutine)
         {
             DynValue result = null;
@@ -141,6 +136,16 @@ namespace SCriPt.API.Lua.Globals
             if (closure == null)
                 throw new NullReferenceException("Closure cannot be null.");
             return Timing.CallPeriodically(timeframe, period, () => closure.Call(args));
+        }
+        
+        public static void Kill(CoroutineHandle handle)
+        {
+            KillCoroutine(handle);
+        }
+        
+        public static void KillCoroutine(CoroutineHandle handle)
+        {
+            Timing.KillCoroutines(handle);
         }
         
     }

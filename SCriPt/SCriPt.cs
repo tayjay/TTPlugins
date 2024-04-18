@@ -46,8 +46,10 @@ namespace SCriPt
         
         public Scp3114Events Scp3114Events { get; private set; }
         
+        public CommandEvents CommandEvents { get; private set; }
         
-        public List<Script> LoadedScripts { get; private set; } = new List<Script>();
+        
+        public Dictionary<string,Script> LoadedScripts { get; private set; } = new Dictionary<string,Script>();
 
         private SCriPt()
         {
@@ -102,6 +104,7 @@ namespace SCriPt
             Scp914Events = new Scp914Events();
             Scp939Events = new Scp939Events();
             Scp3114Events = new Scp3114Events();
+            CommandEvents = new CommandEvents();
             
             
             PlayerEvents.RegisterEvents();
@@ -136,6 +139,9 @@ namespace SCriPt
             Scp939Events.RegisterEventTypes();
             Scp3114Events.RegisterEvents();
             Scp3114Events.RegisterEventTypes();
+            CommandEvents.RegisterEvents();
+            CommandEvents.RegisterEventTypes();
+            Log.Info("Events registered!");
         }
         
         public void Unregister()
@@ -156,6 +162,7 @@ namespace SCriPt
             Scp914Events.UnregisterEvents();
             Scp939Events.UnregisterEvents();
             Scp3114Events.UnregisterEvents();
+            CommandEvents.UnregisterEvents();
             
             PlayerEvents = null;
             ServerEvents = null;
@@ -173,12 +180,13 @@ namespace SCriPt
             Scp914Events = null;
             Scp939Events = null;
             Scp3114Events = null;
+            CommandEvents = null;
         }
 
         public void Load()
         {
             Register();
-            LoadedScripts = new List<Script>();
+            LoadedScripts = new Dictionary<string, Script>();
             try
             {
                 

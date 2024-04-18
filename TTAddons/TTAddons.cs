@@ -15,6 +15,7 @@ namespace TTAddons
         
         public ClassDHandler ClassDHandler { get; private set; }
         public SpectatorHandler SpectatorHandler { get; private set; }
+        //public LightFixHandler LightFixHandler { get; private set; }
         
 
         private TTAddons()
@@ -38,6 +39,7 @@ namespace TTAddons
             Scp3114Handler = new Scp3114Handler();
             ClassDHandler = new ClassDHandler();
             SpectatorHandler = new SpectatorHandler();
+            //LightFixHandler = new LightFixHandler();
             
             
             //Register objects
@@ -48,6 +50,7 @@ namespace TTAddons
             //ClassDHandler.Register();
             if(Config.EnableWeaponStats)
                 WeaponStats.Register();
+            //LightFixHandler.Register();
         }
         
         private void ShutdownPlugin()
@@ -60,12 +63,14 @@ namespace TTAddons
             //ClassDHandler.Unregister();
             if(Config.EnableWeaponStats)
                 WeaponStats.Unregister();
+            //LightFixHandler.Unregister();
             
             //Dispose objects
             Unstuck = null;
             Scp3114Handler = null;
             ClassDHandler = null;
             SpectatorHandler = null;
+            //LightFixHandler = null;
         }
         
         public override void OnDisabled()

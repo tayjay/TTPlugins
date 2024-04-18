@@ -5,6 +5,7 @@ using Exiled.API.Features;
 using RoundModifiers.API;
 using RoundModifiers.Handlers;
 using RoundModifiers.Modifiers;
+using RoundModifiers.Modifiers.Flamingos;
 using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.RogueAI;
 
@@ -86,6 +87,7 @@ namespace RoundModifiers
             //AddModifier(new AntiCamping());
             AddModifier(new Pills());
             AddModifier(new Paper());
+            AddModifier(new Keyless());
         }
         
         
@@ -157,6 +159,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 2, 1);
+        public override System.Version Version { get; } = new System.Version(0, 2, 2);
     }
 }

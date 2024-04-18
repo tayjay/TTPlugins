@@ -81,7 +81,7 @@ namespace RoundModifiers.Handlers
             if (VotingEnabled())
             {
                 //Do nothing if mod is blacklisted
-                if(BlacklistedModifiers.Contains(modifier.Name))
+                if(BlacklistedModifiers.Contains(modifier.Name) || modifier.Hidden)
                 {
                     response = "This modifier is disabled.";
                     return false;
@@ -276,11 +276,19 @@ namespace RoundModifiers.Handlers
                 string modString = "<size=75%>Modifiers: \n";
                 if (ActiveModifiers.Count > 0)
                 {
+                    int visibleMods = 0;
                     foreach(ModInfo modifier in ActiveModifiers)
                     {
+                        if(modifier.Hidden) continue;
+                        visibleMods++;
                         modString += $"{modifier.FormattedName}, ";
                     }
-                    modString = modString.Remove(modString.Length - 2);
+                    if(visibleMods > 0)
+                        modString = modString.Remove(modString.Length - 2);
+                    else
+                    {
+                        modString = "<size=75%>Modifiers: \nNone";//If no visible mods, show none
+                    }
                 }
                 else
                 {

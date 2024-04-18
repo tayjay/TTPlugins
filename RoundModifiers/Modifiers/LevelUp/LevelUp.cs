@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -329,14 +330,26 @@ namespace RoundModifiers.Modifiers.LevelUp
         {
             foreach (XP xp in _xp)
             {
-                if(xp is IGameTickEvent)
-                    ((IGameTickEvent) xp).OnGameTick();
+                try
+                {
+                    if(xp is IGameTickEvent)
+                        ((IGameTickEvent) xp).OnGameTick();
+                } catch (System.Exception e)
+                {
+                    Log.Error("Error in LevelUpHandler XP Update: "+e);
+                }
             }
             
             foreach (Boost boost in _boosts)
             {
-                if(boost is IGameTickEvent)
-                    ((IGameTickEvent) boost).OnGameTick();
+                try
+                {
+                    if(boost is IGameTickEvent)
+                        ((IGameTickEvent) boost).OnGameTick();
+                } catch (System.Exception e)
+                {
+                    Log.Error("Error in LevelUpHandler Boost Update: "+e);
+                }
             }
 
             foreach (Player player in Player.List.ToList())
@@ -363,7 +376,7 @@ namespace RoundModifiers.Modifiers.LevelUp
                         layout = hud.GetLayout<LevelUpHUDLayout>();
                     }
                     
-                    layout.XP = PlayerXP[player.NetId];
+                    layout.XP = (float)Math.Round(PlayerXP[player.NetId],1);
                     layout.Level = PlayerLevel[player.NetId];
                     layout.XPNeeded = XP.GetXPNeeded(layout.Level);
                     layout.ActivePerks = string.Join("\n", _boosts.Where(b => b.HasBoost.ContainsKey(player.NetId)).Select(b => b.GetColouredName()));

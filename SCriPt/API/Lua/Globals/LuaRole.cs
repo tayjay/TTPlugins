@@ -183,13 +183,20 @@ namespace SCriPt.API.Lua.Globals
             return role.Type == RoleTypeId.Scp3114;
         }
         
-        
-        
         public static bool IsSpectator(Role role)
         {
             return role.Type == RoleTypeId.Spectator;
         }
         
+        public static bool IsDead(Role role)
+        {
+            return role.IsDead;
+        }
+        
+        public static bool IsAlive(Role role)
+        {
+            return role.IsAlive;
+        }
         
         
         

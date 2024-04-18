@@ -13,7 +13,7 @@ namespace RoundModifiers.Modifiers;
 
 public class MysteryBox : Modifier
 {
-    public List<ItemType> PossibleItems { get; } = new List<ItemType>();
+    public List<ItemType> PossibleItems { get; private set;}
     //OnFlipCoin
     public void OnFlipCoin(FlippingCoinEventArgs ev)
     {
@@ -47,7 +47,7 @@ public class MysteryBox : Modifier
     protected override void RegisterModifier()
     {
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlipCoin;
-        
+        PossibleItems = new List<ItemType>();
         PossibleItems.Add(ItemType.Adrenaline);
         PossibleItems.Add(ItemType.Adrenaline);
         PossibleItems.Add(ItemType.Adrenaline);

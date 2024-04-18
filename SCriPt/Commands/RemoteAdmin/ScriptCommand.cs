@@ -7,16 +7,17 @@ using SCriPt.API.Lua;
 namespace SCriPt.Commands.RemoteAdmin
 {
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
-    public class ScriptCommand : ICommand
+    public class ScriptCommand : ParentCommand
     {
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if(!sender.CheckPermission("script"))
+            if(!sender.CheckPermission("SCriPt"))
             {
                 response = "You do not have permission to use this command.";
                 return false;
             }
 
+            /*
             if (arguments.Count == 0)
             {
                 response = "Usage: script <lua>";
@@ -37,11 +38,24 @@ namespace SCriPt.Commands.RemoteAdmin
             {
                 response = e.Message;
                 return false;
-            }
+            }*/
+            
+            response = "Available commands: dir, load, unload, list, run";
+            return true;
         }
 
-        public string Command { get; } = "script";
-        public string[] Aliases { get; } = {"lua"};
-        public string Description { get; } = "Runs a lua string.";
+        protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string Command { get; } = "script";
+        public override string[] Aliases { get; } = {"lua"};
+        public override string Description { get; } = "Runs a lua string.";
+        public override void LoadGeneratedCommands()
+        {
+            RegisterCommand(new ScriptDirCommand());
+            RegisterCommand(new ScriptLoadCommand());
+        }
     }
 }

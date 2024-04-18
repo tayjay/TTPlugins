@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pickups;
@@ -28,6 +29,11 @@ namespace SCriPt.API.Lua.Globals
         public static Player GetClosestTo(Door door)
         {
             return GetClosestTo(door.Position);
+        }
+        
+        public static Player GetRandom()
+        {
+            return Player.List.GetRandomValue();
         }
         
         public static Player GetClosestTo(Pickup pickup)

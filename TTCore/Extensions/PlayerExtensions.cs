@@ -96,15 +96,34 @@ namespace TTCore.Extensions
             RaycastHit[] hits = new RaycastHit[30];
             Physics.RaycastNonAlloc(new Ray(player.ReferenceHub.PlayerCameraReference.position, player.ReferenceHub.PlayerCameraReference.forward), hits, maxDistance, LayerMask.GetMask("Door"));
 
-            foreach (RaycastHit hit in hits)
+            /*foreach (RaycastHit hit in hits)
             {
-                Log.Debug(hit.transform?.name);
+                //Log.Debug(hit.collider?.name);
                 if (hit.collider == null)
                     continue;
-                door = Door.Get(hit.collider.gameObject);
-                if (door != null)
-                    return true;
+                if (hit.collider.name.StartsWith("Door") || hit.collider.name.StartsWith("PlainSide"))
+                {
+                    Log.Debug("Found possible door "+hit.collider.gameObject.name);
+                    door = Door.GetClosest(hit.point, out float distance);
+                    if (door != null && distance < 2f)
+                        return true;
+                }
+            }*/
+            float closestDistance = 1000;
+            Vector3 closestDoor = Vector3.zero;
+            foreach (RaycastHit hit in hits)
+            {
+                if(hit.distance < closestDistance)
+                {
+                    closestDistance = hit.distance;
+                    closestDoor = hit.point;
+                }
             }
+            door = Door.GetClosest(closestDoor, out float distance);
+            if(distance < 2f)
+                return true;
+            else
+                door = null;
             return door != null;
         }
         

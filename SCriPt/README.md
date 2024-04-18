@@ -22,21 +22,38 @@ The target audience of this plugin is between a few groups:
 
 If you are running a verified server, be sure to check <https://scpslgame.com/Verified_server_rules.pdf> to make sure you are not breaking any rules.
 
-### A note on safety
+More docs
 
-The code ran in this plugin can do anything a user with the "Server Owner" role can do. Privileged functions such as file system access are disabled for your safety, but it is possible to crash the server with infinite loops or cause unwanted changes with other bad code. Be sure to test your code on a local server before running it on a live server.
-And if you are accepting scripts from others, be sure to check them for malicious code. (ChatGPT/Gemini are good at spotting logical errors in Lua) If something looks suspicious it's best not to run it, the fun of this plugin is to make it your own.
+https://exiled-team.github.io/EXILED/api/Exiled.API.Enums.html
+
+## Disclaimer
+
+This plugin enables the ability to use Lua scripts for task automation. Please be advised of the following:
+
+- Potential for Abuse: While Lua scripts offer valuable automation tools, they can also be misused. Misconfigured or intentionally malicious scripts may cause disruptions, in-game issues, or stability problems within the server environment.
+- Responsibility: Users are fully responsible for the Lua scripts they write, execute, or share. Neither the server owners nor the modification creators are liable for any damages or negative consequences arising from the use of these scripts.
+- Use at Your Own Risk: You agree to use this modification and any associated scripting features at your own risk. Always exercise caution and thoroughly test scripts in a safe environment before deployment.
+- No Guarantees: The server owners and modification creators make no guarantees regarding the safety, reliability, or error-free performance of user-created scripts.
+
+### Important Reminders
+
+- Back up important data before executing any new or unknown scripts.
+- Research Lua scripting principles and best practices for secure coding.
+- Never run scripts from untrusted sources.
+- By using this plugin, you acknowledge and agree to the terms of this disclaimer.
 
 ## Getting Started
 
 ### Setting up your environment
 
-1. First off, if you don't have one, we need a game server to run this on. This can be your local computer if you want. Follow NorthWood's instructions to setup a local SCP:SL server. 
-2. Then install the latest EXILED version.
+1. First off, if you don't have one, we need a game server to run this on. This can be your local computer if you want. Follow [NorthWood's Instructions](https://en.scpslgame.com/index.php?title=Guide:Hosting_a_server) to setup a local SCP:SL server. 
+2. Then install the latest [EXILED](https://github.com/Exiled-Team/EXILED) version.
 3. Get the latest version of the SCriPt.dll plugin from the releases page and place it in your EXILED plugins folder.
-4. Get the latest version of MoonSharp.Interpreter.dll from their releases page and place it in your EXILED plugins "dependencies" subfolder.
-5. Run the server once, then check the directory where you ran the "LocalAdmin" file. You should see a "Scripts" folder. This is where you will place your lua scripts.
-6. Make sure you can connect to the server. Direct Connect to ```127.0.0.1``` if it's running on your local computer.
+4. Get the latest release of [MoonSharp.Interpreter.dll](https://github.com/moonsharp-devs/moonsharp/releases/latest) (Currently 2.0.0.0) from their releases page and place it in your EXILED plugins "dependencies" subfolder.
+5. Run the server once, then check the directory where you ran the `LocalAdmin` file. You should see a `Scripts` folder. This is where you will place your lua scripts.
+6. Add your SteamID to the Owner permission on the server.
+7. Make sure you can connect to the server. Direct Connect to ```127.0.0.1``` if it's running on your local computer.
+
 
 ### Scripts Structure
 
@@ -82,17 +99,13 @@ function hello_user:onPlayerJoined(args)
     print("Player " .. args.Player.Nickname .. " has joined the server.")
 end
 
-
-
-hello_user:load()
 ```
 Most of this code is boilerplate, but let's break it down:
 - ```hello_user = {}``` creates a table to hold our functions. It's best practice to keep all your functions in a table to avoid conflicts with other scripts. The table name can be any unique name you want.
-- ```function:load()...``` and ```function:unload()``` are special functions that are called when the script is loaded and unloaded. This is where you should add and remove your event listeners.
+- ```hello_user:load()...``` and ```hello_user:unload()``` are special functions that are called when the script is loaded and unloaded. This is where you should add and remove your event listeners. They are **automatically** called when the scripts loads and unloads.
 - ```Events.Player.Joined:add(self.onPlayerJoined)``` adds the ```onPlayerJoined``` function to the Player.Joined event. This means that when a player joins the server, the onPlayerJoined function will be called.
 - ```function hello_user:onPlayerJoined(args)``` is the function that will be called when a player joins the server. It takes a single argument, args, which contains information about the player that joined.
 - ```Server:Broadcast("Welcome to the server, " .. args.Player.Nickname .. "!")``` sends a message to all players on the server welcoming the new player.
-- ```hello_user:load()``` calls the load function when the script is loaded, making sure they are ready for their event to trigger.
 
 Now, when a player joins the server, a broadcast message will be sent welcoming them to the server. The print function is used so you can see it happen in the console too.
 
@@ -120,7 +133,7 @@ end
 function scp3114:onRoundStarted()
     -- Get a random number between 1 and 100
     local chance = math.random(1, 100)
-    -- If the number is less than or equal to 5
+    -- If the number is less than or equal to 25
     if chance <= 25 then
         -- Get a random player
         local player = Player.GetRandom()
@@ -131,20 +144,87 @@ function scp3114:onRoundStarted()
     -- This will unregister the event, so it doesn't trigger again. If you want this to continue through restarts you can remove this line.
     self:unload()
 end
-
--- Call the load function
-scp3114:load()
 ```
 
 Put this in a file ```Scp3114.lua```. Now you have a choice
 - Place the file in ```Scripts/AutoLoad``` and it will run when the server starts. If you do this I suggest removing the self:unload() line.
-- Place the file directly in ```Scripts```. Run it using RemoteAdmin in the lobby if you only want to add him once in awhile. ```luaf Scp3114.lua```
+- Place the file directly in ```Scripts```. Run it using RemoteAdmin in the lobby if you only want to add him once in awhile. ```script load Scp3114.lua```
 
+### Custom Commands?
+
+Technically, this plugin can create custom command, both general player and RemoteAdmin. Let's try an example:
+
+Let's do something simple, a command that lets any player send a 1 word CASSIE anncouncement. 
+
+```lua
+-- Start by creating a table to hold our functions
+cassie = {}
+
+-- Load function, called when the script is loaded
+function cassie:load()
+    -- Add the function to the event
+    Events.Command.PlayerGameConsoleCommandExecuted:add(self.onPlayerGameConsoleCommandExecuted)
+end
+
+-- Unload function, called when the script is unloaded
+function cassie:unload()
+    -- Remove the function from the event
+    Events.Command.PlayerGameConsoleCommandExecuted:remove(self.onPlayerGameConsoleCommandExecuted)
+end
+
+-- Function called when a player uses a command
+function cassie:onPlayerGameConsoleCommandExecuted(args)
+    -- Check if the command is !cassie
+    if args.Command == "!cassie" then
+        if args.Arguments.Length ~= 1 then
+            -- Send a response to the player if the command is invalid
+            args.Response = "Usage: !cassie <word>"
+            args.Result = false
+            return
+        end
+        -- Get the message the player wants to send
+        local message = args.Arguments[1]
+        -- Check if the message is valid
+        if Cassie:IsValidWord(message) then
+            -- Send the message through Cassie
+            -- message, makeHold, makeNoise, isSubtitles
+            Cassie:Message(message,true, false, true)
+            -- Send a response to the player
+            args.Response = "Message sent to Cassie."
+            args.Result = true
+        else
+            -- Send a response to the player if the message is invalid
+            args.Response = "Invalid message."
+            args.Result = false
+        end
+    end
+end
+```
+
+Now if a player uses the `~` console, they can type ```!cassie <word>``` and it will be sent to Cassie. I wouldn't recommend using the command on a large server, but it servers as an example.
+
+## Using other Plugins
+
+I am currently working on an API that will allow developers to add events and globals to your code.
+For now though, as long as whatever you need to do can be ran by in the RA console you can use the following:
+
+    Server:RACommand("command")
+
+Variables from your Lua code can be concatenated onto the command as needed, such as PlayerIDs.
 
 
 # Globals
 
 The following are global variables that can be accessed from anywhere in the code.
+
+### AdminToys
+For spawning and interacting with Admin Toys. These are Unity Primitive objects that can be spawned in the game such as cubes, spheres, and lights.
+
+| Type      | Function          | Arguments                                                                                           |
+|-----------|-------------------|-----------------------------------------------------------------------------------------------------|
+| Primitive | AdminToys:Spawn   | string name <br/>Vector3 position <br/>Quaternion rotation <br/>Color color                         |
+| Primitive | AdminToys:Destroy | string name                                                                                         |
+| Primitive | AdminToys:Create  | PrimitiveType type <br/>Vector3 position <br/>Vector3 rotation <br/> Vector3 scale <br/>Color color |
 
 ### Cassie
 For interacting with the in-game announcer.
@@ -153,12 +233,12 @@ For interacting with the in-game announcer.
 | --- |-------------------|-------------|
  | bool | Cassie.IsSpeaking | Get |
 
-| Type | Function               | Arguments                                                                                     |
-| --- |------------------------|-----------------------------------------------------------------------------------------------|
-| void | Cassie:Message         | _string_ **words** <br/>_bool_ **makeHold** = true <br/>_bool_ **makeNoise** = true <br/>_bool_ **isAllowed** = false |
-| void | Cassie:GlitchyMessage  | string message <br/>float glitchChance <br/>float jamChance                                   |
-| bool | Cassie:IsValidMessage  | string message                                                                                |
-| bool | Cassie:IsValidSentence | string sentence                                                                               |
+| Type | Function               | Arguments                                                                                                               |
+| --- |------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| void | Cassie:Message         | _string_ **words** <br/>_bool_ **makeHold** = true <br/>_bool_ **makeNoise** = true <br/>_bool_ **isSubtitles** = false |
+| void | Cassie:GlitchyMessage  | string message <br/>float glitchChance <br/>float jamChance                                                             |
+| bool | Cassie:IsValidWord     | string word                                                                                                             |
+| bool | Cassie:IsValidSentence | string sentence                                                                                                         |
 
 ### Timing
 For creating and managing coroutines.
@@ -181,7 +261,7 @@ For interacting with the LCZ decontamination sequence.
 
 ### Events
 For subscribing to events.
-```angular2html
+```
 See Events section
 ```
 
@@ -204,18 +284,29 @@ For interacting with the current round.
 ### Server
 For interacting with the server.
 
-| Type | Variable | Interaction |
-|------|----------|-------------|
-| int | PlayerCount | Get         |
-| int | NpcCount | Get         |
-| int | ScpCount | Get         |
-| int | HumanCount | Get         |
-| int | DClassCount | Get         |
-| int | ScientistCount | Get         |
-| int | FoundationCount | Get         |
-| int | ChaosCount | Get         |
-| bool | FriendlyFire | Get/Set     |
-| List<Player> | Players | Get         |
+| Type         | Variable | Interaction |
+|--------------|----------|-------------|
+| int          | PlayerCount | Get         |
+| int          | NpcCount | Get         |
+| int          | ScpCount | Get         |
+| int          | HumanCount | Get         |
+| int          | DClassCount | Get         |
+| int          | ScientistCount | Get         |
+| int          | FoundationCount | Get         |
+| int          | ChaosCount | Get         |
+| bool         | FriendlyFire | Get/Set     |
+| List(Player) | Players | Get         |
+| List(Player) | RemoteAdmins | Get         |
+| double       | Tps | Get         |
+| double       | Frametime | Get         |
+| string       | Ip | Get         |
+| string       | Port | Get         |
+| string       | Name | Get         |
+| string       | Version | Get         |
+| bool         | StreamingAllowed | Get |
+| bool         | IsBeta | Get |
+| bool         | IsIdleModeEnabled | Get/Set |
+
 
 | Type | Function             | Arguments                        |
 |------|----------------------|----------------------------------|
@@ -224,6 +315,8 @@ For interacting with the server.
 | void | Server:Restart       |                                  |
 | void | Server:Shutdown      |                                  |
 | void | Server:SendBroadcast | string message <br/>float duration |
+| object | Server:GetSessionVariable | string key |
+| void | Server:SetSessionVariable | string key <br/>object value |
 
 ### Warhead
 For interacting with the warhead.
@@ -236,13 +329,18 @@ function MyFunction(args)
     -- Do something
 end
 ```
-Then you can subscribe to the event like so
+Then you can subscribe/unsubscribed to the event like so
 ```lua
 Events.Item.KeycardInteracting:add(MyFunction)
+Events.Item.KeycardInteracting:remove(MyFunction)
 ```
 When the event is triggered, your function will be called. Information on what arguments are passed to the function can be found in the event's documentation below.
 
+Some events have an alias associated. For example, `Events.Scp049...` can also be accessed as `Events.Doctor...`
+
 ## Cassie
+Events related to the in-game announcer.
+
 **Events.Cassie.SendingCassieMessage**
 
 | Type | Member   |
@@ -252,6 +350,65 @@ When the event is triggered, your function will be called. Information on what a
 | bool | MakeNoise |
 | bool | IsAllowed |
 ---
+
+## Command
+Events related to commands being received and executed.
+
+**Events.Command.RemoteAdminCommand**
+
+| Type | Member   |
+| --- |----------|
+| ICommandSender | Sender |
+| string | Command |
+| string[] | Arguments |
+
+**Events.Command.RemoteAdminCommandExecuted**
+
+| Type | Member    |
+| --- |-----------|
+| ICommandSender | Sender    |
+| string | Command   |
+| string[] | Arguments |
+| bool | Result    |
+| string | Response  |
+
+**Events.Command.ConsoleCommand**
+
+| Type | Member   |
+| --- |----------|
+| ICommandSender | Sender |
+| string | Command |
+| string[] | Arguments |
+
+**Events.Command.ConsoleCommandExecuted**
+
+| Type | Member    |
+| --- |-----------|
+| ICommandSender | Sender    |
+| string | Command   |
+| string[] | Arguments |
+| bool | Result    |
+| string | Response  |
+
+**Events.Command.PlayerGameConsoleCommand**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| string | Command |
+| string[] | Arguments |
+
+**Events.Command.PlayerGameConsoleCommandExecuted**
+
+| Type | Member    |
+| --- |-----------|
+| Player | Player    |
+| string | Command   |
+| string[] | Arguments |
+| bool | Result    |
+| string | Response  |
+
+
 ## Item
 **Events.Item.ChangingAmmo**
 
@@ -289,7 +446,7 @@ When the event is triggered, your function will be called. Information on what a
 | bool | IsAllowed |
 | Player | Player |
 
-**KeycardInteracting**
+**Events.Item.KeycardInteracting**
 
 | Type | Member   |
 | --- |----------|
@@ -298,7 +455,7 @@ When the event is triggered, your function will be called. Information on what a
 | Door | Door |
 | bool | IsAllowed |
 
-**Swinging**
+**Events.Item.Swinging**
 
 | Type | Member   |
 | --- |----------|
@@ -306,7 +463,7 @@ When the event is triggered, your function will be called. Information on what a
 | Item | Item |
 | bool | IsAllowed |
 
-**ChargingJailbird**
+**Events.Item.ChargingJailbird**
 
 | Type | Member   |
 | --- |----------|
@@ -314,7 +471,7 @@ When the event is triggered, your function will be called. Information on what a
 | Item | Item |
 | bool | IsAllowed |
 
-**UsingRadioPickupBattery**
+**Events.Item.UsingRadioPickupBattery**
 
 | Type | Member   |
 | --- |----------|
@@ -333,7 +490,7 @@ When the event is triggered, your function will be called. Information on what a
 | bool | IsAllowed |
 | Player | Player |
     
-**PlacingBlood**
+**Events.Map.PlacingBlood**
     
 | Type | Member   |
 | --- |----------|
@@ -342,7 +499,7 @@ When the event is triggered, your function will be called. Information on what a
 | Vector3 | Position |
 | bool | IsAllowed |
     
-**AnnouncingDecontamination**
+**Events.Map.AnnouncingDecontamination**
 
 | Type | Member   |
 | --- |----------|
@@ -350,7 +507,7 @@ When the event is triggered, your function will be called. Information on what a
 | DecontaminationState | State |
 | DecontaminationController.DecontaminationPhase.PhaseFunction | PhaseFunction |
 
-**AnnouncingScpTermination**
+**Events.Map.AnnouncingScpTermination**
 
 | Type | Member   |
 | --- |----------|
@@ -361,7 +518,7 @@ When the event is triggered, your function will be called. Information on what a
 | CustomDamageHandler | DamageHandler |
 | bool | IsAllowed |
 
-**AnnouncingNtfEntrance**
+**Events.Map.AnnouncingNtfEntrance**
 
 | Type | Member   |
 | --- |----------|
@@ -370,20 +527,20 @@ When the event is triggered, your function will be called. Information on what a
 | int | UnitNumber |
 | bool | IsAllowed |
 
-**GeneratorActivating**
+**Events.Map.GeneratorActivating**
 
 | Type | Member   |
 | --- |----------|
 | Generator | Generator |
 | bool | IsAllowed |
 
-**Decontaminating**
+**Events.Map.Decontaminating**
 
 | Type | Member   |
 | --- |----------|
 | bool | IsAllowed |
 
-**ExplodingGrenade**
+**Events.Map.ExplodingGrenade**
 
 | Type | Member   |
 | --- |----------|
@@ -393,7 +550,7 @@ When the event is triggered, your function will be called. Information on what a
 | bool | IsAllowed |
 | Player | Player |
 
-**SpawningItem**
+**Events.Map.SpawningItem**
 
 | Type | Member   |
 | --- |----------|
@@ -402,7 +559,7 @@ When the event is triggered, your function will be called. Information on what a
 | Door | TriggerDoor |
 | bool | IsAllowed |
 
-**FillingLocker**
+**Events.Map.FillingLocker**
 
 | Type | Member   |
 | --- |----------|
@@ -410,13 +567,13 @@ When the event is triggered, your function will be called. Information on what a
 | LockerChamber | LockerChamber |
 | bool | IsAllowed |
 
-**Generated**
+**Events.Map.Generated**
 
 | Type | Member   |
 | --- |----------|
 
 
-**ChangingIntoGrenade**
+**Events.Map.ChangingIntoGrenade**
 
 | Type | Member   |
 | --- |----------|
@@ -424,7 +581,7 @@ When the event is triggered, your function will be called. Information on what a
 | ItemType | Type |
 | bool | IsAllowed |
 
-**ChangedIntoGrenade**
+**Events.Map.ChangedIntoGrenade**
 
 | Type | Member   |
 | --- |----------|
@@ -432,7 +589,7 @@ When the event is triggered, your function will be called. Information on what a
 | Projectile | Projectile |
 | double | FuseTime (DEPRICATED) |
 
-**TurningOffLights**
+**Events.Map.TurningOffLights**
 
 | Type | Member   |
 | --- |----------|
@@ -440,19 +597,19 @@ When the event is triggered, your function will be called. Information on what a
 | float | Duration |
 | bool | IsAllowed |
 
-**PickupAdded**
+**Events.Map.PickupAdded**
 
 | Type | Member   |
 | --- |----------|
 | Pickup | Pickup |
 
-**PickupDestroyed**
+**Events.Map.PickupDestroyed**
     
 | Type | Member   |
 | --- |----------|
 | Pickup | Pickup |
 
-**SpawningTeamVehicle**
+**Events.Map.SpawningTeamVehicle**
 
 | Type | Member   |
 | --- |----------|
@@ -461,7 +618,7 @@ When the event is triggered, your function will be called. Information on what a
 ---
 ## Player
 
-**PreAuthenticating**
+**Events.Player.PreAuthenticating**
 
 | Type | Member   |
 | --- |----------|
@@ -475,14 +632,14 @@ When the event is triggered, your function will be called. Information on what a
 | ConnectionRequest | Request |
 | bool | IsAllowed |
 
-**ReservedSlot**
+**Events.Player.ReservedSlot**
 
 | Type | Member   |
 | --- |----------|
 | string | UserId |
 | bool | HasReservedSlot |
 
-**Kicking**
+**Events.Player.Kicking**
 
 | Type | Member   |
 | --- |----------|
@@ -491,14 +648,14 @@ When the event is triggered, your function will be called. Information on what a
 | string | FullMessage |
 | bool | IsAllowed |
 
-**Kicked**
+**Events.Player.Kicked**
 
 | Type | Member   |
 | --- |----------|
 | Player | Player |
 | string | Reason |
     
-**Banning**
+**Events.Player.Banning**
     
 | Type | Member   |
 | --- |----------|
@@ -509,7 +666,7 @@ When the event is triggered, your function will be called. Information on what a
 | bool | IsAllowed |
 | Player | Player |
 
-**Banned**
+**Events.Player.Banned**
 
 | Type | Member   |
 | --- |----------|
@@ -519,7 +676,7 @@ When the event is triggered, your function will be called. Information on what a
 | BanHandler.BanType | Type |
 | bool | IsForced |
     
-**EarningAchievement**
+**Events.Player.EarningAchievement**
 
 | Type | Member   |
 | --- |----------|
@@ -527,7 +684,7 @@ When the event is triggered, your function will be called. Information on what a
 | bool | IsAllowed |
 | Player | Player |
 
-**UsingItem**
+**Events.Player.UsingItem**
 
 | Type | Member   |
 | --- |----------|
@@ -537,245 +694,538 @@ When the event is triggered, your function will be called. Information on what a
 | float | Cooldown |
 | bool | IsAllowed |
 
-**UsingItemCompleted**
+**Events.Player.UsingItemCompleted**
 
-**UsedItem**
+| Type | Member   |
+| --- |----------|
+| Usable | Usable |
+| Item | Item |
+| Player | Player |
+| bool | IsAllowed |
 
-**CancellingItemUse**
+**Events.Player.UsedItem**
 
-**CancelledItemUse**
+| Type | Member   |
+| --- |----------|
+| Usable | Usable |
+| Item | Item |
+| Player | Player |
 
-**Interacted**
 
-**SpawnedRagdoll**
+**Events.Player.CancellingItemUse**
 
-**ActivatingWarheadPanel**
+| Type | Member   |
+| --- |----------|
+| Usable | Usable |
+| Item | Item |
+| Player | Player |
+| bool | IsAllowed |
 
-**ActivatingWorkstation**
+**Events.Player.CancelledItemUse**
 
-**Joined**
+| Type | Member   |
+| --- |----------|
+| Usable | Usable |
+| Item | Item |
+| Player | Player |
+
+**Events.Player.Interacted**
 
-**Verified**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+
+**Events.Player.SpawnedRagdoll**
+
+| Type | Member   |
+| --- |----------|
+| Vector3 | Position |
+| Quaternion | Rotation |
+| RoleTypeId | Role |
+| double | CreationTime |
+| string | Nickname |
+| RagdollData | Info |
+| DamageHandlerBase | DamageHandlerBase |
+| Ragdoll | Ragdoll |
+| Player | Player |
+
+**Events.Player.ActivatingWarheadPanel**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| bool | IsAllowed |
+
+**Events.Player.ActivatingWorkstation**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| WorkstationController | WorkstationController |
+| WorkstationController.WorkstationStatus| Status |
+| bool | IsAllowed |
+
+**Events.Player.DeactivatingWorkstation**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| WorkstationController | WorkstationController |
+| WorkstationController.WorkstationStatus| Status |
+| bool | IsAllowed |
+
+**Events.Player.Joined**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+
+**Events.Player.Verified**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+
+**Events.Player.Left**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+
+**Events.Player.Destroying**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+
+**Events.Player.Hurting**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player   |
+| Player | Attacker |
+| float | Amount |
+| CustomDamageHandler | DamageHandler |
+| bool | IsAllowed |
+
+**Events.Player.Hurt**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player   |
+| Player | Attacker |
+| float | Amount |
+| PlayerStatsSystem.DamageHandlerBase.HandlerOutput | HandlerOutput |
+| CustomDamageHandler | DamageHandler |
+
+**Events.Player.Dying**
+
+| Type | Member                     |
+| --- |----------------------------|
+| List<Item> | ItemsToDrop (Set Obsolete) |
+| Player | Player                   |
+| Player | Attacker                 |
+| CustomDamageHandler | DamageHandler |
+| bool | IsAllowed                 |
+
+**Events.Player.Died**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player   |
+| Player | Attacker |
+| RoleTypeId | TargetOldRole |
+| CustomDamageHandler | DamageHandler |
+
+**Events.Player.ChangingRole**
+
+| Type       | Member   |
+|------------|----------|
+| Player     | Player |
+| RoleTypeId | NewRole |
+| SpawnReason | Reason |
+| List<ItemType> | Items |
+| Dictionary<ItemType, short> | Ammo |
+| bool | ShouldPreserveInventory |
+| RoleSpawnFlags | SpawnFlags |
+| bool | IsAllowed |
+
+**Events.Player.ThrownProjectile**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Throwable | Throwable |
+| Item | Item |
+| Pickup | Pickup |
+
+**Events.Player.ThrowingRequest**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Throwable | Throwable |
+| Item | Item |
+| ThrowRequest | RequestType |
+
+**Events.Player.DroppingItem**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Item | Item |
+| bool | IsAllowed |
+| bool | IsThrown |
+
+**Events.Player.DroppedItem**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Pickup | Pickup |
+| bool | WasThrown |
+
+**Events.Player.DroppingNothing**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+
+**Events.Player.PickingUpItem**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Pickup | Pickup |
+| bool | IsAllowed |
+
+**Events.Player.Handcuffing**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Player | Target |
+| bool | IsAllowed |
+
+**Events.Player.RemovingHandcuffs**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Player | Target |
+| bool | IsAllowed |
+
+**Events.Player.IntercomSpeaking**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| bool | IsAllowed |
+
+**Events.Player.Shot**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Firearm | Firearm |
+| Item | Item |
+| HitboxIdentity | Hitbox |
+| float | Damage |
+| float | Distance |
+| Vector3 | Position |
+| RaycastHit | RaycastHit |
+| Player | Target |
+| bool | CanHurt |
+
+**Events.Player.Shooting**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Firearm | Firearm |
+| Item | Item |
+| ShotMessage | ShotMessage |
+| uint | TargetNetId |
+| bool | IsAllowed |
+
+
+**Events.Player.EnteringPocketDimension**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| bool | IsAllowed |
+| Player | Scp106 |
+
+**Events.Player.EscapingPocketDimension**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Vector3 | TeleportPosition |
+| bool | IsAllowed |
+
+**Events.Player.FailingEscapePocketDimension**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| bool | IsAllowed |
+| PocketDimensionTeleport | Teleporter |
+
+**Events.Player.EnteringKillerCollision**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| bool | IsAllowed |
+
+**Events.Player.ReloadingWeapon**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Firearm | Firearm |
+| Item | Item |
+| bool | IsAllowed |
+
+**Events.Player.Spawning**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Role | OldRole |
+| Vector3 | Position |
+| float | HorizontalRotation |
 
-**Left**
+**Events.Player.Spawned**
 
-**Destroying**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Role | OldRole |
+| SpawnReason | Reason |
+| RoleSpawnFlags | SpawnFlags |
 
-**Hurting**
+**Events.Player.ChangedItem**
 
-**Hurt**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Item | Item |
+| Item | OldItem |
 
-**Dying**
+**Events.Player.ChangingItem**
 
-**Died**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Item | Item |
+| bool | IsAllowed |
 
-**ChangingRole**
+**Events.Player.ChangingGroup**
 
-**ThrownProjectile**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| UserGroup | NewGroup |
+| bool | IsAllowed |
 
-**ThrowingRequest**
+**Events.Player.InteractingDoor**
 
-**DroppingItem**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Door | Door |
+| bool | IsAllowed |
 
-**DroppedItem**
+**Events.Player.InteractingElevator**
 
-**DroppingNothing**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| ElevatorChamber | Elevator |
+| Lift | Lift |
+| bool | IsAllowed |
 
-**PickingUpItem**
+**Events.Player.InteractingLocker**
 
-**Handcuffing**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| Locker | Locker |
+| LockerChamber | Chamber |
+| byte | ChamberId |
+| bool | IsAllowed |
 
-**RemovingHandcuffs**
 
-**IntercomSpeaking**
+**Events.Player.TriggeringTesla**
 
-**Shot**
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| TeslaGate | Tesla |
+| bool | IsInHurtingRange |
+| bool | IsTriggerable |
+| bool | IsInIdleRange |
+| bool | IsAllowed |
+| bool | DisableTesla |
 
-**Shooting**
+**Events.Player.UnlockingGenerator**
 
-**EnteringPocketDimension**
+**Events.Player.OpeningGenerator**
 
-**EscapingPocketDimension**
+**Events.Player.ClosingGenerator**
 
-**FailingEscapePocketDimension**
+**Events.Player.ActivatingGenerator**
 
-**EnteringKillerCollision**
+**Events.Player.StoppingGenerator**
 
-**ReloadingWeapon**
+**Events.Player.ReceivingEffect**
 
-**Spawning**
+**Events.Player.IssuingMute**
 
-**Spawned**
+**Events.Player.RevokingMute**
 
-**ChangedItem**
+**Events.Player.UsingRadioBattery**
 
-**ChangingItem**
+**Events.Player.ChangingRadioPreset**
 
-**ChangingGroup**
+**Events.Player.UsingMicroHIDEnergy**
 
-**InteractingDoor**
+**Events.Player.DroppingAmmo**
 
-**InteractingElevator**
+**Events.Player.DroppedAmmo**
 
-**InteractingLocker**
+**Events.Player.InteractingShootingTarget**
 
-**TriggeringTesla**
+**Events.Player.DamagingShootingTarget**
 
-**UnlockingGenerator**
+**Events.Player.FlippingCoin**
 
-**OpeningGenerator**
+**Events.Player.TogglingFlashlight**
 
-**ClosingGenerator**
+**Events.Player.UnloadingWeapon**
 
-**ActivatingGenerator**
+**Events.Player.AimingDownSight**
 
-**StoppingGenerator**
+**Events.Player.TogglingWeaponFlashlight**
 
-**ReceivingEffect**
+**Events.Player.DryfiringWeapon**
 
-**IssuingMute**
+**Events.Player.VoiceChatting**
 
-**RevokingMute**
+**Events.Player.MakingNoise**
 
-**UsingRadioBattery**
+**Events.Player.Jumping**
 
-**ChangingRadioPreset**
+**Events.Player.Landing**
 
-**UsingMicroHIDEnergy**
+**Events.Player.Transmitting**
 
-**DroppingAmmo**
+**Events.Player.ChangingMoveState**
 
-**DroppedAmmo**
+**Events.Player.ChangingSpectatedPlayer**
 
-**InteractingShootingTarget**
+**Events.Player.TogglingNoClip**
 
-**DamagingShootingTarget**
+**Events.Player.TogglingOverwatch**
 
-**FlippingCoin**
+**Events.Player.TogglingRadio**
 
-**TogglingFlashlight**
+**Events.Player.SearchingPickup**
 
-**UnloadingWeapon**
+**Events.Player.SendingAdminChatMessage**
 
-**AimingDownSight**
+**Events.Player.PlayerDamageWindow**
 
-**TogglingWeaponFlashlight**
+**Events.Player.DamagingDoor**
 
-**DryfiringWeapon**
+**Events.Player.ItemAdded**
 
-**VoiceChatting**
+**Events.Player.ItemRemoved**
 
-**MakingNoise**
+**Events.Player.KillingPlayer**
 
-**Jumping**
+**Events.Player.EnteringEnvironmentalHazard**
 
-**Landing**
+**Events.Player.StayingOnEnvironmentalHazard**
 
-**Transmitting**
+**Events.Player.ExitingEnvironmentalHazard**
 
-**ChangingMoveState**
-
-**ChangingSpectatedPlayer**
-
-**TogglingNoClip**
-
-**TogglingOverwatch**
-
-**TogglingRadio**
-
-**SearchingPickup**
-
-**SendingAdminChatMessage**
-
-**PlayerDamageWindow**
-
-**DamagingDoor**
-
-**ItemAdded**
-
-**ItemRemoved**
-
-**KillingPlayer**
-
-**EnteringEnvironmentalHazard**
-
-**StayingOnEnvironmentalHazard**
-
-**ExitingEnvironmentalHazard**
-
-**ChangingNickname**
+**Events.Player.ChangingNickname**
 
 ---
 
-## Scp049
+## Scp049 (Doctor)
 
-**FinishingRecall**
+**Events.Scp049.FinishingRecall**
 
-**StartingRecall**
+**Events.Scp049.StartingRecall**
 
-**ActivatingSense**
+**Events.Scp049.ActivatingSense**
 
-**SendingCall**
+**Events.Scp049.SendingCall**
 
-**Attacking**
-
----
-
-## Scp0492
-
-**TriggeringBloodlust**
-
-**ConsumedCorpse**
-
-**ConsumingCorpse**
+**Events.Scp049.Attacking**
 
 ---
 
-## Scp079
+## Scp0492 (Zombie)
 
-**ChangingCamera**
+**Events.Scp0492.TriggeringBloodlust**
 
-**GainingExperience**
+**Events.Scp0492.ConsumedCorpse**
 
-**GainingLevel**
-
-**InteractingTesla**
-
-**TriggeringDoor**
-
-**ElevatorTeleporting**
-
-**LockingDown**
-
-**ChangingSpeakerStatus**
-
-**Recontained**
-
-**Pinging**
-
-**RoomBlackout**
-
-**ZoneBlackout**
+**Events.Scp0492.ConsumingCorpse**
 
 ---
 
-## Scp096
+## Scp079 (Computer/Camera)
 
-**Enraging**
+**Events.Scp079.ChangingCamera**
 
-**CalmingDown**
+**Events.Scp079.GainingExperience**
 
-**AddingTarget**
+**Events.Scp079.GainingLevel**
 
-**StartPryingGate**
+**Events.Scp079.InteractingTesla**
 
-**Charging**
+**Events.Scp079.TriggeringDoor**
 
-**TryingNotToCry**
+**Events.Scp079.ElevatorTeleporting**
+
+**Events.Scp079.LockingDown**
+
+**Events.Scp079.ChangingSpeakerStatus**
+
+**Events.Scp079.Recontained**
+
+**Events.Scp079.Pinging**
+
+**Events.Scp079.RoomBlackout**
+
+**Events.Scp079.ZoneBlackout**
 
 ---
 
-## Scp106
+## Scp096 (ShyGuy)
+
+**Events.Scp096.Enraging**
+
+**Events.Scp096.CalmingDown**
+
+**Events.Scp096.AddingTarget**
+
+**Events.Scp096.StartPryingGate**
+
+**Events.Scp096.Charging**
+
+**Events.Scp096.TryingNotToCry**
+
+---
+
+## Scp106 (Larry/OldMan)
 
 **Attacking**
 
@@ -787,7 +1237,7 @@ When the event is triggered, your function will be called. Information on what a
 
 ---
 
-## Scp173
+## Scp173 (Peanut)
 
 **Blinking**
 
@@ -798,26 +1248,68 @@ When the event is triggered, your function will be called. Information on what a
 **UsingBreakneckSpeeds**
 
 ---
-
-## Scp244
+## Scp244 (Vase)
 
 **UsingScp244**
 
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| bool | IsAllowed |
+| Scp244 | Scp244 |
+
 **DamagingScp244**
+
+| Type | Member   |
+| --- |----------|
+| Scp244Pickup | Pickup |
+| DamageHandler | Handler |
+| bool | IsAllowed |
 
 **OpeningScp244**
 
+| Type | Member   |
+| --- |----------|
+| Scp244Pickup | Pickup |
+| bool | IsAllowed |
+
 ---
 
-## Scp330
+## Scp330 (Candy)
 
 **InteractingScp330**
 
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| CandyKindID | Candy |
+| bool | IsAllowed |
+| int | UsageCount |
+| bool | ShouldSever |
+
 **DroppingScp330**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| CandyKindID | Candy |
+| bool | IsAllowed |
+| Scp330 | Scp330 |
 
 **EatingScp330**
 
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| ICandy | Candy |
+| bool | IsAllowed |
+
 **EatenScp330**
+
+| Type | Member   |
+| --- |----------|
+| Player | Player |
+| ICandy | Candy |
 
 ---
 
@@ -833,7 +1325,7 @@ When the event is triggered, your function will be called. Information on what a
 
 ---
 
-## Scp939
+## Scp939 (Dog)
 
 **ChangingFocus**
 
@@ -853,7 +1345,7 @@ When the event is triggered, your function will be called. Information on what a
 
 ---
 
-## Scp3114
+## Scp3114 (Skeleton)
 
 **Disguising**
 
@@ -918,3 +1410,51 @@ When the event is triggered, your function will be called. Information on what a
 **Detonating**
 
 ---
+
+# Coroutines
+Coroutines are a way to run code in parallel with the main thread. 
+This can be useful for:
+- running code that takes a long time to complete
+- running code that needs to wait for a certain condition to be met
+- running code that needs to be executed at regular intervals
+
+The Timing global variable provides functions for creating and managing coroutines.
+
+### Timing:CallDelayed
+Call a function after a delay.
+
+```lua
+Timing:CallDelayed(5, function()
+    print('This will be printed after 5 seconds')
+end)
+```
+
+### Timing:CallCoroutine
+
+Call a coroutine.
+
+Note that Lua Coroutine logic partially applies here. You can use `coroutine.yield(x)` to pause the coroutine for x seconds, 0.1 = 10 loops/second.
+
+```lua
+Timing:CallCoroutine(function()
+    print('This will be printed immediately')
+    while true do
+        print('This will be printed every second')
+        coroutine.yield(1)
+    end
+end)
+```
+
+### Arguments
+These functions can also be called with arguments. The arguments need to be passed along in an object[].
+
+```lua
+Timing:CallDelayed(5, function(word1, word2)
+    print('This will be printed after 5 seconds')
+    print('The arguments are: ' .. word1 .. ' ' .. word2)
+end, {'Hello',' World!'})
+```
+
+
+
+

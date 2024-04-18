@@ -29,7 +29,7 @@ namespace SCriPt.API.Lua
     public class ScriptLoader
     {
         
-        public static Script Script = new Script();
+        public static Script AutoLoadScript = new Script();
         
         public static void AutoLoad()
         {
@@ -51,8 +51,8 @@ namespace SCriPt.API.Lua
                 Directory.CreateDirectory("Scripts/Globals");
             }
             
-            Script = new Script();
-            RegisterAPI(Script);
+            AutoLoadScript = new Script();
+            RegisterAPI(AutoLoadScript);
             foreach(string file in Directory.GetFiles("Scripts/AutoLoad"))
             {
                 if(file.EndsWith(".lua"))
@@ -60,7 +60,7 @@ namespace SCriPt.API.Lua
                     try
                     {
                         //Script script = new Script();
-                        Script.DoFile(file);
+                        AutoLoadScript.DoFile(file);
                         //SCriPt.Instance.LoadedScripts.Add(script);
                         Log.Info("Loaded script: " + file);
                     }
@@ -70,7 +70,103 @@ namespace SCriPt.API.Lua
                     }
                 }
             }
-            SCriPt.Instance.LoadedScripts.Add(Script);
+            
+            ExecuteLoad(AutoLoadScript);
+            
+            SCriPt.Instance.LoadedScripts.Add("AutoLoad",AutoLoadScript);
+        }
+
+        public static string[] GetScriptsDir()
+        {
+            return Directory.GetFiles("Scripts");
+        }
+
+        private static void ExecuteLoad(Script script)
+        {
+            // Get the global table
+            Table globals = script.Globals;
+
+            // Iterate 
+            foreach (var pair in globals.Pairs)
+            {
+                // Check if the value is a table
+                if (pair.Value.Type == DataType.Table)
+                {
+                    Table table = pair.Value.Table;
+                    
+                    if(table.Get("loaded").Type == DataType.Boolean)
+                    {
+                        if(table.Get("loaded").Boolean)
+                        {
+                            Log.Info("Skipping loaded script: "+pair.Key);
+                            continue;
+                        }
+                    }
+                    
+                    // Check for the "load" function
+                    if (table.Get("load").Type == DataType.Function)
+                    {
+                        DynValue loadFunction = table.Get("load");
+                        try
+                        {
+                            // Execute the load function
+                            script.Call(loadFunction); 
+                            Log.Info("Loaded table: "+pair.Key);
+                            table.Set("loaded", DynValue.True);
+                        }
+                        catch (ScriptRuntimeException ex)
+                        {
+                            // Handle potential exceptions during load function execution
+                            //Console.WriteLine($"Error executing load function in table '{pair.Key}': {ex.Message}");
+                            Log.Error(ex.DecoratedMessage);
+                        }
+                    }
+                }
+            }
+        }
+        
+        public static void ExecuteUnload(Script script)
+        {
+            // Get the global table
+            Table globals = script.Globals;
+
+            // Iterate 
+            foreach (var pair in globals.Pairs)
+            {
+                // Check if the value is a table
+                if (pair.Value.Type == DataType.Table)
+                {
+                    Table table = pair.Value.Table;
+                    
+                    if(table.Get("loaded").Type == DataType.Boolean)
+                    {
+                        if(!table.Get("loaded").Boolean)
+                        {
+                            Log.Info("Skipping unloaded script: "+pair.Key);
+                            continue;
+                        }
+                    }
+                    
+                    // Check for the "load" function
+                    if (table.Get("unload").Type == DataType.Function)
+                    {
+                        DynValue unloadFunction = table.Get("unload");
+                        try
+                        {
+                            // Execute the load function
+                            script.Call(unloadFunction); 
+                            Log.Info("Unloaded table: "+pair.Key);
+                            table.Set("loaded", DynValue.False);
+                        }
+                        catch (ScriptRuntimeException ex)
+                        {
+                            // Handle potential exceptions during load function execution
+                            //Console.WriteLine($"Error executing load function in table '{pair.Key}': {ex.Message}");
+                            Log.Error(ex.DecoratedMessage);
+                        }
+                    }
+                }
+            }
         }
 
         public static void CustomAPIs(Script script)
@@ -83,6 +179,37 @@ namespace SCriPt.API.Lua
                     Log.Info("Loaded Custom Global: "+file);
                 }
             }
+        }
+        
+        public static bool LoadFile(string fileName)
+        {
+            foreach(string file in Directory.GetFiles("Scripts"))
+            {
+                Log.Debug("Checking file: "+file);
+                if(file.EndsWith(".lua"))
+                {
+                    if(file.ToLower().Contains(fileName.ToLower()))
+                    {
+                        try
+                        {
+                            Script script = new Script();
+                            RegisterAPI(script);
+                            //Script script = new Script();
+                            script.DoFile(file);
+                            //SCriPt.Instance.LoadedScripts.Add(script);
+                            ExecuteLoad(script);
+                            SCriPt.Instance.LoadedScripts.Add(file,script);
+                            return true;
+                        }
+                        catch (ScriptRuntimeException e)
+                        {
+                            Log.Error(e.DecoratedMessage);
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static DynValue API;
@@ -134,6 +261,7 @@ namespace SCriPt.API.Lua
         {
             //UserData.RegisterType<Player>();
             UserData.RegisterProxyType<ProxyPlayer, Player>(p => new ProxyPlayer(p));
+            UserData.RegisterProxyType<ProxyPlayer, PluginAPI.Core.Player>(p => new ProxyPlayer(Exiled.API.Features.Player.Get(p.ReferenceHub)));
             UserData.RegisterProxyType<ProxyPickup, Pickup>(p => new ProxyPickup(p));
             UserData.RegisterProxyType<ProxyRoom, Room>(r => new ProxyRoom(r));
             UserData.RegisterProxyType<ProxyTeslaGate, Exiled.API.Features.TeslaGate>(t => new ProxyTeslaGate(t));

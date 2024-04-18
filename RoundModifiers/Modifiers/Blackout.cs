@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.API.Features.Toys;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem;
@@ -26,6 +28,8 @@ namespace RoundModifiers.Modifiers
                 Overcharge(FacilityZone.Entrance, float.MaxValue);
                 Overcharge(FacilityZone.Surface, float.MaxValue);
             });
+            
+            _blackoutTick = Timing.RunCoroutine(BlackoutTick());
             
         }
         
@@ -54,10 +58,6 @@ namespace RoundModifiers.Modifiers
                         ev.Player.CurrentItem = Exiled.API.Features.Items.Item.Create(ItemType.Flashlight); //Forces Flashlight into hands
                     }
                 });
-
-                _blackoutTick = Timing.RunCoroutine(BlackoutTick());
-                //Timing.RunCoroutine(MoveLights(), "MoveLights");
-
             }
             
         }
@@ -93,6 +93,23 @@ namespace RoundModifiers.Modifiers
             if (lightController == null)
                 return;
             lightController.ServerFlickerLights(duration);
+        }
+
+        public bool HasLightItem(Player player)
+        {
+            //Check held items
+            foreach (Item item in player.Items)
+            {
+                if (item.IsLightEmitter)
+                    return true;
+                if (item is Firearm firearm)
+                {
+                    if(firearm.FlashlightEnabled)
+                        return true;
+                }
+            }
+
+            return false;
         }
         
         protected override void RegisterModifier()

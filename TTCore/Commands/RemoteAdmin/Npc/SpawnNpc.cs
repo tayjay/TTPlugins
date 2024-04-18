@@ -3,6 +3,7 @@ using CommandSystem;
 using Exiled.API.Features;
 using PlayerRoles;
 using TTCore.Extensions;
+using UnityEngine;
 
 namespace TTCore.Commands.RemoteAdmin.Npc
 {
@@ -45,7 +46,10 @@ namespace TTCore.Commands.RemoteAdmin.Npc
                 response = "You do not have the needed permissions to run this command! Needed perms : devdummies";
                 return false;
             }   
-            TTCore.Instance.NpcManager.SpawnNpc(name, role, player.Position,out Exiled.API.Features.Npc npc);            
+            if(role.IsAlive())
+                TTCore.Instance.NpcManager.SpawnNpc(name, role, player.Position,out Exiled.API.Features.Npc npc);
+            else
+                TTCore.Instance.NpcManager.SpawnNpc(name, role, Vector3.zero, out Exiled.API.Features.Npc npc);
             response = $"Spawned NPC with name '{name}', role '{role}', for player '{player.Nickname}'";
             return true;
         }

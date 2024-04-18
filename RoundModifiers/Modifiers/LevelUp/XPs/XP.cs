@@ -26,7 +26,7 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
             float level = LevelUpHandler.PlayerLevel[player.NetId];
             float xpNeeded = GetXPNeeded(level);
 
-            while (xp >= xpNeeded)
+            while (xp >= GetXPNeeded(level))
             {
                 LevelUpHandler.PlayerXP[player.NetId] -= xpNeeded;
                 LevelUpHandler.PlayerLevel[player.NetId] += 1;
@@ -38,7 +38,7 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         
         public static float GetXPNeeded(float level)
         {
-            return 75 + (25 * level);
+            return RoundModifiers.Instance.Config.LevelUp_BaseXP + (RoundModifiers.Instance.Config.LevelUp_XPPerLevel * level);
         }
 
         public virtual void Reset()

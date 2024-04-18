@@ -27,7 +27,7 @@ namespace SCriPt.Handlers
         public static void CallEvent(string name)
         {
             if(!RegisteredEvents.ContainsKey(name)) return;
-            RegisteredEvents[name]?.ForEach(closure => ScriptLoader.Script.Call(closure));
+            RegisteredEvents[name]?.ForEach(closure => ScriptLoader.AutoLoadScript.Call(closure));
         }
         
         public static void CallEvent<T>(string name, T args) where T : IExiledEvent
@@ -35,7 +35,7 @@ namespace SCriPt.Handlers
             if(!RegisteredEvents.ContainsKey(name)) return;
             Log.Debug("Calling event: "+name+" with args: "+args?.GetType().Name);
             //RegisteredEvents[name]?.ForEach(closure => closure.Call(args));
-            RegisteredEvents[name]?.ForEach(closure => ScriptLoader.Script.Call(closure,args));
+            RegisteredEvents[name]?.ForEach(closure => ScriptLoader.AutoLoadScript.Call(closure,args));
             Log.Debug("Event args were "+args);
         }
         

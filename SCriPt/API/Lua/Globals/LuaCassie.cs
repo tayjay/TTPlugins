@@ -8,22 +8,7 @@ namespace SCriPt.API.Lua.Globals
     {
         public static bool IsSpeaking => Cassie.IsSpeaking;
         
-        public static void Message(string message)
-        {
-            Exiled.API.Features.Cassie.Message(message);
-        }
-        
-        public static void Message(string message, bool isHeld)
-        {
-            Exiled.API.Features.Cassie.Message(message, isHeld);
-        }
-        
-        public static void Message(string message, bool isHeld, bool isNoisy)
-        {
-            Exiled.API.Features.Cassie.Message(message, isHeld, isNoisy);
-        }
-        
-        public static void Message(string message, bool isHeld, bool isNoisy, bool isSubtitles)
+        public static void Message(string message, bool isHeld = false, bool isNoisy= true, bool isSubtitles= false)
         {
             Exiled.API.Features.Cassie.Message(message, isHeld, isNoisy, isSubtitles);
         }
@@ -33,9 +18,9 @@ namespace SCriPt.API.Lua.Globals
             Exiled.API.Features.Cassie.GlitchyMessage(message, glitchChance, jamChance);
         }
         
-        public static bool IsValidMessage(string message)
+        public static bool IsValidWord(string word)
         {
-            return Exiled.API.Features.Cassie.IsValid(message);
+            return Exiled.API.Features.Cassie.IsValid(word);
         }
         
         public static bool IsValidSentence(string sentence)

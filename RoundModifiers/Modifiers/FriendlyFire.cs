@@ -7,6 +7,7 @@ namespace RoundModifiers.Modifiers
     {
         
         private bool WasFriendlyFireEnabled = false;
+        private bool WasFriendlyFireDetectionPaused = false;
         private FriendlyFireAction LifeAction = FriendlyFireAction.Noop;
         private FriendlyFireAction RespawnAction = FriendlyFireAction.Noop;
         private FriendlyFireAction RoundAction = FriendlyFireAction.Noop;
@@ -15,9 +16,12 @@ namespace RoundModifiers.Modifiers
         public void OnRoundStart()
         {
             WasFriendlyFireEnabled = Server.FriendlyFire;
+            WasFriendlyFireDetectionPaused = FriendlyFireConfig.PauseDetector;
             Server.FriendlyFire = true;
+            FriendlyFireConfig.PauseDetector = true;
             ServerConfigSynchronizer.RefreshAllConfigs();
             //todo: Prevent player bans for friendly fire
+            
            
         }
         
@@ -31,6 +35,7 @@ namespace RoundModifiers.Modifiers
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
             
             Server.FriendlyFire = WasFriendlyFireEnabled;
+            FriendlyFireConfig.PauseDetector = WasFriendlyFireDetectionPaused;
             ServerConfigSynchronizer.RefreshAllConfigs();
         }
 
