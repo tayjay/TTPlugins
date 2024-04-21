@@ -37,27 +37,10 @@ namespace SCriPt.API.Lua.Globals
         private static IEnumerator<float> Coroutine(DynValue coroutine)
         {
             DynValue result = null;
-            //yield return Timing.WaitForSeconds(2f);
-            
-            
-            /*
-            if(args == null || args.Length==0)
-                result = coroutine.Coroutine.Resume();
-            else
-                result = coroutine.Coroutine.Resume(args);
-            */
-            
-            /*for(result = coroutine.Coroutine.Resume(); result.Type==DataType.YieldRequest; result = coroutine.Coroutine.Resume())
-            {
-                // Do something with the result.
-                Log.Debug("Coroutine yielded.");
-                yield return Timing.WaitForSeconds(1f);
-            }*/
-            
             while (true)
             {
                 DynValue x = coroutine.Coroutine.Resume();
-                Log.Debug(x.ToString());
+                //Log.Debug(x.ToString());
                 if(x.IsNil() || x.Number == 0)
                     break;
                 yield return Timing.WaitForSeconds((float)x.Number);
@@ -69,7 +52,6 @@ namespace SCriPt.API.Lua.Globals
         private static IEnumerator<float> Coroutine(DynValue coroutine, object[] args)
         {
             DynValue result = null;
-            
             while (true)
             {
                 DynValue x;
@@ -81,7 +63,7 @@ namespace SCriPt.API.Lua.Globals
                 {
                     x = coroutine.Coroutine.Resume();
                 }
-                if(x.IsNil() || x.Number == 0)
+                if(x.IsNil() /*|| x.Number == 0*/) //todo: Confirm if 0 returned is necessary to break
                     break;
                 yield return Timing.WaitForSeconds((float)x.Number);
             }

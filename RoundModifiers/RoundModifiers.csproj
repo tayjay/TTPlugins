@@ -104,6 +104,7 @@
     <ItemGroup>
         <Compile Include="API\ModInfo.cs" />
         <Compile Include="API\Modifier.cs" />
+        <Compile Include="Commands\Client\LevelUpCommand.cs" />
         <Compile Include="Commands\Client\VoteCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModActiveCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModAddCommand.cs" />
@@ -111,6 +112,7 @@
         <Compile Include="Commands\RemoteAdmin\ModifierCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModListCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModNextCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModRandomCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModSetCommand.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\RoundManager.cs" />

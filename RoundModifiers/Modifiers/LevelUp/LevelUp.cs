@@ -294,13 +294,13 @@ namespace RoundModifiers.Modifiers.LevelUp
         {
             Tier selectedTier = Tier.Common;
             
-            if(playerLevel >= 9)
+            if(playerLevel >= 7)
                 selectedTier = Tier.Legendary;
-            else if(playerLevel >= 7)
-                selectedTier = Tier.Epic;
             else if(playerLevel >= 5)
+                selectedTier = Tier.Epic;
+            else if(playerLevel >= 4)
                 selectedTier = Tier.Rare;
-            else if(playerLevel >= 3)
+            else if(playerLevel >= 2)
                 selectedTier = Tier.Uncommon;
             else if(playerLevel >= 1)
                 selectedTier = Tier.Common;

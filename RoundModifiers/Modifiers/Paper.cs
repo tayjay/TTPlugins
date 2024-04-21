@@ -20,10 +20,12 @@ public class Paper : Modifier
         if(!ev.Player.Role.IsAlive) return;
         if (ev.Player.Role == RoleTypeId.Scp106 || ev.Player.Role == RoleTypeId.Scp939)//Found that 106 and 939 incorrectly rescale with this modifier. Need to not scale them til resolved
         {
-            ev.Player.ChangeSize(1f);
+            //ev.Player.ChangeSize(1f);
+            //ev.Player.Scale = new Vector3(1,1,1);
             return;
         }
-        ev.Player.ChangeSize(new Vector3(1,1,0.01f));
+        //ev.Player.ChangeSize(new Vector3(1,1,0.01f));
+        ev.Player.Scale = new Vector3(1,1,0.01f);
     }
     
     protected override void RegisterModifier()
@@ -43,7 +45,7 @@ public class Paper : Modifier
         Aliases = new [] {"paper"},
         Description = "Everyone is paper thin!",
         FormattedName = "<color=yellow>S-C-Paper Mario</color>",
-        Impact = ImpactLevel.MinorGameplay,
+        Impact = ImpactLevel.MajorGameplay,
         MustPreload = false
     };
 }

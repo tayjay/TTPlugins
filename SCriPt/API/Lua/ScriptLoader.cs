@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -98,7 +100,7 @@ namespace SCriPt.API.Lua
                     {
                         if(table.Get("loaded").Boolean)
                         {
-                            Log.Info("Skipping loaded script: "+pair.Key);
+                            Log.Info("Skipping loaded table: "+pair.Key);
                             continue;
                         }
                     }
@@ -212,49 +214,40 @@ namespace SCriPt.API.Lua
             return false;
         }
 
-        private static DynValue API;
-        private static DynValue Warhead;
-        private static DynValue Decon;
-        private static DynValue Lobby;
-        private static DynValue Round;
-        private static DynValue Facility;
-        private static DynValue Cassie;
-        private static DynValue Server;
-        private static DynValue Events;
-        private static DynValue Player;
-        private static DynValue Coroutines;
-        private static DynValue Role;
+        
+        private static Dictionary<string, DynValue> Globals = new Dictionary<string, DynValue>();
 
         public static void RegisterAPI(Script script)
         {
-            
-            if(API == null) API = UserData.CreateStatic<LuaAPI>();
-            if(Warhead == null) Warhead = UserData.CreateStatic<LuaWarhead>();
-            if(Decon == null) Decon = UserData.CreateStatic<LuaDecon>();
-            if(Lobby == null) Lobby = UserData.CreateStatic<LuaLobby>();
-            if(Round == null) Round = UserData.CreateStatic<LuaRound>();
-            if(Facility == null) Facility = UserData.CreateStatic<LuaFacility>();
-            if(Cassie == null) Cassie = UserData.CreateStatic<LuaCassie>();
-            if(Server == null) Server = UserData.CreateStatic<LuaServer>();
-            if(Events == null) Events = UserData.CreateStatic<LuaEvents>();
-            if(Player == null) Player = UserData.CreateStatic<LuaPlayer>();
-            if(Coroutines == null) Coroutines = UserData.CreateStatic<LuaCoroutines>();
-            if(Role == null) Role = UserData.CreateStatic<LuaRole>();
-            
+            AddGlobal<LuaAdminToys>("AdminToys");
+            AddGlobal<LuaAPI>("API");
+            AddGlobal<LuaWarhead>("Warhead");
+            AddGlobal<LuaDecon>("Decon");
+            AddGlobal<LuaLobby>("Lobby");
+            AddGlobal<LuaRound>("Round");
+            AddGlobal<LuaFacility>("Facility");
+            AddGlobal<LuaCassie>("Cassie");
+            AddGlobal<LuaServer>("Server");
+            AddGlobal<LuaEvents>("Events");
+            AddGlobal<LuaPlayer>("Player");
+            AddGlobal<LuaCoroutines>("Timing");
+            AddGlobal<LuaRole>("Role");
             script.Globals["RegisterType"] = (Action<string,string>) RegisterType;
-            script.Globals["API"] = API;
-            script.Globals["Warhead"] = Warhead;
-            script.Globals["Decon"] = Decon;
-            script.Globals["Lobby"] = Lobby;
-            script.Globals["Round"] = Round;
-            script.Globals["Facility"] = Facility;
-            script.Globals["Cassie"] = Cassie;
-            script.Globals["Server"] = Server;
-            script.Globals["Events"] = Events;
-            script.Globals["Player"] = Player;
-            script.Globals["Timing"] = Coroutines;
-            script.Globals["Role"] = Role;
+            
+            foreach(var global in Globals)
+            {
+                script.Globals[global.Key] = global.Value;
+            }
             CustomAPIs(script); 
+        }
+        
+        public static void AddGlobal<T>(string globalName)
+        {
+            if (Attribute.GetCustomAttribute(typeof(T), typeof(MoonSharpUserDataAttribute)) == null)
+                UserData.RegisterType<T>();
+            if(Globals.ContainsKey(globalName)) return;
+            UserData.CreateStatic(typeof(T));
+            Globals[globalName] = UserData.CreateStatic(typeof(T));
         }
 
         private static void RegisterTypes()
@@ -290,6 +283,7 @@ namespace SCriPt.API.Lua
             UserData.RegisterType<ItemPickupBase>();
             UserData.RegisterType<PickupSyncInfo>();
             UserData.RegisterType<CoroutineHandle>();
+            UserData.RegisterType<EventHandler>();
             UserData.RegisterAssembly();
         }
         

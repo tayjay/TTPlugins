@@ -87,18 +87,17 @@ Let's look at the code that will do this and break it down. Create a new file in
 hello_user = {}
 
 function hello_user:load()
- Events.Player.Joined:add(self.onPlayerJoined)
+ Events.Player.Joined:add(hello_user.onPlayerJoined)
 end
 
 function hello_user:unload()
- Events.Player.Joined:remove(self.onPlayerJoined)
+ Events.Player.Joined:remove(hello_user.onPlayerJoined)
 end
 
 function hello_user:onPlayerJoined(args)
     Server:Broadcast("Welcome to the server, " .. args.Player.Nickname .. "!")
     print("Player " .. args.Player.Nickname .. " has joined the server.")
 end
-
 ```
 Most of this code is boilerplate, but let's break it down:
 - ```hello_user = {}``` creates a table to hold our functions. It's best practice to keep all your functions in a table to avoid conflicts with other scripts. The table name can be any unique name you want.
@@ -120,13 +119,13 @@ scp3114 = {}
 -- Load function, called when the script is loaded
 function scp3114:load()
     -- Add the function to the event
-    Events.Server.RoundStarted:add(self.onRoundStarted)
+    Events.Server.RoundStarted:add(scp3114.onRoundStarted)
 end
 
 -- Unload function, called when the script is unloaded
 function scp3114:unload()
     -- Remove the function from the event
-    Events.Server.RoundStarted:remove(self.onRoundStarted)
+    Events.Server.RoundStarted:remove(scp3114.onRoundStarted)
 end
 
 -- Function called when the round starts
@@ -163,13 +162,13 @@ cassie = {}
 -- Load function, called when the script is loaded
 function cassie:load()
     -- Add the function to the event
-    Events.Command.PlayerGameConsoleCommandExecuted:add(self.onPlayerGameConsoleCommandExecuted)
+    Events.Command.PlayerGameConsoleCommandExecuted:add(cassie.onPlayerGameConsoleCommandExecuted)
 end
 
 -- Unload function, called when the script is unloaded
 function cassie:unload()
     -- Remove the function from the event
-    Events.Command.PlayerGameConsoleCommandExecuted:remove(self.onPlayerGameConsoleCommandExecuted)
+    Events.Command.PlayerGameConsoleCommandExecuted:remove(cassie.onPlayerGameConsoleCommandExecuted)
 end
 
 -- Function called when a player uses a command
@@ -1429,11 +1428,22 @@ Timing:CallDelayed(5, function()
 end)
 ```
 
+### Timing:CallPeriodically
+Call a function at regular intervals for a certain duration.
+
+```lua
+--duration, interval, action
+Timing:CallPeriodically(60, 1, function()
+    print('This will be printed every second')
+end)
+
+```
+
 ### Timing:CallCoroutine
 
 Call a coroutine.
 
-Note that Lua Coroutine logic partially applies here. You can use `coroutine.yield(x)` to pause the coroutine for x seconds, 0.1 = 10 loops/second.
+Note that Lua Coroutine logic applies here. You can use `coroutine.yield(x)` to pause the coroutine for x seconds, 0.1 = 10 loops/second.
 
 ```lua
 Timing:CallCoroutine(function()
@@ -1444,6 +1454,8 @@ Timing:CallCoroutine(function()
     end
 end)
 ```
+
+`coroutine.yield` can currently only be used in CallCoroutine, if you want to use `CallDelayed` and have a break in it use `CallCoroutine` and start function with `coroutine.yield(delay)`
 
 ### Arguments
 These functions can also be called with arguments. The arguments need to be passed along in an object[].

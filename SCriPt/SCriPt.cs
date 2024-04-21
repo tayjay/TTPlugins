@@ -16,6 +16,7 @@ namespace SCriPt
         private static readonly SCriPt Singleton = new SCriPt();
         public static SCriPt Instance => Singleton;
         
+        
         public PlayerEvents PlayerEvents { get; private set; }
         public ServerEvents ServerEvents { get; private set; }
         public WarheadEvents WarheadEvents { get; private set; }
@@ -56,7 +57,7 @@ namespace SCriPt
             
         }
         
-        public override PluginPriority Priority { get; } = PluginPriority.Last;
+        public override PluginPriority Priority { get; } = PluginPriority.Higher;
         
         public override void OnEnabled()
         {
@@ -189,11 +190,6 @@ namespace SCriPt
             LoadedScripts = new Dictionary<string, Script>();
             try
             {
-                
-                //ModApiImpl.Setup();
-                Log.Info(rtnHelloWorld());
-                Log.Info("Global sum: "+globalSum(5, 5));
-                Log.Info(CallbackTest("Testing2"));
                 ScriptLoader.AutoLoad();
             } catch (IOException e)
             {
@@ -204,51 +200,7 @@ namespace SCriPt
             //EventHandler.RegisterEvents();
         }
 
-        public string rtnHelloWorld()
-        {
-            string script = @"
-                return 'Hello, World!'
-            ";
-            DynValue res = Script.RunString(script);
-            return res.String;
-        }
         
-        public static double globalSum(int a, int b)
-        {
-            string scriptCode = @"
-                function sum(a, b)
-                    return a + b
-                end
-
-                return sum(globalA, globalB)
-            ";
-            Script script = new Script();
-            script.Globals["globalA"] = a;
-            script.Globals["globalB"] = b;
-            DynValue res = script.DoString(scriptCode);
-            return res.Number;
-        }
-
-        private static string CallbackTest(string message)
-        {
-            string scriptCode = @"
-                function log (message)
-                    print(message)
-                end
-            ";
-            Script script = new Script();
-            script.Options.DebugPrint = s => Exiled.API.Features.Log.Info(s);
-            script.Globals["LogC"] = (Func<string,string>) LogC;
-            script.DoString(scriptCode);
-            DynValue res = script.Call(script.Globals["log"], message);
-            return res.String;
-        }
-
-        private static string LogC(string msg)
-        {
-            Exiled.API.Features.Log.Info(msg);
-            return msg;
-        }
         
         
         

@@ -26,6 +26,12 @@ namespace SCriPt.API.Lua.Proxy
         
         public string Nickname => Player.Nickname;
         public int Id => Player.Id;
+        public string UserId => Player.UserId;
+        public string IPAddress => Player.IPAddress;
+        public string DisplayNickname => Player.DisplayNickname;
+        public uint NetId => Player.NetId;
+        
+        
         public float Health
         {
             get => Player.Health;
@@ -275,5 +281,33 @@ namespace SCriPt.API.Lua.Proxy
         {
             Player.ChangeAppearance(roleType);
         }
+        
+        public void ChangeAppearance(string roleType)
+        {
+            if(Enum.TryParse(roleType, out RoleTypeId roleTypeId))
+                Player.ChangeAppearance(roleTypeId);
+        }
+        
+        public bool IsAlive => Player.IsAlive;
+        public bool IsDead => Player.IsDead;
+        public bool IsScp => Player.IsScp;
+        public bool IsHuman => Player.IsHuman;
+        public bool IsNTF => Player.IsNTF;
+        public bool IsCHI => Player.IsCHI;
+        
+        public bool IsClassD => Player.Role == RoleTypeId.ClassD;
+        public bool IsScientist => Player.Role == RoleTypeId.Scientist;
+        public bool IsFacilityGuard => Player.Role == RoleTypeId.FacilityGuard;
+        
+        public void MoveToward(Vector3 position)
+        {
+            if (Player.Role is FpcRole role)
+            {
+                Vector3 currentPos = Player.Position;
+                Vector3 direction = (position - currentPos).normalized;
+                role.FirstPersonController.FpcModule.CharController.Move(direction);
+            }
+        }
+        
     }
 }

@@ -20,11 +20,12 @@ namespace RoundModifiers.Commands.RemoteAdmin
             RegisterCommand(new ModSetCommand());
             RegisterCommand(new ModActiveCommand());
             RegisterCommand(new ModNextCommand());
+            RegisterCommand(new ModRandomCommand());
         }
 
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            response = "Invalid subcommand! Valid subcommands : set, add, clear, all, active, next";
+            response = "Invalid subcommand! Valid subcommands : set, add, clear, all, active, next, random";
             return false;
         }
 

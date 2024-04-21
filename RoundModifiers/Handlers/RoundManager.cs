@@ -314,10 +314,15 @@ namespace RoundModifiers.Handlers
                 string modString = "Modifiers:<size=75%> ";
                 if (ActiveModifiers.Count > 0)
                 {
+                    int addedMods = 0;
                     foreach(ModInfo modifier in ActiveModifiers)
                     {
+                        if(modifier.Hidden) continue;
+                        addedMods++;
                         modString += $"\n{modifier.FormattedName}";
                     }
+                    if(addedMods == 0)
+                        modString += "None";
                 }
                 else
                 {

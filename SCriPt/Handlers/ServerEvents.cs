@@ -17,7 +17,7 @@ namespace SCriPt.Handlers
         public void OnWaitingForPlayers()
         {
             //EventManager.CallEvent("WaitingForPlayers");
-            WaitingForPlayers?.Invoke(null, EventArgs.Empty);
+            WaitingForPlayers?.Invoke(this, EventArgs.Empty);
         }
         
         [MoonSharpVisible(true)]

@@ -49,8 +49,8 @@ namespace TTCore.Handlers
         public void ResetSize(Player player)
         {
             int playerId = player.Id;
-            if (PlayerSizes.ContainsKey(playerId))
-                PlayerSizes.Remove(playerId);
+            /*if (PlayerSizes.ContainsKey(playerId)) // Modifies enumerable
+                PlayerSizes.Remove(playerId);*/
             MEC.Timing.KillCoroutines("Resize"+playerId);
             //ChangePlayerScale(player, Vector3.one);
             player.Scale = Vector3.one;
@@ -67,6 +67,7 @@ namespace TTCore.Handlers
                     ResetSize(player);
                 }
             }
+            PlayerSizes.Clear();
         }
 
         private IEnumerator<float> ChangeOverTime(Player player, Vector3 targetSize)

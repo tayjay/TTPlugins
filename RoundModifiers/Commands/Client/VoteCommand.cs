@@ -27,7 +27,7 @@ namespace RoundModifiers.Commands.Client
 
             if (arguments.Count == 0)
             {
-                foreach(ModInfo mod in RoundModifiers.Instance.Modifiers.Keys)
+                foreach(ModInfo mod in RoundModifiers.Instance.Modifiers.Keys.OrderBy(info => info.Name))
                 {
                     if(mod.Hidden) continue;
                     response += $"{mod.Name} - {mod.Description}\n";

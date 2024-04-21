@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Linq;
 using CommandSystem;
 using RoundModifiers.API;
 
@@ -17,7 +18,7 @@ namespace RoundModifiers.Commands.RemoteAdmin
 
             response = "All Modifiers: ";
             
-            foreach (ModInfo modifier in RoundModifiers.Instance.Modifiers.Keys)
+            foreach (ModInfo modifier in RoundModifiers.Instance.Modifiers.Keys.OrderBy(info=>info.Name))
             {
                 response += $"\n{modifier.Name}, ";
             }

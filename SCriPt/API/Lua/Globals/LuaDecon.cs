@@ -11,5 +11,10 @@ namespace SCriPt.API.Lua.Globals
             DecontaminationController.Singleton.NetworkDecontaminationOverride =
                 DecontaminationController.DecontaminationStatus.Disabled;
         }
+        
+        public static void Force()
+        {
+            DecontaminationController.Singleton.ForceDecontamination();
+        }
     }
 }

@@ -56,14 +56,17 @@ namespace RoundModifiers.Modifiers
 
         public void Stop()
         {
+            if(DoorMarkers == null || Doors == null) return;
             for(int i = 0; i < DoorCount; i++)
             {
+                if(DoorMarkers[i] == null || Doors[i] == null) continue;
                 //Doors[i].Destroy();
                 DoorMarkers[i].Destroy();
                 
                 Doors[i] = null;
                 DoorMarkers[i] = null;
             }
+            
             Timing.KillCoroutines(_doorMovementCoroutine);
             Timing.KillCoroutines(_teleportCoroutine);
         }

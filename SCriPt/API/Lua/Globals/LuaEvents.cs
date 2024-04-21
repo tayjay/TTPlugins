@@ -3,7 +3,7 @@ using SCriPt.Handlers;
 
 namespace SCriPt.API.Lua.Globals
 {
-    [MoonSharpUserData]
+    //[MoonSharpUserData]
     public class LuaEvents
     {
         public static PlayerEvents Player => SCriPt.Instance.PlayerEvents;

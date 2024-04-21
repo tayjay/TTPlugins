@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using MoonSharp.Interpreter;
+using RoundRestarting;
 
 namespace SCriPt.API.Lua.Globals
 {
@@ -23,7 +24,7 @@ namespace SCriPt.API.Lua.Globals
         
         public static void Restart()
         {
-            LuaServer.Restart();
+            RoundRestart.InitiateRoundRestart();
         }
 
         public static bool InProgress => RoundSummary.RoundInProgress();
