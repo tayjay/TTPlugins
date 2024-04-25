@@ -9,11 +9,11 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         public void OnGameTick()
         {
             tick++;
-            if (tick % 3 == 0)
+            if (tick % 1 == 0)
             {
                 foreach (Player player in Player.List)
                 {
-                    if(player.IsAlive && !player.IsScp)
+                    if(player.IsAlive/* && !player.IsScp*/)
                         GiveXP(player, 1);
                 }
             }

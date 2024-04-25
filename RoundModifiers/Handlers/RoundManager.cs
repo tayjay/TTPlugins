@@ -17,6 +17,9 @@ namespace RoundModifiers.Handlers
         
         public List<ModInfo> NextRoundModifiers { get; private set; }
 
+        public bool ModifiersHidden { get; set; }
+        public bool NextModifiersHidden { get; set; }
+
         public static ModInfo NoneInfo = new ModInfo
         {
             Name = "None",
@@ -37,6 +40,8 @@ namespace RoundModifiers.Handlers
             NextRoundModifiers = new List<ModInfo>();
             VotingPlayers = new Dictionary<string, ModInfo>();
             BlacklistedModifiers = new List<string>(); //RoundModifiers.Instance.Config.DisabledModifiers.ToList();
+            ModifiersHidden = false;
+            NextModifiersHidden = false;
         }
         
         //**********************************************
@@ -143,6 +148,11 @@ namespace RoundModifiers.Handlers
                 Log.Info("Player: " + mod.Key + " voted for: " + mod.Value.Name);
             }
 
+            //Hide modifiers if needed.
+            ModifiersHidden = false;
+            if(NextModifiersHidden) ModifiersHidden = true;
+            NextModifiersHidden = false;
+            
             int votes = VotingPlayers.Count;
             int players = Player.List.Count;
             if (votes > 0)
@@ -274,7 +284,11 @@ namespace RoundModifiers.Handlers
             {
                 if(!Round.IsLobby) break;
                 string modString = "<size=75%>Modifiers: \n";
-                if (ActiveModifiers.Count > 0)
+                if (ModifiersHidden)
+                {
+                    modString += "[REDACTED]";
+                }
+                else if (ActiveModifiers.Count > 0)
                 {
                     int visibleMods = 0;
                     foreach(ModInfo modifier in ActiveModifiers)
@@ -312,7 +326,12 @@ namespace RoundModifiers.Handlers
                 Timing.KillCoroutines(LobbyModViewCoroutine);
                 if (!RoundModifiers.Instance.Config.ShowRoundModInGame) return;
                 string modString = "Modifiers:<size=75%> ";
-                if (ActiveModifiers.Count > 0)
+                
+                if (ModifiersHidden)
+                {
+                    modString += "[REDACTED]";
+                }
+                else if (ActiveModifiers.Count > 0)
                 {
                     int addedMods = 0;
                     foreach(ModInfo modifier in ActiveModifiers)
@@ -343,6 +362,7 @@ namespace RoundModifiers.Handlers
         {
             ClearRoundModifiers();
             SelectNewModifiers();
+            Timing.KillCoroutines(LobbyModViewCoroutine);
         }
 
         public void Register()

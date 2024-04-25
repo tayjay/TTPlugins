@@ -57,6 +57,8 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
                     color = "white";
                     break;
             }
+            if(OwnerHUD.Owner.IsScp)
+                color = "red";
 
             string hud = $"<color={color}><size=70%>Level: {Level}\n" +
                          $"XP: {XP}/{XPNeeded}</size><size=20%>\n";

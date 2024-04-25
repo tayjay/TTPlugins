@@ -16,7 +16,7 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         {
             foreach(Player player in Player.List)
             {
-                if (player.Role.Team == Team.SCPs || player.Role.Team == Team.Dead) continue;
+                if (/*player.Role.Team == Team.SCPs || */player.Role.Team == Team.Dead) continue;
                 if (!_zones.ContainsKey(player.NetId))
                     _zones[player.NetId] = new List<ZoneType>();
                 

@@ -21,6 +21,8 @@ namespace TTAdmin
         public override string Author { get; } = "TayTay";
         public override Version Version { get; } = new Version(0, 1, 0);
         
+        private HttpServer HttpServer;
+        
         //private CoroutineHandle AdminPanelCoroutine;
         //GameServerClient GameServerClient;
         //ScriptLoader ScriptLoader;
@@ -37,7 +39,7 @@ namespace TTAdmin
         public override void OnEnabled()
         {
             base.OnEnabled();
-            Setup();
+            //Setup();
             Log.Info("TTAdmin has been enabled!");
         }
         
@@ -54,11 +56,11 @@ namespace TTAdmin
 
         public void Setup()
         {
-            //AdminPanelCoroutine = Timing.RunCoroutine(AdminPanel());
+            
             try
             {
-                //ScriptLoader = new ScriptLoader();
-                //ScriptLoader.Initialize();
+                HttpServer = new HttpServer("http://localhost:8080/");
+                HttpServer.Start();
             } catch (Exception e)
             {
                 Log.Error(e);
@@ -68,7 +70,7 @@ namespace TTAdmin
         
         public void Shutdown()
         {
-            //Timing.KillCoroutines(AdminPanelCoroutine);
+            HttpServer.Stop();
         }
         
         /*private IEnumerator<float> AdminPanel()

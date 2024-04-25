@@ -84,6 +84,8 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                     return ItemType.GunShotgun;
                 case ItemType.GunShotgun:
                     return ItemType.GunLogicer;
+                case ItemType.GunLogicer:
+                    return ItemType.GunFRMG0;
                 default:
                     return ItemType.None;
             }

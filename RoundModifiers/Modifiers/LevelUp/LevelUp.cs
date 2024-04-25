@@ -36,6 +36,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             _xp.Add(new AliveXP());
             _xp.Add(new HandcuffXP());
             _xp.Add(new UsedItemXP());
+            _xp.Add(new NearScpXP());
             
             _boosts.Add(new GiveItemBoost(ItemType.Jailbird, Tier.Rare));
             _boosts.Add(new GiveItemBoost(ItemType.Adrenaline));
@@ -410,6 +411,15 @@ namespace RoundModifiers.Modifiers.LevelUp
 
         }
 
+        public void OnRevive(ChangingRoleEventArgs ev)
+        {
+            if(ev.Reason != SpawnReason.Revived) return;
+            if(ev.NewRole != RoleTypeId.Scp0492) return;
+            foreach(XP xp in _xp.Where(x=>x is IResurrectEvent))
+                ((IResurrectEvent) xp).OnResurrect(ev);
+                
+        }
+
         public void OnRoundStart()
         {
             MEC.Timing.RunCoroutine(Tick(), "LevelUpTick");
@@ -462,6 +472,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
             Exiled.Events.Handlers.Player.Joined += OnPlayerJoin;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += OnScp914UpgradingPlayer;
+            Exiled.Events.Handlers.Player.ChangingRole += OnRevive;
         }
 
         protected override void UnregisterModifier()
@@ -481,6 +492,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Server.RestartingRound -= OnRoundRestart;
             Exiled.Events.Handlers.Player.Joined -= OnPlayerJoin;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= OnScp914UpgradingPlayer;
+            Exiled.Events.Handlers.Player.ChangingRole -= OnRevive;
             MEC.Timing.KillCoroutines("LevelUpTick");
             PlayerXP.Clear();
             PlayerLevel.Clear();

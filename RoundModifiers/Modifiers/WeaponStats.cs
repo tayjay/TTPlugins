@@ -41,23 +41,29 @@ public class WeaponStats : Modifier
             {
                 foreach(Player player in Player.List.Where(p=>p.IsHuman))
                 {
-                    if(player.TryGetPickupOnSight(10,out Pickup pickup))
+                    try
                     {
-                        if(!(Item.Get(pickup.Serial) is Firearm firearm)) continue;
-                        Stats stats = Stats.GetWeaponStats(firearm);
-                        if(stats==null) continue;
-                        
-                        string output = $"<size=70%>{stats.Prefix} {firearm.FirearmType} </size><size=90%>";
-                        for(int i=0;i<5;i++)
+                        if(player.TryGetPickupOnSight(10,out Pickup pickup))
                         {
-                            if(i<stats.Rarity) 
-                                output += "<color=#e6c300>*</color>";
-                            else
-                                output += "<color=#616161>*</color>";
-                        }
-                        output+=$"</size>";
+                            if(!(Item.Get(pickup.Serial) is Firearm firearm)) continue;
+                            Stats stats = Stats.GetWeaponStats(firearm);
+                            if(stats==null) continue;
                         
-                        player.ShowHUDHint(output,2f);
+                            string output = $"<size=70%>{stats.Prefix} {firearm.FirearmType} </size><size=90%>";
+                            for(int i=0;i<5;i++)
+                            {
+                                if(i<stats.Rarity) 
+                                    output += "<color=#e6c300>*</color>";
+                                else
+                                    output += "<color=#616161>*</color>";
+                            }
+                            output+=$"</size>";
+                        
+                            player.ShowHUDHint(output,2f);
+                        }
+                    } catch (System.Exception e)
+                    {
+                        Log.Error($"Error in WeaponStats tick: {e}");
                     }
 
                     yield return Timing.WaitForOneFrame;

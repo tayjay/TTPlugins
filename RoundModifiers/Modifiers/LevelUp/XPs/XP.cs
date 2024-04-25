@@ -22,6 +22,7 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
 
         protected static void TryLevelUp(Player player)
         {
+            if(player.IsScp) return;
             float xp = LevelUpHandler.PlayerXP[player.NetId];
             float level = LevelUpHandler.PlayerLevel[player.NetId];
             float xpNeeded = GetXPNeeded(level);

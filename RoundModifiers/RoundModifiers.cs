@@ -88,6 +88,7 @@ namespace RoundModifiers
             AddModifier(new Pills());
             AddModifier(new Paper());
             AddModifier(new Keyless());
+            AddModifier(new ExplosiveRagdolls());
         }
         
         

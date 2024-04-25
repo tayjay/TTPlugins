@@ -109,6 +109,7 @@
         <Compile Include="Commands\RemoteAdmin\ModActiveCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModAddCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModClearCommand.cs" />
+        <Compile Include="Commands\RemoteAdmin\ModHideCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModifierCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModListCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\ModNextCommand.cs" />
@@ -122,6 +123,7 @@
         <Compile Include="Modifiers\BodyBlock.cs" />
         <Compile Include="Modifiers\BoneZone.cs" />
         <Compile Include="Modifiers\Escape.cs" />
+        <Compile Include="Modifiers\ExplosiveRagdolls.cs" />
         <Compile Include="Modifiers\Flamingos\Flamingos.cs" />
         <Compile Include="Modifiers\Flamingos\Scp1507Role.cs" />
         <Compile Include="Modifiers\Flamingos\SwarmAbility.cs" />
@@ -140,6 +142,7 @@
         <Compile Include="Modifiers\LevelUp\Boosts\HealAOEBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\LightFootedBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\NoInstaKillBoost.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\Scp\HealBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\StatusEffectBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\UpgradeKeycardBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Boosts\UpgradeWeaponBoost.cs" />
@@ -154,6 +157,7 @@
         <Compile Include="Modifiers\LevelUp\Interfaces\IHurtingEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\ILevelUpEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IMakingNoiseEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IResurrectEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IUpgradingPlayerEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IUsedItemEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IUsingItemEvent.cs" />
@@ -164,8 +168,13 @@
         <Compile Include="Modifiers\LevelUp\XPs\EscapePocketDimensionXP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\EscapeXP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\ExploreZonesXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\FirstSeeScpXP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\HandcuffXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\NearScpXP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp914UpgradingPlayerXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\Scp\KillXP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp049XP.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\Scp\ScpXP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\UsedItemXP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\XP.cs" />
         <Compile Include="Modifiers\Medic.cs" />
@@ -198,6 +207,7 @@
         <Compile Include="Modifiers\RogueAI\Abilities\TouchRandomDoorAbility.cs" />
         <Compile Include="Modifiers\RogueAI\RogueAI.cs" />
         <Compile Include="Modifiers\Scp249.cs" />
+        <Compile Include="Modifiers\Scp507\Scp507.cs" />
         <Compile Include="Modifiers\SpectatorGame.cs" />
         <Compile Include="Modifiers\WeaponStats.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
