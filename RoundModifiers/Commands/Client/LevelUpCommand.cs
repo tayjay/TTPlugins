@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using CommandSystem;
 using Exiled.API.Features;
+using NorthwoodLib.Pools;
 using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.LevelUp.Boosts;
 using RoundModifiers.Modifiers.LevelUp.XPs;
@@ -30,11 +32,18 @@ public class LevelUpCommand : ICommand
 
         response = $"Your current Level is {level} and your current XP is {xp}/{xpNeeded}";
         response += "\n Your current boosts are: ";
+        
         foreach (Boost boost in RoundModifiers.Instance.GetModifier<LevelUp>()._boosts)
         {
             if (boost.HasBoost.ContainsKey(Player.Get(sender).NetId))
                 response += "\n"+boost.GetName();
         }
+        response += "\n\nBoost History: ";
+        foreach(string boost in RoundModifiers.Instance.GetModifier<LevelUp>().PlayerBoostList[Player.Get(sender).NetId])
+        {
+            response += "\n"+boost;
+        }
+
         return true;
     }
 

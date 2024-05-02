@@ -2,6 +2,7 @@
 using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using PlayerRoles;
 
 namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
@@ -10,12 +11,14 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
         private EffectType _effectType;
         private byte _intensity;
         private bool _onRespawn;
+        private bool _canGiveToScp;
         
-        public StatusEffectBoost(EffectType effectType, byte intensity, bool onRespawn = true, Tier tier = Tier.Common) : base(tier)
+        public StatusEffectBoost(EffectType effectType, byte intensity, bool onRespawn = true, Tier tier = Tier.Common, bool canGiveToScp=true) : base(tier)
         {
             _effectType = effectType;
             _intensity = intensity;
             _onRespawn = onRespawn;
+            _canGiveToScp = canGiveToScp;
         }
         
         public bool SafeToGive(Player player)
@@ -34,8 +37,12 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
 
         public override bool AssignBoost(Player player)
         {
-            if(_onRespawn)
-                HasBoost[player.NetId] = true;
+            if(player.TryGetEffect(_effectType, out StatusEffectBase effect))
+            {
+                if(effect.Intensity > 0) return false;
+            }
+            if(!_canGiveToScp && player.Role.Team == Team.SCPs) return false;
+            
             return ApplyBoost(player);
         }
 
@@ -49,6 +56,8 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
             }
             player.EnableEffect(_effectType, intensity, 1000000);
             Log.Info("Giving "+player.Nickname+" "+_effectType.ToString()+" status effect.");
+            if(_onRespawn)
+                HasBoost[player.NetId] = true;
             return true;
         }
 

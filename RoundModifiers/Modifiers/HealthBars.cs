@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
 using Exiled.Events.EventArgs.Player;
@@ -11,7 +12,7 @@ namespace RoundModifiers.Modifiers;
 
 public class HealthBars : Modifier
 {
-    private List<HPBar> _hpBars = new List<HPBar>();
+    private List<HPBar> _hpBars { get; set; }
 
     public void OnRoundStart()
     {
@@ -48,14 +49,14 @@ public class HealthBars : Modifier
     {
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
         Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+        _hpBars = ListPool<HPBar>.Pool.Get();
     }
 
     protected override void UnregisterModifier()
     {
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
         Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
-        
-        _hpBars.Clear();
+        ListPool<HPBar>.Pool.Return(_hpBars);
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()

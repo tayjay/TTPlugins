@@ -4,6 +4,7 @@ using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
+using InventorySystem.Items.ThrowableProjectiles;
 using RoundModifiers.API;
 using TTCore.Components;
 using TTCore.Events.EventArgs;
@@ -70,17 +71,17 @@ namespace RoundModifiers.Modifiers
         public void OnBounce(Scp018BounceEventArgs ev)
         {
             if(Random.Range(0f,1f) <= ExtraBallSpawnChance)
-                SpawnExtraBall(ev);
+                SpawnExtraBall(ev.Projectile, ev.Owner);
         }
         
-        public void SpawnExtraBall(Scp018BounceEventArgs ev)
+        public void SpawnExtraBall(ThrownProjectile oldProjectile, GameObject owner)
         {
-            Projectile projectile = Projectile.CreateAndSpawn(ProjectileType.Scp018, ev.Projectile.Position, ev.Projectile.Rotation, true,
-                Player.Get(ev.Projectile.PreviousOwner));
+            Projectile projectile = Projectile.CreateAndSpawn(ProjectileType.Scp018, oldProjectile.Position, oldProjectile.Rotation, true,
+                Player.Get(oldProjectile.PreviousOwner));
             projectile.PhysicsModule.Rb.velocity = Vector3Utils.Random(5f,10f);
             //(projectile as Scp018Projectile).FuseTime = (Projectile.Get(ev.Projectile) as Scp018Projectile).FuseTime;
             if(RoundModifiers.Instance.Config.MultiBall_Recursive)
-                projectile.GameObject.AddComponent<ProjectileCollisionHandler>().Init(ev.Owner, projectile.Base);
+                projectile.GameObject.AddComponent<ProjectileCollisionHandler>().Init(owner, projectile.Base);
         }
 
         protected override void RegisterModifier()

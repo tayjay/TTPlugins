@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp0492;
+using Exiled.Events.EventArgs.Scp096;
+using Exiled.Events.EventArgs.Scp173;
 using Exiled.Events.EventArgs.Scp914;
+using Exiled.Events.EventArgs.Scp939;
+using Exiled.Events.Features;
+using HarmonyLib;
 using InventorySystem.Items.Usables.Scp330;
+using MEC;
 using PlayerRoles;
 using RoundModifiers.API;
 using RoundModifiers.Modifiers.LevelUp.Boosts;
+using RoundModifiers.Modifiers.LevelUp.Boosts.Scp;
 using RoundModifiers.Modifiers.LevelUp.HUD;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 using RoundModifiers.Modifiers.LevelUp.XPs;
+using RoundModifiers.Modifiers.LevelUp.XPs.Scp;
 using TTCore.HUDs;
 
 namespace RoundModifiers.Modifiers.LevelUp
@@ -19,14 +29,36 @@ namespace RoundModifiers.Modifiers.LevelUp
     public class LevelUp : Modifier
     {
         //Store XP for players
-        public Dictionary<uint,float> PlayerXP = new Dictionary<uint, float>();
-        public Dictionary<uint, int> PlayerLevel = new Dictionary<uint, int>();
+        public Dictionary<uint,float> PlayerXP { get; set; }
+        public Dictionary<uint, int> PlayerLevel { get; set; }
+        public Dictionary<uint, List<string>> PlayerBoostList { get; set; }
         
-        public List<Boost> _boosts = new List<Boost>();
-        public List<XP> _xp = new List<XP>();
+        //public Dictionary<string, List<XP>> XpByType { get; set; }
+        //public Dictionary<string, List<Boost>> BoostsByType { get; set; }
+        
+        public List<Boost> _boosts { get; set; }
+        public List<XP> _xp { get; set; }
+        
+        public CoroutineHandle TickHandle { get; set; }
 
         public LevelUp()
         {
+            //Setup();
+        }
+
+        public void Setup()
+        {
+            PlayerXP = DictionaryPool<uint, float>.Pool.Get();
+            PlayerLevel = DictionaryPool<uint, int>.Pool.Get();
+            PlayerBoostList = DictionaryPool<uint, List<string>>.Pool.Get();
+            
+            _boosts = ListPool<Boost>.Pool.Get();
+            _xp = ListPool<XP>.Pool.Get();
+
+            //XpByType = DictionaryPool<string, List<XP>>.Pool.Get();
+            //BoostsByType = DictionaryPool<string, List<Boost>>.Pool.Get();
+            
+            //XP
             _xp.Add(new EscapeXP());
             _xp.Add(new DealDamageXP());
             _xp.Add(new ExploreZonesXP());
@@ -37,6 +69,14 @@ namespace RoundModifiers.Modifiers.LevelUp
             _xp.Add(new HandcuffXP());
             _xp.Add(new UsedItemXP());
             _xp.Add(new NearScpXP());
+            //SCP XPs
+            _xp.Add(new KillXP());
+            _xp.Add(new Scp049XP());
+            _xp.Add(new Scp0492XP());
+            _xp.Add(new Scp096XP());
+            _xp.Add(new Scp106XP());
+            _xp.Add(new Scp173XP());
+            _xp.Add(new Scp939XP());
             
             _boosts.Add(new GiveItemBoost(ItemType.Jailbird, Tier.Rare));
             _boosts.Add(new GiveItemBoost(ItemType.Adrenaline));
@@ -61,9 +101,9 @@ namespace RoundModifiers.Modifiers.LevelUp
             _boosts.Add(new StatusEffectBoost(EffectType.Ghostly, 1, true, Tier.Epic));
             _boosts.Add(new StatusEffectBoost(EffectType.Vitality, 1, true, Tier.Uncommon));
             _boosts.Add(new StatusEffectBoost(EffectType.DamageReduction, 1, true, Tier.Uncommon));
-            _boosts.Add(new StatusEffectBoost(EffectType.SilentWalk, 1, true, Tier.Legendary));
+            _boosts.Add(new StatusEffectBoost(EffectType.SilentWalk, 1, true, Tier.Legendary,false));
             _boosts.Add(new StatusEffectBoost(EffectType.Scp207, 1, true, Tier.Rare));
-            _boosts.Add(new StatusEffectBoost(EffectType.AntiScp207, 1, true, Tier.Rare));
+            _boosts.Add(new StatusEffectBoost(EffectType.AntiScp207, 1, true, Tier.Rare, false));
             _boosts.Add(new UpgradeKeycardBoost());
             _boosts.Add(new UpgradeKeycardBoost());
             _boosts.Add(new UpgradeKeycardBoost());
@@ -74,7 +114,37 @@ namespace RoundModifiers.Modifiers.LevelUp
             _boosts.Add(new UpgradeWeaponBoost(Tier.Common));
             _boosts.Add(new UpgradeWeaponBoost(Tier.Uncommon));
             _boosts.Add(new ChangeSizeBoost());
+            //SCP Boosts
+            _boosts.Add(new HealBoost(Tier.Common));
+            _boosts.Add(new HealBoost(Tier.Uncommon));
+            _boosts.Add(new HealBoost(Tier.Rare));
+            _boosts.Add(new HealBoost(Tier.Epic));
+            _boosts.Add(new HealBoost(Tier.Legendary));
+            _boosts.Add(new AppearHumanBoost());
         }
+        
+        public void Shutdown()
+        {
+            DictionaryPool<uint, float>.Pool.Return(PlayerXP);
+            DictionaryPool<uint, int>.Pool.Return(PlayerLevel);
+            ListPool<Boost>.Pool.Return(_boosts);
+            ListPool<XP>.Pool.Return(_xp);
+        }
+        
+        /*public void RegisterXP<T>(T xp) where T : XP
+        {
+            foreach(Type type in xp.GetType().GetInterfaces())
+            {
+                if (XpByType.ContainsKey(type.Name) == false)
+                    XpByType[type.Name] = ListPool<XP>.Pool.Get();
+                XpByType[type.Name].Add(xp);
+            }
+        }
+        
+        public List<XP> GetXP<T>()
+        {
+            return XpByType[typeof(T).Name];
+        }*/
         
         //Store actions they have completed so they aren't completed more than once
         
@@ -90,6 +160,8 @@ namespace RoundModifiers.Modifiers.LevelUp
                 if(xp is IHurtingEvent)
                     ((IHurtingEvent) xp).OnHurting(ev);
             }
+            /*foreach(XP xp in GetXP<IHurtingEvent>())
+                ((IHurtingEvent) xp).OnHurting(ev);*/
 
             foreach (Boost boost in _boosts)
             {
@@ -182,6 +254,8 @@ namespace RoundModifiers.Modifiers.LevelUp
             }
         }
         
+        
+        
         public void OnMakingNoise(MakingNoiseEventArgs ev)
         {
             //Control player noise, stops footsteps from 939
@@ -264,7 +338,12 @@ namespace RoundModifiers.Modifiers.LevelUp
                 if (newBoost.AssignBoost(player))
                 {
                     //newBoost.ApplyBoost(player);
+                    Log.Debug("Player "+player.Nickname+" got boost "+newBoost.GetName());
                     break;
+                }
+                else
+                {
+                    newBoost = null;
                 }
             }
             
@@ -280,16 +359,132 @@ namespace RoundModifiers.Modifiers.LevelUp
                 if(boost is ILevelUpEvent)
                     ((ILevelUpEvent) boost).OnLevelUp(player);
             }
-            
-            if(newBoost != null)
+
+            if (newBoost != null)
+            {
                 player.ShowHUDHint("You have leveled up!\n" +
-                                    "You got a new boost: "+newBoost.GetColouredName()+"\n"+
-                                    newBoost.GetDescription(), 5f);
+                                   "You got a new boost: "+newBoost.GetColouredName()+"\n"+
+                                   newBoost.GetDescription(), 5f);
+                if (PlayerBoostList.ContainsKey(player.NetId) == false)
+                    PlayerBoostList[player.NetId] = ListPool<string>.Pool.Get();
+                PlayerBoostList[player.NetId].Add($"Level {PlayerLevel[player.NetId]}: {newBoost.GetName()}");
+            }
             else
             {
                 player.ShowHUDHint("There was an error getting your boost. Please tell your local Taylar.", 5f);
+                PlayerXP[player.NetId] += XP.GetXPNeeded(PlayerLevel[player.NetId]-1);
             }
         }
+        
+        //SCPs
+        
+        public void OnEnteringPocketDimension(EnteringPocketDimensionEventArgs ev)
+        {
+            //Control player escape
+            foreach (XP xp in _xp)
+            {
+                if(xp is IPocketDimensionEvent)
+                    ((IPocketDimensionEvent) xp).OnEnteringPocketDimension(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IPocketDimensionEvent)
+                    ((IPocketDimensionEvent) boost).OnEnteringPocketDimension(ev);
+            }
+        }
+
+        public void OnBlinkRequest(BlinkingRequestEventArgs ev)
+        {
+            foreach (XP xp in _xp)
+            {
+                if(xp is IBlinkEvent)
+                    ((IBlinkEvent) xp).OnBlinkingRequest(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IBlinkEvent)
+                    ((IBlinkEvent) boost).OnBlinkingRequest(ev);
+            }
+        }
+        
+        public void OnConsumedCorpse(ConsumedCorpseEventArgs ev)
+        {
+            foreach (XP xp in _xp)
+            {
+                if(xp is IConsumeEvent)
+                    ((IConsumeEvent) xp).OnConsumedCorpse(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IConsumeEvent)
+                    ((IConsumeEvent) boost).OnConsumedCorpse(ev);
+            }
+        }
+        
+        public void OnEnraging(EnragingEventArgs ev)
+        {
+            foreach (XP xp in _xp)
+            {
+                if(xp is IEnragingEvent)
+                    ((IEnragingEvent) xp).OnEnraging(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IEnragingEvent)
+                    ((IEnragingEvent) boost).OnEnraging(ev);
+            }
+        }
+        
+        public void OnSavingVoice(SavingVoiceEventArgs ev)
+        {
+            foreach (XP xp in _xp)
+            {
+                if(xp is IVoiceEvent)
+                    ((IVoiceEvent) xp).OnSavingVoice(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IVoiceEvent)
+                    ((IVoiceEvent) boost).OnSavingVoice(ev);
+            }
+        }
+        
+        public void OnPlayingSound(PlayingSoundEventArgs ev)
+        {
+            foreach (XP xp in _xp)
+            {
+                if(xp is IVoiceEvent)
+                    ((IVoiceEvent) xp).OnPlayingSound(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IVoiceEvent)
+                    ((IVoiceEvent) boost).OnPlayingSound(ev);
+            }
+        }
+        
+        public void OnPlayingVoice(PlayingVoiceEventArgs ev)
+        {
+            foreach (XP xp in _xp)
+            {
+                if(xp is IVoiceEvent)
+                    ((IVoiceEvent) xp).OnPlayingVoice(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IVoiceEvent)
+                    ((IVoiceEvent) boost).OnPlayingVoice(ev);
+            }
+        }
+        
+        
 
         public Boost GetBoostByLevel(int playerLevel)
         {
@@ -359,7 +554,7 @@ namespace RoundModifiers.Modifiers.LevelUp
                 {
                     if(player.IsNPC) continue;
                     if(player.IsDead) continue;
-                    if (player.IsScp)
+                    if (player.Role==RoleTypeId.Scp079)
                     {
                         TTCore.HUDs.HUD.RemoveHUD(player);
                         continue;
@@ -393,7 +588,7 @@ namespace RoundModifiers.Modifiers.LevelUp
         //On player spawn
         public void OnSpawned(SpawnedEventArgs ev)
         {
-            if(ev.Player.Role.Team == Team.SCPs) return; //Patches Zombie Coke
+            //if(ev.Player.Role.Team == Team.SCPs) return; //Patches Zombie Coke
             if(ev.Player.Role.Team == Team.Dead) return; //Patches visual status effects as spectator
             //Control player spawn
             MEC.Timing.CallDelayed(1f, () =>
@@ -422,7 +617,7 @@ namespace RoundModifiers.Modifiers.LevelUp
 
         public void OnRoundStart()
         {
-            MEC.Timing.RunCoroutine(Tick(), "LevelUpTick");
+            TickHandle = MEC.Timing.RunCoroutine(Tick());
             foreach (Player player in Player.List)
             {
                 PlayerXP[player.NetId] = 0;
@@ -473,6 +668,17 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Player.Joined += OnPlayerJoin;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += OnScp914UpgradingPlayer;
             Exiled.Events.Handlers.Player.ChangingRole += OnRevive;
+            
+            //SCP
+            Exiled.Events.Handlers.Player.EnteringPocketDimension += OnEnteringPocketDimension;
+            Exiled.Events.Handlers.Scp173.BlinkingRequest += OnBlinkRequest;
+            Exiled.Events.Handlers.Scp0492.ConsumedCorpse += OnConsumedCorpse;
+            Exiled.Events.Handlers.Scp096.Enraging += OnEnraging;
+            Exiled.Events.Handlers.Scp939.SavingVoice += OnSavingVoice;
+            Exiled.Events.Handlers.Scp939.PlayingSound += OnPlayingSound;
+            Exiled.Events.Handlers.Scp939.PlayingVoice += OnPlayingVoice;
+            
+            Setup();
         }
 
         protected override void UnregisterModifier()
@@ -493,14 +699,25 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Player.Joined -= OnPlayerJoin;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= OnScp914UpgradingPlayer;
             Exiled.Events.Handlers.Player.ChangingRole -= OnRevive;
-            MEC.Timing.KillCoroutines("LevelUpTick");
-            PlayerXP.Clear();
-            PlayerLevel.Clear();
+            MEC.Timing.KillCoroutines(TickHandle);
+            /*Traverse.Create(Exiled.Events.Handlers.Player.Escaping).Field("InnerEvent").GetValue<CustomEventHandler>()
+                .GetInvocationList();*/
+            
+            //SCP
+            Exiled.Events.Handlers.Player.EnteringPocketDimension -= OnEnteringPocketDimension;
+            Exiled.Events.Handlers.Scp173.BlinkingRequest -= OnBlinkRequest;
+            Exiled.Events.Handlers.Scp0492.ConsumedCorpse -= OnConsumedCorpse;
+            Exiled.Events.Handlers.Scp096.Enraging -= OnEnraging;
+            Exiled.Events.Handlers.Scp939.SavingVoice -= OnSavingVoice;
+            Exiled.Events.Handlers.Scp939.PlayingSound -= OnPlayingSound;
+            Exiled.Events.Handlers.Scp939.PlayingVoice -= OnPlayingVoice;
             
             foreach(XP xp in _xp)
                 xp.Reset();
             foreach(Boost boost in _boosts)
                 boost.Reset();
+            
+            Shutdown();
         }
 
         public override ModInfo ModInfo { get; } = new ModInfo()

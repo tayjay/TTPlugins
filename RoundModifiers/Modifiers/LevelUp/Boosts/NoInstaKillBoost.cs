@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using MEC;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
      * This includes SCP-049's melee attack, SCP-096's rage, grenades, and SCP-173's snap.
      * Anything that does damage ticks prior to lowering health to 0 will still work.
      */
-    public class NoInstaKillBoost : Boost, IHurtingEvent, IHurtEvent
+    public class NoInstaKillBoost : Boost, IHurtingEvent, IHurtEvent, IDyingEvent
     {
         private Dictionary<Player,float> _lastHit = new Dictionary<Player, float>();
         
@@ -23,6 +24,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
 
         public override bool AssignBoost(Player player)
         {
+            if(player.IsScp) return false;
             if(HasBoost.ContainsKey(player.NetId)) return false;
             HasBoost.Add(player.NetId, true);
             return ApplyBoost(player);
@@ -59,7 +61,6 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                     }
                 }
             }
-                
         }
 
         public void OnHurt(HurtEventArgs ev)
@@ -67,13 +68,30 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
             //Update last hit timer
             if (_lastHit.ContainsKey(ev.Player))
             {
-                _lastHit[ev.Player] = Time.time;
+                Timing.CallDelayed(Timing.WaitForOneFrame, () => _lastHit[ev.Player] = Time.time);
             }
         }
         
         public override void Reset()
         {
             _lastHit.Clear();
+        }
+
+        public void OnDying(DyingEventArgs ev)
+        {
+            if (_lastHit.ContainsKey(ev.Player))
+            {
+                if(Time.time - _lastHit[ev.Player] < VaulnerabilityTime)
+                {
+                    ev.IsAllowed = true;
+                }
+                else
+                {
+                    ev.IsAllowed = false;
+                    _lastHit[ev.Player] = Time.time;
+                }
+            }
+                
         }
     }
 }

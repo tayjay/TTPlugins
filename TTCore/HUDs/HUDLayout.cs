@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Exiled.API.Features.Pools;
 
 namespace TTCore.HUDs;
 
 public class HUDLayout
 {
     public float RefreshRate { get; set; }
-    public Dictionary<string,object> Data { get; set; }
+    //public Dictionary<string,object> Data { get; set; }
         
     public HUD.HUDHint DisplayingHint => OwnerHUD.DisplayingHint;
     public HUD OwnerHUD { get; set; }

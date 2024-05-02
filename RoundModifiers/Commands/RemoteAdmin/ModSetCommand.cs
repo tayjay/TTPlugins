@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using CommandSystem;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Permissions.Extensions;
 using RoundModifiers.API;
 
@@ -20,8 +21,8 @@ namespace RoundModifiers.Commands.RemoteAdmin
                     response = "Usage: mod set <modifier>";
                     return false;
                 }
-                
-                List<ModInfo> modInfo = new List<ModInfo>();
+
+                List<ModInfo> modInfo = ListPool<ModInfo>.Pool.Get();
                 
                 foreach (string strMod in arguments)
                 {
@@ -36,6 +37,7 @@ namespace RoundModifiers.Commands.RemoteAdmin
                 {
                     response += $"{mod.Name} {(mod.MustPreload?"(Must be preloaded)":"")}, ";
                 }
+                ListPool<ModInfo>.Pool.Return(modInfo);
                 return true;
                 
             }

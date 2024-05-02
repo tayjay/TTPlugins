@@ -4,6 +4,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
+using NorthwoodLib.Pools;
 using RoundModifiers.API;
 using TTCore.HUDs;
 
@@ -38,7 +39,7 @@ public class Pills : Modifier
         if(pillCount.ContainsKey(player.NetId))
         {
             //CandyKindID[] AllCandies = (CandyKindID[]) System.Enum.GetValues(typeof(CandyKindID));
-            List<CandyKindID> candies = new List<CandyKindID>();
+            List<CandyKindID> candies = Exiled.API.Features.Pools.ListPool<CandyKindID>.Pool.Get();
             candies.Add(CandyKindID.Rainbow);
             candies.Add(CandyKindID.Blue);
             candies.Add(CandyKindID.Green);
@@ -59,7 +60,7 @@ public class Pills : Modifier
             CandyKindID candy = candies.RandomItem();
             if (candy == CandyKindID.None)
             {
-                List<EffectCategory> categories = new List<EffectCategory>();
+                List<EffectCategory> categories = Exiled.API.Features.Pools.ListPool<EffectCategory>.Pool.Get();
                 categories.Add(EffectCategory.Positive);
                 if (pillCount[player.NetId] >= 2)
                 {
@@ -91,12 +92,15 @@ public class Pills : Modifier
                     duration = 120f;
                 }
                 EffectType effect = player.ApplyRandomEffect(categories.RandomItem(), duration);
+                Exiled.API.Features.Pools.ListPool<EffectCategory>.Pool.Return(categories);
             }
             else
             {
                 Scp330.AvailableCandies[candy].ServerApplyEffects(player.ReferenceHub);
                 player.ShowHUDHint("You taste the colour "+candy.ToString(), 5f);
             }
+
+            Exiled.API.Features.Pools.ListPool<CandyKindID>.Pool.Return(candies);
             
         }
     }

@@ -15,8 +15,9 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
 
         public override bool AssignBoost(Player player)
         {
+            if(player.IsScp) return false;
             HasBoost[player.NetId] = true;
-            return true;
+            return ApplyBoost(player);
         }
 
         public override bool ApplyBoost(Player player)

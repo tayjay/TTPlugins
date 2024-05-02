@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
@@ -14,11 +15,11 @@ namespace TTAddons.Handlers
     public class Unstuck : IRegistered
     {
 
-        public List<Player> playerCanUnstuck;
+        public List<Player> playerCanUnstuck { get; private set; }
         
         public Unstuck()
         {
-            playerCanUnstuck = new List<Player>();
+            
         }
 
         public bool DoUnstuck(Player player, out string response)
@@ -108,13 +109,14 @@ namespace TTAddons.Handlers
         public void Register()
         {
             Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+            playerCanUnstuck = ListPool<Player>.Pool.Get();
         }
         
         public void Unregister()
         {
             Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
             
-            playerCanUnstuck.Clear();
+            ListPool<Player>.Pool.Return(playerCanUnstuck);
         }
     }
 }

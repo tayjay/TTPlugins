@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 
 namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
     public abstract class Boost
     {
-        public Dictionary<uint, bool> HasBoost = new Dictionary<uint, bool>();
+        public Dictionary<uint, bool> HasBoost { get; set; }
         
         public Boost(Tier tier)
         {
             Tier = tier;
+            HasBoost = DictionaryPool<uint, bool>.Pool.Get();
         }
         
         public virtual Tier Tier { get; set; }
@@ -24,7 +26,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
 
         public virtual void Reset()
         {
-            HasBoost.Clear();
+            DictionaryPool<uint,bool>.Pool.Return(HasBoost);
         }
 
 

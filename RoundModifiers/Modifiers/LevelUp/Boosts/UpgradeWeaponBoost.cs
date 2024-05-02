@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pools;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
 namespace RoundModifiers.Modifiers.LevelUp.Boosts
@@ -18,6 +20,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
         {
             if(player.IsCuffed) return false;
             if(HasBoost.ContainsKey(player.NetId)) return false;
+            if(player.IsScp) return false;
             return ApplyBoost(player);
         }
 
@@ -29,9 +32,13 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
         
         public void OnGameTick()
         {
-            foreach(uint netId in HasBoost.Keys.ToList())
+            List<uint> keys = ListPool<uint>.Pool.Get(HasBoost.Keys);
+            foreach(uint netId in keys)
             {
                 Player player = Player.Get(netId);
+                if(player == null) continue;
+                if(player.IsScp) continue;
+                bool processed = false;
                 if(player.CurrentItem.IsWeapon) continue; //Don't want to remove the item from player while using.
                 //This will apply regardless of Tier
                 foreach (Item item in player.Items)
@@ -44,23 +51,26 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                     player.AddItem(newFirearm);
                     player.AddAmmo(GetAmmoType(newFirearm), newFirearm.MaxAmmo);
                     HasBoost.Remove(netId);
+                    processed = true;
                     break;
                 }
 
+                if(processed) continue;
                 //Don't want to give away a free gun with the Common upgrade
                 if (Tier >= Tier.Uncommon)
                 {
                     player.AddItem(GenerateOutcome(ItemType.GunCOM15, ItemType.GunCOM18, ItemType.GunFSP9));
                     HasBoost.Remove(netId);
-                    break;
+                    continue;
                 }
                 else
                 {
                     player.AddItem(GenerateOutcome(ItemType.Radio, ItemType.Flashlight, ItemType.Medkit));
                     HasBoost.Remove(netId);
-                    break;
+                    continue;
                 }
             }
+            ListPool<uint>.Pool.Return(keys);
         }
 
         public ItemType UpgradeWeapon(Firearm firearm)
@@ -104,12 +114,12 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
 
         public override string GetName()
         {
-            throw new System.NotImplementedException();
+            return "Upgrade Weapon";
         }
 
         public override string GetDescription()
         {
-            throw new System.NotImplementedException();
+            return "Upgrade your current weapon to a better one.";
         }
 
         

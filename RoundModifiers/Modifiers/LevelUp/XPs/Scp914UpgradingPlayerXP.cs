@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Scp914;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
@@ -8,7 +9,12 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
     public class Scp914UpgradingPlayerXP : XP, IUpgradingPlayerEvent
     {
         
-        public List<uint> HasUpgraded = new List<uint>();
+        public List<uint> HasUpgraded { get; set; }
+        
+        public Scp914UpgradingPlayerXP() : base()
+        {
+            HasUpgraded = ListPool<uint>.Pool.Get();
+        }
         
         protected override bool CanGiveXP(Player player)
         {
@@ -22,7 +28,7 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         
         public override void Reset()
         {
-            HasUpgraded.Clear();
+            ListPool<uint>.Pool.Return(HasUpgraded);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
 
         public override bool ShouldDisplay()
         {
-            return OwnerHUD.Owner.Role.Team != Team.SCPs && OwnerHUD.Owner.IsAlive;
+            return OwnerHUD.Owner.Role != RoleTypeId.Scp079 && OwnerHUD.Owner.IsAlive;
         }
 
         public override string BuildHUD()

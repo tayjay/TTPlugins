@@ -19,6 +19,9 @@ public static class Custom
     public static Event<ZombieAttackEventArgs> ZombieAttack { get; set; } = new Event<ZombieAttackEventArgs>();
    
     public static Event<ChooseScpSpawnQueueEventArgs> ChooseScpSpawnQueue { get; set; } = new Event<ChooseScpSpawnQueueEventArgs>();
+   
+    public static Event<PlayerEffectsAwakeArgs> PlayerEffectsAwake { get; set; } = new Event<PlayerEffectsAwakeArgs>();
+    
     
     public static void OnAdminToyCollision(AdminToyCollisionEventArgs ev)
     {
@@ -53,5 +56,10 @@ public static class Custom
     public static void OnChooseScpSpawnQueue(ChooseScpSpawnQueueEventArgs ev)
     {
         ChooseScpSpawnQueue.InvokeSafely(ev);
+    }
+    
+    public static void OnPlayerEffectsAwake(PlayerEffectsAwakeArgs ev)
+    {
+        PlayerEffectsAwake.InvokeSafely(ev);
     }
 }

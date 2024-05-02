@@ -66,7 +66,6 @@ public class Keyless : Modifier
         Description = "Everything is unlocked.",
         FormattedName = "<color=yellow>Keyless</color>",
         Impact = ImpactLevel.MajorGameplay,
-        MustPreload = false,
-        Hidden = true
+        MustPreload = false
     };
 }

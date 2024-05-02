@@ -2,12 +2,16 @@
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
+using Exiled.CustomRoles.API.Features;
 using RoundModifiers.API;
 using RoundModifiers.Handlers;
 using RoundModifiers.Modifiers;
-using RoundModifiers.Modifiers.Flamingos;
+using RoundModifiers.Modifiers.Scp1507;
 using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.RogueAI;
+using RoundModifiers.Modifiers.WeaponStats;
+using TTCore.Handlers;
 
 namespace RoundModifiers
 {
@@ -35,6 +39,8 @@ namespace RoundModifiers
             SetupModifiers();
             RoundManager = new RoundManager();
             RoundManager.Register();
+            CustomRole.RegisterRoles(false, null);
+            //CustomEffects.RegisterEffect<WeaponStatsEffect>();
         }
         
         public override void OnDisabled()
@@ -43,6 +49,7 @@ namespace RoundModifiers
             ResetModifiers();
             RoundManager.Unregister();
             RoundManager = null;
+            CustomRole.UnregisterRoles();
         }
         
         public override void OnReloaded()
@@ -89,6 +96,8 @@ namespace RoundModifiers
             AddModifier(new Paper());
             AddModifier(new Keyless());
             AddModifier(new ExplosiveRagdolls());
+            //AddModifier(new WeaponStats2());
+            //AddModifier(new Nicknames());
         }
         
         
@@ -112,7 +121,7 @@ namespace RoundModifiers
          */
         public bool TryGetModifier(string name, out Modifier modifier, bool exact = false)
         {
-            List<ModInfo> mods = new List<ModInfo>();
+            List<ModInfo> mods = ListPool<ModInfo>.Pool.Get();
             foreach (ModInfo mod in Modifiers.Keys)
             {
                 if (mod.Name.ToLower() == name.ToLower() || mod.Aliases.Contains(name.ToLower()))
@@ -160,6 +169,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 2, 3);
+        public override System.Version Version { get; } = new System.Version(0, 3, 0);
     }
 }

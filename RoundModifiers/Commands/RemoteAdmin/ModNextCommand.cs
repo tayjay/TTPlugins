@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandSystem;
+using Exiled.API.Features.Pools;
 using Exiled.Permissions.Extensions;
 using RoundModifiers.API;
 using RoundModifiers.Handlers;
@@ -30,11 +31,15 @@ namespace RoundModifiers.Commands.RemoteAdmin
 
             if (arguments.At(0).ToLower() == "none")
             {
-                RoundModifiers.Instance.RoundManager.SetNextRoundModifiers(new List<ModInfo>(){RoundManager.NoneInfo});
+                List<ModInfo> noneInfo = ListPool<ModInfo>.Pool.Get();
+                noneInfo.Add(RoundManager.NoneInfo);
+                RoundModifiers.Instance.RoundManager.SetNextRoundModifiers(noneInfo);
                 response = "Set next round to have No modifiers.";
+                ListPool<ModInfo>.Pool.Return(noneInfo);
                 return true;
             }
-            List<ModInfo> modInfo = new List<ModInfo>();
+
+            List<ModInfo> modInfo = ListPool<ModInfo>.Pool.Get();
                 
             foreach (string strMod in arguments)
             {
@@ -49,6 +54,7 @@ namespace RoundModifiers.Commands.RemoteAdmin
             {
                 response += $"{mod.Name}, ";
             }
+            ListPool<ModInfo>.Pool.Return(modInfo);
             return true;
         }
 

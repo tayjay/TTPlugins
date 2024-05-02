@@ -19,7 +19,9 @@ public class ExplosiveRagdolls : Modifier
 {
 
     CoroutineHandle _ragdollTick;
-    private List<Ragdoll> explodedRagdolls = new List<Ragdoll>();
+    private List<Ragdoll> explodedRagdolls { get; set; }
+    
+    
     
     public void OnSpawnRagdoll(SpawnedRagdollEventArgs ev)
     {
@@ -117,6 +119,7 @@ public class ExplosiveRagdolls : Modifier
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
         Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
         Exiled.Events.Handlers.Player.SpawnedRagdoll += OnSpawnRagdoll;
+        explodedRagdolls = Exiled.API.Features.Pools.ListPool<Ragdoll>.Pool.Get();
     }
 
     protected override void UnregisterModifier()
@@ -126,7 +129,7 @@ public class ExplosiveRagdolls : Modifier
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
         Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
         Exiled.Events.Handlers.Player.SpawnedRagdoll -= OnSpawnRagdoll;
-        explodedRagdolls.Clear();
+        Exiled.API.Features.Pools.ListPool<Ragdoll>.Pool.Return(explodedRagdolls);
         Timing.KillCoroutines(_ragdollTick);
     }
 
@@ -137,7 +140,6 @@ public class ExplosiveRagdolls : Modifier
         Description = "Ragdolls explode after 10 seconds",
         FormattedName = "Birthday Party",
         Impact = ImpactLevel.MajorGameplay,
-        MustPreload = false,
-        Hidden = true
+        MustPreload = false
     };
 }

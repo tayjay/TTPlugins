@@ -1,5 +1,7 @@
-﻿using Exiled.API.Enums;
+﻿using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features;
+using MEC;
 using PlayerRoles;
 using UnityEngine;
 
@@ -13,6 +15,9 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
 
         public override bool AssignBoost(Player player)
         {
+            if(player.IsScp) return false;
+            if(Player.List.Count(p=>p.Role == RoleTypeId.Scp3114) > 0) return false; //Only one SCP-3114 at a time
+            if(Round.ElapsedTime.TotalMinutes < 15) return false; //Don't give SCP-3114 at the start of the round
             return ApplyBoost(player);
         }
 
@@ -33,6 +38,12 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                 //Don't put in light containment
                 player.Teleport(Room.Get(RoomType.Hcz939).Position+Vector3.up);
             }
+            
+            Timing.CallDelayed(0.1f, ()=>
+            {
+                player.MaxHealth = 200;
+                player.Health = 200;
+            });
             
             return true;
         }

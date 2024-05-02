@@ -18,7 +18,7 @@ using Firearm = Exiled.API.Features.Items.Firearm;
 
 namespace RoundModifiers.Modifiers;
 
-public class WeaponStats : Modifier
+public class WeaponStatsOld : Modifier
 {
     
     

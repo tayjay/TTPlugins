@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using CommandSystem;
+using Exiled.API.Features.Pools;
 using RoundModifiers.API;
 
 namespace RoundModifiers.Commands.RemoteAdmin
@@ -15,10 +17,13 @@ namespace RoundModifiers.Commands.RemoteAdmin
             }
 
             response = "Modifiers: ";
-            foreach (ModInfo modifier in RoundModifiers.Instance.RoundManager.ActiveModifiers)
+            List<ModInfo> activeModifiers =
+                ListPool<ModInfo>.Pool.Get(RoundModifiers.Instance.RoundManager.ActiveModifiers);
+            foreach (ModInfo modifier in activeModifiers)
             {
                 response += $"{modifier.Name}, ";
             }
+            ListPool<ModInfo>.Pool.Return(activeModifiers);
 
             response = response.Remove(response.Length - 2);
             return true;

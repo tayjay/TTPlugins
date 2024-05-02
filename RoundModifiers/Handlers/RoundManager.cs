@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RoundModifiers.API;
@@ -36,10 +37,10 @@ namespace RoundModifiers.Handlers
 
         public RoundManager()
         {
-            ActiveModifiers = new List<ModInfo>();
-            NextRoundModifiers = new List<ModInfo>();
-            VotingPlayers = new Dictionary<string, ModInfo>();
-            BlacklistedModifiers = new List<string>(); //RoundModifiers.Instance.Config.DisabledModifiers.ToList();
+            ActiveModifiers = ListPool<ModInfo>.Pool.Get();
+            NextRoundModifiers = ListPool<ModInfo>.Pool.Get();
+            VotingPlayers = DictionaryPool<string, ModInfo>.Pool.Get();
+            BlacklistedModifiers = ListPool<string>.Pool.Get(); //RoundModifiers.Instance.Config.DisabledModifiers.ToList();
             ModifiersHidden = false;
             NextModifiersHidden = false;
         }
@@ -379,7 +380,10 @@ namespace RoundModifiers.Handlers
             Exiled.Events.Handlers.Player.Left -= OnPlayerLeave;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
             Exiled.Events.Handlers.Server.RestartingRound -= OnRoundRestart;
-            
+            ListPool<ModInfo>.Pool.Return(ActiveModifiers);
+            ListPool<ModInfo>.Pool.Return(NextRoundModifiers);
+            DictionaryPool<string, ModInfo>.Pool.Return(VotingPlayers);
+            ListPool<string>.Pool.Return(BlacklistedModifiers);
             Timing.KillCoroutines(LobbyModViewCoroutine);
         }
     }

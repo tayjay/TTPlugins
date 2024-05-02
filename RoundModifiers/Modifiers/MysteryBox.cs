@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Attachments;
 using RoundModifiers.API;
@@ -47,7 +48,7 @@ public class MysteryBox : Modifier
     protected override void RegisterModifier()
     {
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlipCoin;
-        PossibleItems = new List<ItemType>();
+        PossibleItems = ListPool<ItemType>.Pool.Get();
         PossibleItems.Add(ItemType.Adrenaline);
         PossibleItems.Add(ItemType.Adrenaline);
         PossibleItems.Add(ItemType.Adrenaline);
@@ -77,7 +78,7 @@ public class MysteryBox : Modifier
     {
         Exiled.Events.Handlers.Player.FlippingCoin -= OnFlipCoin;
         
-        PossibleItems.Clear();
+        ListPool<ItemType>.Pool.Return(PossibleItems);
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()

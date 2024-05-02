@@ -22,6 +22,7 @@ namespace TTCore
         public PlayerSizeManager PlayerSizeManager { get; private set; }
         public NpcManager NpcManager { get; private set; }
         public NavMeshBuilder NavMeshBuilder { get; private set; }
+        public VoiceHandler VoiceHandler { get; private set; }
 
         private TTCore()
         {
@@ -61,6 +62,11 @@ namespace TTCore
             PlayerSizeManager = new PlayerSizeManager();
             NpcManager = new NpcManager();
             //NavMeshBuilder = new NavMeshBuilder();
+            VoiceHandler = new VoiceHandler();
+            if(Config.EnableVoiceModification)
+                VoiceHandler.Register();
+            if(Config.EnableCustomEffects)
+                CustomEffects.Register();
             
             //NavMeshBuilder.Register();
             
@@ -71,15 +77,23 @@ namespace TTCore
         {
             _harmony.UnpatchAll();
             HUD.Unregister();
+            if(Config.EnableVoiceModification)
+                VoiceHandler.Unregister();
+            if(Config.EnableCustomEffects)
+                CustomEffects.Unregister();
             //NavMeshBuilder.Unregister();
             PlayerSizeManager = null;
             NpcManager = null;
             //NavMeshBuilder = null;
+            
+            VoiceHandler = null;
+            
+            
         }
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 2, 3);
+        public override System.Version Version { get; } = new System.Version(0, 3, 0);
         
     }
 }

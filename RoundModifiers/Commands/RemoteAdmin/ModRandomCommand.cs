@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Extensions;
+using Exiled.API.Features.Pools;
 using Exiled.Permissions.Extensions;
 using RoundModifiers.API;
 using Random = UnityEngine.Random;
@@ -16,7 +17,7 @@ public class ModRandomCommand : ICommand
     {
         if (sender.CheckPermission("RoundEvents") || sender.CheckPermission("modifier") || sender.CheckPermission("RoundEvents*"))
         {
-            List<string> modifiers = new List<string>();
+            List<string> modifiers = ListPool<string>.Pool.Get();
             
             if (arguments.Count == 0)
             {
@@ -53,6 +54,7 @@ public class ModRandomCommand : ICommand
                 return false;
             }
             response = $"Added modifiers: {string.Join(", ", modifiers)} to the {(arguments.Count == 0 ? "current" : "next")} round.";
+            ListPool<string>.Pool.Return(modifiers);
             return true;
         }
 

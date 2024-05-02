@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
@@ -15,7 +16,7 @@ namespace TTCore.Handlers
 
         public PlayerSizeManager()
         {
-            PlayerSizes = new Dictionary<int, Vector3>();
+            PlayerSizes = DictionaryPool<int, Vector3>.Pool.Get();
         }
 
         //Need a method to get the size of a player

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Extensions;
+using Exiled.API.Features.Pools;
 using Exiled.Permissions.Extensions;
 
 namespace RoundModifiers.Commands.RemoteAdmin;
@@ -14,7 +15,7 @@ public class ModHideCommand : ICommand
     {
         if (sender.CheckPermission("RoundEvents") || sender.CheckPermission("modifier") || sender.CheckPermission("RoundEvents*"))
         {
-            List<string> modifiers = new List<string>();
+            List<string> modifiers = ListPool<string>.Pool.Get();
             
             if (arguments.Count == 0)
             {
@@ -36,12 +37,13 @@ public class ModHideCommand : ICommand
                 
             } else
             {
+                ListPool<string>.Pool.Return(modifiers);
                 response = "Usage: mod hide [next]";
                 return false;
             }
+            ListPool<string>.Pool.Return(modifiers);
             return true;
         }
-
         response = "You do not have permission to use this random command.";
         return false;
     }
