@@ -123,10 +123,22 @@ namespace RoundModifiers
         [Description("The vertical offset of the health bars. Default is 1f.")]
         public float HealthBars_Height { get; set; } = 1f;
         
-        //MoonGravity
-        [Description("Whether the MoonGravity modifier is enabled. Default is true.")]
-        public bool MoonGravity_Enable { get; set; } = true;
-        [Description("The gravity to set during the MoonGravity modifier. Default is -10f. Normal Gravity is -19.6f.")]
-        public float MoonGravity_Gravity { get; set; } = -10.0f;
+        //Nicknames
+        [Description("A list of nicknames to give to players.")]
+        public string[] Nicknames_HumanNames { get; set; } = new[]
+        {
+            "Alan", "Steeve", "Mary", "John", "Alice", "Bob", "Carol", "Davis", "Eve", "Frank",
+            "Grace", "Helen", "Ian", "Judy", "Kevin", "Linda", "Mike", "Nora", "Oliver", "Patricia",
+            "Quinn", "Rachel", "Sam", "Tina", "Ursula", "Vince", "Wendy", "Xavier", "Yvonne", "Zack",
+            "Amber", "Bruce", "Cindy", "Derek", "Elena", "Felix", "Gina", "Harry", "Isla", "Justin",
+            "Kara", "Leo", "Mona", "Nathan", "Oscar", "Penny", "Quincy", "Rose", "Seth", "Tara",
+            "Ulysses", "Victor", "Willa", "Xander", "Yasmin", "Zeke", "April", "Blaine", "Claire",
+            "Dante", "Elise", "Frederick", "Gloria", "Howard", "Ingrid", "Joel", "Krista", "Luke",
+            "Megan", "Neil", "Opal", "Paul", "Queenie", "Roger", "Susan", "Thomas", "Una", "Vernon",
+            "Whitney", "Xenia", "Yuri", "Zara", "Aaron", "Beth", "Carter", "Deanna", "Elliott", "Faye",
+            "George", "Hannah", "Ivan", "Jean", "Kyle", "Leslie", "Mitchell", "Nadia", "Owen", "Paula",
+            "Quentin", "Ruth", "Spencer", "Tiffany", "Uma", "Vincent", "Wallace", "Xena", "Yvette", "Zion",
+            "Taylar", "Ely", "Jason", "Kevin", "Chance", "Vivian"
+        };
     }
 }

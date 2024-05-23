@@ -124,11 +124,13 @@
         <Compile Include="Commands\RemoteAdmin\VoiceModCommand.cs" />
         <Compile Include="Components\AdminToyCollisionHandler.cs" />
         <Compile Include="Components\AttachObjectToPlayerHandler.cs" />
+        <Compile Include="Components\PickupCollisionHandler.cs" />
         <Compile Include="Components\ProjectileCollisionHandler.cs" />
         <Compile Include="Events\EventArgs\AccessFirearmBaseStatsEventArgs.cs" />
         <Compile Include="Events\EventArgs\AdminToyCollisionEventArgs.cs" />
         <Compile Include="Events\EventArgs\ChooseScpSpawnQueueEventArgs.cs" />
         <Compile Include="Events\EventArgs\InspectFirearmEventArgs.cs" />
+        <Compile Include="Events\EventArgs\PickupCollisionEventArgs.cs" />
         <Compile Include="Events\EventArgs\PlayerEffectsAwakeArgs.cs" />
         <Compile Include="Events\EventArgs\Scp018BounceEventArgs.cs" />
         <Compile Include="Events\EventArgs\SetupNpcBrainEventArgs.cs" />
@@ -158,6 +160,7 @@
         <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshModifierVolume.cs" />
         <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshSurface.cs" />
         <Compile Include="Npcs\NpcManager.cs" />
+        <Compile Include="Patches\AttachmentUtilsPatch.cs" />
         <Compile Include="Patches\FirearmBasicMessagesHandlerPatch.cs" />
         <Compile Include="Patches\FirearmPatch.cs" />
         <Compile Include="Patches\PlayerEffectsControllerPatch.cs" />
@@ -169,6 +172,8 @@
         <Compile Include="Utilities\AudioUtils.cs" />
         <Compile Include="Utilities\TransformUtils.cs" />
         <Compile Include="Utilities\Vector3Utils.cs" />
+        <Compile Include="Utilities\WeightedItem.cs" />
+        <Compile Include="Utilities\WeightedRandomSelector.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />

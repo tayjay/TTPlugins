@@ -37,10 +37,10 @@ namespace RoundModifiers.Handlers
 
         public RoundManager()
         {
-            ActiveModifiers = ListPool<ModInfo>.Pool.Get();
-            NextRoundModifiers = ListPool<ModInfo>.Pool.Get();
-            VotingPlayers = DictionaryPool<string, ModInfo>.Pool.Get();
-            BlacklistedModifiers = ListPool<string>.Pool.Get(); //RoundModifiers.Instance.Config.DisabledModifiers.ToList();
+            ActiveModifiers = new List<ModInfo>();
+            NextRoundModifiers = new List<ModInfo>();
+            VotingPlayers = new Dictionary<string, ModInfo>();
+            BlacklistedModifiers = new List<string>(); //RoundModifiers.Instance.Config.DisabledModifiers.ToList();
             ModifiersHidden = false;
             NextModifiersHidden = false;
         }
@@ -130,15 +130,27 @@ namespace RoundModifiers.Handlers
 
         public void SelectNewModifiers()
         {
+            //Hide modifiers if needed.
+            ModifiersHidden = false;
+            if(NextModifiersHidden) ModifiersHidden = true;
+            NextModifiersHidden = false;
+            
+            Log.Debug("Next round mod count: " + NextRoundModifiers.Count);
             //First see if admin has set mods for next round
             if (NextRoundModifiers.Count != 0)
             {
+                Log.Debug("Next round set:");
+                foreach (ModInfo mod in NextRoundModifiers)
+                {
+                    Log.Debug(mod.Name);
+                }
                 if (NextRoundModifiers.Contains(NoneInfo))
                 {
-                    ClearRoundModifiers();
+                    //ClearRoundModifiers();
                     NextRoundModifiers.Clear();
                     return;
                 }
+                
                 SetRoundModifiers(NextRoundModifiers);
                 NextRoundModifiers.Clear();
                 return;
@@ -148,11 +160,6 @@ namespace RoundModifiers.Handlers
             {
                 Log.Info("Player: " + mod.Key + " voted for: " + mod.Value.Name);
             }
-
-            //Hide modifiers if needed.
-            ModifiersHidden = false;
-            if(NextModifiersHidden) ModifiersHidden = true;
-            NextModifiersHidden = false;
             
             int votes = VotingPlayers.Count;
             int players = Player.List.Count;
@@ -233,7 +240,11 @@ namespace RoundModifiers.Handlers
         
         public void SetNextRoundModifiers(List<ModInfo> modifiers)
         {
-            NextRoundModifiers = modifiers;
+            NextRoundModifiers.Clear();
+            foreach(ModInfo mod in modifiers)
+            {
+                AddNextRoundModifier(mod);
+            }
         }
         
         public void RemoveNextRoundModifier(ModInfo modifier)
@@ -361,8 +372,16 @@ namespace RoundModifiers.Handlers
 
         public void OnRoundRestart()
         {
-            ClearRoundModifiers();
-            SelectNewModifiers();
+            Log.Debug("Round is restarting.");
+            try
+            {
+                ClearRoundModifiers();
+                SelectNewModifiers();
+            } catch (Exception e)
+            {
+                Log.Error("Error in OnRoundRestart: " + e);
+            }
+            
             Timing.KillCoroutines(LobbyModViewCoroutine);
         }
 
@@ -380,10 +399,10 @@ namespace RoundModifiers.Handlers
             Exiled.Events.Handlers.Player.Left -= OnPlayerLeave;
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
             Exiled.Events.Handlers.Server.RestartingRound -= OnRoundRestart;
-            ListPool<ModInfo>.Pool.Return(ActiveModifiers);
-            ListPool<ModInfo>.Pool.Return(NextRoundModifiers);
-            DictionaryPool<string, ModInfo>.Pool.Return(VotingPlayers);
-            ListPool<string>.Pool.Return(BlacklistedModifiers);
+            //ListPool<ModInfo>.Pool.Return(ActiveModifiers);
+            //ListPool<ModInfo>.Pool.Return(NextRoundModifiers);
+            //DictionaryPool<string, ModInfo>.Pool.Return(VotingPlayers);
+            //ListPool<string>.Pool.Return(BlacklistedModifiers);
             Timing.KillCoroutines(LobbyModViewCoroutine);
         }
     }

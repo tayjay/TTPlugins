@@ -41,7 +41,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo()
         {
             Name = "MicroHIV",
-            FormattedName = "<color=red>MicroHIV</color>",
+            FormattedName = "<color=red>MicroH-IV</color>",
             Aliases = new []{"microhid", "hid"},
             Description = "Using the MicroHID drains your health.",
             Impact = ImpactLevel.MinorGameplay,

@@ -1,4 +1,5 @@
 ﻿using Exiled.Events.Features;
+using TTCore.Components;
 using TTCore.Events.EventArgs;
 
 namespace TTCore.Events.Handlers;
@@ -22,6 +23,7 @@ public static class Custom
    
     public static Event<PlayerEffectsAwakeArgs> PlayerEffectsAwake { get; set; } = new Event<PlayerEffectsAwakeArgs>();
     
+    public static Event<PickupCollisionEventArgs> PickupCollision { get; set; } = new Event<PickupCollisionEventArgs>();
     
     public static void OnAdminToyCollision(AdminToyCollisionEventArgs ev)
     {
@@ -61,5 +63,10 @@ public static class Custom
     public static void OnPlayerEffectsAwake(PlayerEffectsAwakeArgs ev)
     {
         PlayerEffectsAwake.InvokeSafely(ev);
+    }
+    
+    public static void OnPickupCollision(PickupCollisionEventArgs ev)
+    {
+        PickupCollision.InvokeSafely(ev);
     }
 }

@@ -19,7 +19,12 @@ namespace RoundModifiers.Commands.RemoteAdmin
             }
             if (arguments.Count < 1)
             {
-                response = "Usage: mod next <modifier>/clear";
+                response = "Usage: mod next <modifier>/clear\n" +
+                           "Next modifiers: \n";
+                foreach (ModInfo mod in RoundModifiers.Instance.RoundManager.NextRoundModifiers)
+                {
+                    response += $"{mod.Name}, ";
+                }
                 return false;
             }
             if(arguments.At(0).ToLower() == "clear")
@@ -50,11 +55,11 @@ namespace RoundModifiers.Commands.RemoteAdmin
             }
             RoundModifiers.Instance.RoundManager.SetNextRoundModifiers(modInfo);
             response = $"Set next round modifier(s) to: ";
-            foreach (ModInfo mod in modInfo)
+            ListPool<ModInfo>.Pool.Return(modInfo);
+            foreach (ModInfo mod in RoundModifiers.Instance.RoundManager.NextRoundModifiers)
             {
                 response += $"{mod.Name}, ";
             }
-            ListPool<ModInfo>.Pool.Return(modInfo);
             return true;
         }
 

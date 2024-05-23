@@ -10,6 +10,7 @@ using RoundModifiers.Modifiers;
 using RoundModifiers.Modifiers.Scp1507;
 using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.RogueAI;
+using RoundModifiers.Modifiers.Scp507;
 using RoundModifiers.Modifiers.WeaponStats;
 using TTCore.Handlers;
 
@@ -96,10 +97,17 @@ namespace RoundModifiers
             AddModifier(new Paper());
             AddModifier(new Keyless());
             AddModifier(new ExplosiveRagdolls());
-            //AddModifier(new WeaponStats2());
+            AddModifier(new WeaponStats2());
             //AddModifier(new Nicknames());
+            //AddModifier(new Bouncy());
+            AddModifier<Scp507>();
+            //AddModifier<NoJumping>();
         }
         
+        public void AddModifier<T>() where T : Modifier, new()
+        {
+            AddModifier(new T());
+        }
         
         public void AddModifier(Modifier mod)
         {
@@ -169,6 +177,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 3, 0);
+        public override System.Version Version { get; } = new System.Version(0, 3, 1);
     }
 }

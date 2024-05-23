@@ -79,6 +79,7 @@ namespace RoundModifiers.Modifiers
             Projectile projectile = Projectile.CreateAndSpawn(ProjectileType.Scp018, oldProjectile.Position, oldProjectile.Rotation, true,
                 Player.Get(oldProjectile.PreviousOwner));
             projectile.PhysicsModule.Rb.velocity = Vector3Utils.Random(5f,10f);
+            projectile.Scale = Vector3.one * BallScale;
             //(projectile as Scp018Projectile).FuseTime = (Projectile.Get(ev.Projectile) as Scp018Projectile).FuseTime;
             if(RoundModifiers.Instance.Config.MultiBall_Recursive)
                 projectile.GameObject.AddComponent<ProjectileCollisionHandler>().Init(owner, projectile.Base);

@@ -10,6 +10,9 @@ using Exiled.Events.EventArgs.Scp3114;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using PlayerRoles;
+using PluginAPI.Core.Attributes;
+using PluginAPI.Enums;
+using PluginAPI.Events;
 using RoundModifiers.API;
 using TTCore.HUDs;
 using UnityEngine;
@@ -81,21 +84,7 @@ namespace RoundModifiers.Modifiers
         }*/
     };
 
-    public string[] HumanNames { get; set; } = new[]
-    {
-        "Alan", "Steeve", "Mary", "John", "Alice", "Bob", "Carol", "David", "Eve", "Frank",
-        "Grace", "Helen", "Ian", "Judy", "Kevin", "Linda", "Mike", "Nora", "Oliver", "Patricia",
-        "Quinn", "Rachel", "Sam", "Tina", "Ursula", "Vince", "Wendy", "Xavier", "Yvonne", "Zack",
-        "Amber", "Bruce", "Cindy", "Derek", "Elena", "Felix", "Gina", "Harry", "Isla", "Justin",
-        "Kara", "Leo", "Mona", "Nathan", "Oscar", "Penny", "Quincy", "Rose", "Seth", "Tara",
-        "Ulysses", "Victor", "Willa", "Xander", "Yasmin", "Zeke", "April", "Blaine", "Claire",
-        "Dante", "Elise", "Frederick", "Gloria", "Howard", "Ingrid", "Joel", "Krista", "Luke",
-        "Megan", "Neil", "Opal", "Paul", "Queenie", "Roger", "Susan", "Thomas", "Una", "Vernon",
-        "Whitney", "Xenia", "Yuri", "Zara", "Aaron", "Beth", "Carter", "Deanna", "Elliott", "Faye",
-        "George", "Hannah", "Ivan", "Jean", "Kyle", "Leslie", "Mitchell", "Nadia", "Owen", "Paula",
-        "Quentin", "Ruth", "Spencer", "Tiffany", "Uma", "Vincent", "Wallace", "Xena", "Yvette", "Zion",
-        "Taylar", "Ely", "Jason", "Kevin", "Chance", "Vivian"
-    };
+        public string[] HumanNames => RoundModifiers.Instance.Config.Nicknames_HumanNames;
     
     //public Dictionary<Player, bool> CanReveal { get; set; }
         
@@ -146,8 +135,19 @@ namespace RoundModifiers.Modifiers
                 });
             }
         }
+
+        public void OnPressNoClip(TogglingNoClipEventArgs ev)
+        {
+            if(ev.Player.IsNoclipPermitted) return;
+            ev.Player.ShowHUDHint("Your name is " + ev.Player.DisplayNickname, 10f);
+        }
         
-        
+        [PluginEvent(ServerEventType.PlayerGameConsoleCommandExecuted)]
+        public void OnPlayerGameConsoleCommandExecutedEvent(PlayerGameConsoleCommandExecutedEvent ev)
+        {
+            if(ev.Command == "name" || ev.Command == "nick")
+                ev.Response = "Your name is " + ev.Player.DisplayNickname;
+        }
 
         public void OnDisguised(DisguisedEventArgs ev)
         {
@@ -191,8 +191,9 @@ namespace RoundModifiers.Modifiers
             Exiled.Events.Handlers.Player.Hurt += OnHurt;
             Exiled.Events.Handlers.Scp3114.Disguised += OnDisguised;
             Exiled.Events.Handlers.Scp3114.Revealed += OnRevealed;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnPressNoClip;
 
-            
+            PluginAPI.Events.EventManager.RegisterEvents(this);
         }
 
         protected override void UnregisterModifier()
@@ -204,6 +205,9 @@ namespace RoundModifiers.Modifiers
             Exiled.Events.Handlers.Player.Hurt -= OnHurt;
             Exiled.Events.Handlers.Scp3114.Disguised -= OnDisguised;
             Exiled.Events.Handlers.Scp3114.Revealed -= OnRevealed;
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnPressNoClip;
+            
+            PluginAPI.Events.EventManager.UnregisterEvents(this);
             
         }
 
