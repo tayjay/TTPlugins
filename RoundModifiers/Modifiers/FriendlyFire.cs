@@ -46,7 +46,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"ff"},
             Description = "Friendly fire is enabled.",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -1
         };
     }
 }

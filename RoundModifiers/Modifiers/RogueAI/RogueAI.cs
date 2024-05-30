@@ -4,6 +4,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using Exiled.API.Features.Pools;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using MEC;
@@ -37,7 +38,8 @@ namespace RoundModifiers.Modifiers.RogueAI
         public int AggressionLevel = 0;
         public int MaxAggressionLevel = 10;
         public int CurrentTick = 0;
-        public List<Ability> Abilities = new List<Ability>();
+        public List<Ability> Abilities;
+        public List<WeightedItem<Ability>> WeightedAbilities;
         public Ability CurrentAbility = null;
         //Which side the AI is currently helping
         public Side CurrentSide = Side.None;
@@ -47,33 +49,7 @@ namespace RoundModifiers.Modifiers.RogueAI
 
         public RogueAI()
         {
-            Abilities.Add(new LockDoorAbility());
-            Abilities.Add(new LockDoorAbility());
-            Abilities.Add(new LockDoorAbility());
-            Abilities.Add(new LockdownRoomAbility());
-            Abilities.Add(new TouchRandomDoorAbility());
-            Abilities.Add(new TouchRandomDoorAbility());
-            Abilities.Add(new TouchRandomDoorAbility());
-            Abilities.Add(new TouchRandomDoorAbility());
-            Abilities.Add(new TouchRandomDoorAbility());
-            Abilities.Add(new TeslaGateAbility());
-            Abilities.Add(new ChangeLightAbility());
-            //Abilities.Add(new ChangeLightAbility());
-            //Abilities.Add(new ChangeLightAbility());
-            Abilities.Add(new Scp914Ability());
-            Abilities.Add(new Scp914Ability());
-            Abilities.Add(new AnnouncementAbility(".", isNoisy:true, aggressionLevel: 4));
-            Abilities.Add(new AnnouncementAbility(".g1", isHeld: true));
-            Abilities.Add(new AnnouncementAbility(".g7", aggressionLevel: 4));
-            Abilities.Add(new AnnouncementAbility("XMAS_BOUNCYBALLS", aggressionLevel: 6, oneShot:true));
-            //Abilities.Add(new AnnouncementAbility("You think your safe . I see you there", aggressionLevel: 7));
-            Abilities.Add(new AnnouncementAbility("security seriously needs to get their heads checked . psi", aggressionLevel: 8, oneShot:true));
-            Abilities.Add(new TattleAbility());
-            Abilities.Add(new ActivateNukeAbility(Side.ChaosInsurgency));
-            Abilities.Add(new ActivateNukeAbility(Side.Mtf));
-            Abilities.Add(new BlackoutAbility());
-            Abilities.Add(new BlackoutAbility(Side.Scp, 7));
-            Abilities.Add(new ElevatorAbility());
+            
         }
         
         public void OnRoundStart()
@@ -83,7 +59,7 @@ namespace RoundModifiers.Modifiers.RogueAI
             CurrentTick = 0;
             CurrentAbility = null;
             AITickHandle = Timing.RunCoroutine(AITick());
-            FollowHandler = Timing.RunCoroutine(FollowPlayer());
+            //FollowHandler = Timing.RunCoroutine(FollowPlayer());
             //TTCore.TTCore.Instance.NpcManager.SpawnNpc("RogueAI", RoleTypeId.Scp079, Vector3.zero, out npc);
         }
 
@@ -186,14 +162,16 @@ namespace RoundModifiers.Modifiers.RogueAI
             //Log.Info("Looking for new ability to use.");
             Ability NewAbility = null;
             //Get all abilities that are of or below the current aggression level
-            List<Ability> possibleAbilities = Abilities.Where(x => x.AggressionLevel <= AggressionLevel && (x.HelpingSide==CurrentSide|| x.HelpingSide==Side.None)).ToList();
+            //List<Ability> possibleAbilities = Abilities.Where(x => x.AggressionLevel <= AggressionLevel && (x.HelpingSide==CurrentSide|| x.HelpingSide==Side.None)).ToList();
             
             //Pick a random ability
             try
             {
-                while(possibleAbilities.Count>0)
+                List<WeightedItem<Ability>> WeightedOptions = WeightedAbilities.Where(x => x.Item.AggressionLevel <= AggressionLevel && (x.Item.HelpingSide==CurrentSide|| x.Item.HelpingSide==Side.None)).ToList();
+                WeightedRandomSelector<Ability> selector = new WeightedRandomSelector<Ability>(WeightedOptions);
+                while(WeightedOptions.Count>0)
                 {
-                    NewAbility = possibleAbilities[Random.Range(0, possibleAbilities.Count)];
+                    NewAbility = selector.SelectItem();
                     //Log.Info("Trying to setup new ability "+NewAbility.Name);
                     if (NewAbility.Setup())
                     {
@@ -202,7 +180,7 @@ namespace RoundModifiers.Modifiers.RogueAI
                         CurrentAbility.Start();
                         break;
                     }
-                    possibleAbilities.Remove(NewAbility);
+                    WeightedOptions.Remove(WeightedOptions.First(x => x.Item == NewAbility));
                 }
             } catch (System.Exception e)
             {
@@ -351,6 +329,59 @@ namespace RoundModifiers.Modifiers.RogueAI
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
             Exiled.Events.Handlers.Player.InteractingDoor += TryOpenDoor;
+
+            Abilities = ListPool<Ability>.Pool.Get();
+            Abilities.Add(new LockDoorAbility());
+            //Abilities.Add(new LockDoorAbility());
+            //Abilities.Add(new LockDoorAbility());
+            Abilities.Add(new LockdownRoomAbility());
+            Abilities.Add(new TouchRandomDoorAbility());
+            //Abilities.Add(new TouchRandomDoorAbility());
+            //Abilities.Add(new TouchRandomDoorAbility());
+            //Abilities.Add(new TouchRandomDoorAbility());
+            //Abilities.Add(new TouchRandomDoorAbility());
+            Abilities.Add(new TeslaGateAbility());
+            Abilities.Add(new ChangeLightAbility());
+            //Abilities.Add(new ChangeLightAbility());
+            //Abilities.Add(new ChangeLightAbility());
+            Abilities.Add(new Scp914Ability());
+            //Abilities.Add(new Scp914Ability());
+            Abilities.Add(new AnnouncementAbility(".", isNoisy:true, aggressionLevel: 4));
+            Abilities.Add(new AnnouncementAbility(".g1", isHeld: true));
+            Abilities.Add(new AnnouncementAbility(".g7", aggressionLevel: 4));
+            Abilities.Add(new AnnouncementAbility("XMAS_BOUNCYBALLS", aggressionLevel: 6, oneShot:true));
+            //Abilities.Add(new AnnouncementAbility("You think your safe . I see you there", aggressionLevel: 7));
+            Abilities.Add(new AnnouncementAbility("security seriously needs to get their heads checked . psi", aggressionLevel: 8, oneShot:true));
+            Abilities.Add(new TattleAbility());
+            Abilities.Add(new ActivateNukeAbility(Side.ChaosInsurgency));
+            Abilities.Add(new ActivateNukeAbility(Side.Mtf));
+            Abilities.Add(new BlackoutAbility());
+            Abilities.Add(new BlackoutAbility(Side.Scp, 7));
+            Abilities.Add(new ElevatorAbility());
+            
+            
+            
+            
+            WeightedAbilities = ListPool<WeightedItem<Ability>>.Pool.Get();
+            
+            WeightedAbilities.Add(new WeightedItem<Ability>(new LockDoorAbility(), 3));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new LockdownRoomAbility(), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new TouchRandomDoorAbility(), 5));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new TeslaGateAbility(), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new ChangeLightAbility(), 4));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new Scp914Ability(), 4));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility(".", isNoisy:true, aggressionLevel: 4),2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility(".g1", isHeld: true), 3));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility(".g7", aggressionLevel: 4), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility("XMAS_BOUNCYBALLS", aggressionLevel: 6, oneShot:true), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility("security seriously needs to get their heads checked . psi", aggressionLevel: 8, oneShot:true), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new TattleAbility(), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new ActivateNukeAbility(Side.ChaosInsurgency), 1));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new ActivateNukeAbility(Side.Mtf), 1));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new BlackoutAbility(), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new BlackoutAbility(Side.Scp, 7), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new ElevatorAbility(), 4));
+            
         }
 
         protected override void UnregisterModifier()
@@ -363,7 +394,10 @@ namespace RoundModifiers.Modifiers.RogueAI
             CurrentSide = Side.None;
             
             Timing.KillCoroutines(AITickHandle);
-            Timing.KillCoroutines(FollowHandler);
+            //Timing.KillCoroutines(FollowHandler);
+            
+            ListPool<Ability>.Pool.Return(Abilities);
+            ListPool<WeightedItem<Ability>>.Pool.Return(WeightedAbilities);
         }
 
         
@@ -375,7 +409,8 @@ namespace RoundModifiers.Modifiers.RogueAI
             Aliases = new []{"ai"},
             Description = "An AI that will try to help or hinder the players based on who is currently winning.",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = 0
         };
             
     }

@@ -82,7 +82,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"colour"},
             Description = "The lights are changing colors!",
             Impact = ImpactLevel.Graphics,
-            MustPreload = false
+            MustPreload = false,
+            Balance = 0
         };
         
         /*public override string Name { get; } = "Rainbow";

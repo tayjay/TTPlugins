@@ -7,6 +7,7 @@ using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Attachments;
 using RoundModifiers.API;
+using TTCore.Utilities;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,6 +16,7 @@ namespace RoundModifiers.Modifiers;
 public class MysteryBox : Modifier
 {
     public List<ItemType> PossibleItems { get; private set;}
+    public List<WeightedItem<ItemType>> WeightedItems { get; private set; }
     //OnFlipCoin
     public void OnFlipCoin(FlippingCoinEventArgs ev)
     {
@@ -22,9 +24,7 @@ public class MysteryBox : Modifier
         {
             ev.IsAllowed = false;
             ev.Player.RemoveItem(ev.Item);
-            //Pickup.CreateAndSpawn(ItemType.Coin, controller.transform.position+Vector3.up, controller.transform.rotation);
-            int randomNum = Random.Range(1, Random.Range(2, PossibleItems.Count));
-            ItemType random = PossibleItems.ElementAt(randomNum);
+            ItemType random = new WeightedRandomSelector<ItemType>(WeightedItems).SelectItem();
             ev.Player.AddItem(random);
         }
     }
@@ -49,28 +49,23 @@ public class MysteryBox : Modifier
     {
         Exiled.Events.Handlers.Player.FlippingCoin += OnFlipCoin;
         PossibleItems = ListPool<ItemType>.Pool.Get();
-        PossibleItems.Add(ItemType.Adrenaline);
-        PossibleItems.Add(ItemType.Adrenaline);
-        PossibleItems.Add(ItemType.Adrenaline);
-        PossibleItems.Add(ItemType.Adrenaline);
-        PossibleItems.Add(ItemType.Medkit);
-        PossibleItems.Add(ItemType.Medkit);
-        PossibleItems.Add(ItemType.Medkit);
-        PossibleItems.Add(ItemType.Medkit);
-        PossibleItems.Add(ItemType.Flashlight);
-        PossibleItems.Add(ItemType.Painkillers);
-        PossibleItems.Add(ItemType.Painkillers);
-        PossibleItems.Add(ItemType.Painkillers);
-        PossibleItems.Add(ItemType.Painkillers);
-        PossibleItems.Add(ItemType.Radio);
-        PossibleItems.Add(ItemType.KeycardO5);
-        PossibleItems.Add(ItemType.SCP018);
-        PossibleItems.Add(ItemType.SCP207);
-        PossibleItems.Add(ItemType.SCP268);
-        PossibleItems.Add(ItemType.SCP500);
-        PossibleItems.Add(ItemType.SCP1576);
-        PossibleItems.Add(ItemType.SCP2176);
-        PossibleItems.Add(ItemType.Jailbird);
+        WeightedItems = ListPool<WeightedItem<ItemType>>.Pool.Get();
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.GunCOM15, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.GunE11SR, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.GunLogicer, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.Adrenaline, 5));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.Medkit, 4));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.Flashlight, 3));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.Painkillers, 4));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.Radio, 2));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.KeycardO5, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.SCP018, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.SCP207, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.SCP268, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.SCP500, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.SCP1576, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.SCP2176, 1));
+        WeightedItems.Add(new WeightedItem<ItemType>(ItemType.Jailbird, 1));
         
     }
 
@@ -79,6 +74,7 @@ public class MysteryBox : Modifier
         Exiled.Events.Handlers.Player.FlippingCoin -= OnFlipCoin;
         
         ListPool<ItemType>.Pool.Return(PossibleItems);
+        ListPool<WeightedItem<ItemType>>.Pool.Return(WeightedItems);
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()
@@ -88,6 +84,7 @@ public class MysteryBox : Modifier
         Aliases = new[] { "box" },
         Description = "A mystery box that gives you a random item.",
         Impact = ImpactLevel.MinorGameplay,
-        MustPreload = false
+        MustPreload = false,
+        Balance = 2
     };
 }

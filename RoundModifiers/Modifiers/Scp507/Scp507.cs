@@ -47,8 +47,13 @@ public class Scp507 : Modifier
             {
                 ev.Player.DropItem(item);
             }
+
+            Ragdoll.CreateAndSpawn(ev.Player.Role.Type, ev.Player.DisplayNickname, ev.DamageHandler, ev.Player.Position,
+                ev.Player.Rotation, ev.Player);
             //Teleport to random room in facility
             ev.Player.Teleport(FindSafeLocation(ev.Player));
+            ev.Player.DisableAllEffects(EffectCategory.Negative);
+            ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
         }
     }
@@ -76,6 +81,8 @@ public class Scp507 : Modifier
             }
             //Teleport to random room in facility
             ev.Player.Teleport(FindSafeLocation(ev.Player));
+            ev.Player.DisableAllEffects(EffectCategory.Negative);
+            ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
         }
     }
@@ -103,6 +110,8 @@ public class Scp507 : Modifier
             }
             //Teleport to random room in facility
             ev.Player.Teleport(FindSafeLocation(ev.Player));
+            ev.Player.DisableAllEffects(EffectCategory.Negative);
+            ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
         }
     }
@@ -141,6 +150,8 @@ public class Scp507 : Modifier
             }
             //Teleport to random room in facility
             player.Teleport(FindSafeLocation(player));
+            player.DisableAllEffects(EffectCategory.Negative);
+            player.DisableAllEffects(EffectCategory.Harmful);
             player.Health = player.MaxHealth;
         }
     }
@@ -229,8 +240,8 @@ public class Scp507 : Modifier
         Aliases = new [] {"507", "guy"},
         Description = "SCP507 has been moved to Site-02.",
         FormattedName = "<color=red>SCP-507</color>",
-        Hidden = true,
         Impact = ImpactLevel.MajorGameplay,
-        MustPreload = false
+        MustPreload = false,
+        Balance = 0
     };
 }

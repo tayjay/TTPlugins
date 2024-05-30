@@ -48,7 +48,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"ins"},
             Description = "Facility Guards spawn as Chaos Insurgents.",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = 1
         };
     }
 }

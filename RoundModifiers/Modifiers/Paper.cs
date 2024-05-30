@@ -46,6 +46,7 @@ public class Paper : Modifier
         Description = "Everyone is paper thin!",
         FormattedName = "<color=yellow>S-C-Paper Mario</color>",
         Impact = ImpactLevel.MajorGameplay,
-        MustPreload = false
+        MustPreload = false,
+        Balance = 0
     };
 }

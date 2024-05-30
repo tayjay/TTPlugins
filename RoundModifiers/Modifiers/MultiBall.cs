@@ -106,7 +106,8 @@ namespace RoundModifiers.Modifiers
             Description = "All SCP Lockers are filled with SCP018s, and SCP018s spawn extra balls when thrown.",
             Aliases = new []{"018","balls"},
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = true
+            MustPreload = true,
+            Balance = 3
         };
     }
 }

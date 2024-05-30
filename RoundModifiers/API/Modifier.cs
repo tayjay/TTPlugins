@@ -34,6 +34,22 @@ namespace RoundModifiers.API
         MinorGameplay,
         MajorGameplay,
         Gamemode,
+    }
 
+    public enum Category
+    {
+        None,
+        Visual,
+        ScpRole,
+        HumanRole,
+        Gamemode,
+        Scale,
+        Health,
+        Weapon,
+        NewRole,
+        Facility,
+        Lights,
+        Names,
+        Voice,
     }
 }

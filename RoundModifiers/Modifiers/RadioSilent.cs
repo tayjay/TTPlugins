@@ -44,7 +44,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"noradio", "silentradio"},
             Description = "Players cannot use the radio.",
             Impact = ImpactLevel.MinorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -2
         };
     }
 }

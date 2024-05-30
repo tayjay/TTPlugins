@@ -218,7 +218,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"bz","skeletons"},
             Description = "All Scps are skeletons.",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -3
         };
     }
 }

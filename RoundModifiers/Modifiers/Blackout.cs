@@ -135,7 +135,8 @@ namespace RoundModifiers.Modifiers
             Description = "The lights are out!",
             Aliases = new [] {"bo"},
             Impact = ImpactLevel.MinorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -2
         };
 
 

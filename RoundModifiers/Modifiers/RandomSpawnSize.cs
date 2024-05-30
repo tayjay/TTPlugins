@@ -25,7 +25,7 @@ namespace RoundModifiers.Modifiers
                 float x = Random.Range(SizeMin, SizeMax);
                 float y = Random.Range(SizeMin, SizeMax);
                 float z = Random.Range(SizeMin, SizeMax);
-                if(UniformSize)
+                if(UniformSize || ev.Player.Role == RoleTypeId.Scp939 || ev.Player.Role==RoleTypeId.Scp106)//Patching dog and larry levitating
                     ev.Player.ChangeSize(random);
                 else
                     ev.Player.ChangeSize(new Vector3(x, y, z));
@@ -106,7 +106,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"rss"},
             Description = "Randomly changes the size of spawned players.",
             Impact = ImpactLevel.MinorGameplay,
-            MustPreload = true
+            MustPreload = true,
+            Balance = 0
         };
     }
 }

@@ -206,7 +206,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"imposter"},
             Description = "SCPs are disguised as humans.",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -3
         };
         
         

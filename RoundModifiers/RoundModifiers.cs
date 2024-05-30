@@ -102,6 +102,10 @@ namespace RoundModifiers
             //AddModifier(new Bouncy());
             AddModifier<Scp507>();
             //AddModifier<NoJumping>();
+            AddModifier<ScpShuffle>();
+            AddModifier<Peanuts>();
+            AddModifier<DoNotLook>();
+            AddModifier<ExtraLife>();
         }
         
         public void AddModifier<T>() where T : Modifier, new()
@@ -177,6 +181,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 3, 1);
+        public override System.Version Version { get; } = new System.Version(0, 4, 0);
     }
 }

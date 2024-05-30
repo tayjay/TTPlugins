@@ -11,6 +11,7 @@
             Impact = ImpactLevel.None;
             MustPreload = false;
             Hidden = false;
+            Balance = 0;
         }
 
         /**
@@ -50,5 +51,10 @@
          * It will not be displayed in the broadcast of current modifiers.
          */
         public bool Hidden { get; set; }
+        
+        /**
+         * The balance of the modifier. This is used to determine which direction this modifier will balance the game, positive towards the humans, negative towards the SCPs
+         */
+        public int Balance { get; set; }
     }
 }

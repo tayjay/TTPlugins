@@ -74,7 +74,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"nodecon", "decon"},
             Description = "Disables decontamination and replaces it with a slow damaging effect.",
             Impact = ImpactLevel.MinorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -1
         };
     }
 }

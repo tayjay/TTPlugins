@@ -45,7 +45,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"microhid", "hid"},
             Description = "Using the MicroHID drains your health.",
             Impact = ImpactLevel.MinorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = 2
         };
     }
 }

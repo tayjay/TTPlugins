@@ -55,7 +55,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"pup"},
             Description = "All SCPs are mini 939s",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -2
         };
     }
 }

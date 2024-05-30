@@ -16,7 +16,7 @@ public class HealBoost : Boost
 
     public override bool ApplyBoost(Player player)
     {
-        player.Heal(300 + (100*(int)Tier), true);
+        player.Heal(100 + (100*(int)Tier), true);
         return true;
     }
 

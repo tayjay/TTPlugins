@@ -43,7 +43,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"cassie"},
             Description = "Disables all Cassie announcements.",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -1
         };
     }
 }

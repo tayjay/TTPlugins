@@ -140,5 +140,12 @@ namespace RoundModifiers
             "Quentin", "Ruth", "Spencer", "Tiffany", "Uma", "Vincent", "Wallace", "Xena", "Yvette", "Zion",
             "Taylar", "Ely", "Jason", "Kevin", "Chance", "Vivian"
         };
+        
+        //ExtraLife
+        [Description("The minimum amount of time in seconds the ExtraLife modifier will ensure the game lasts. Default is 300f.")]
+        public float ExtraLife_MinimumRoundTime { get; set; } = 300f;
+        
+        [Description("The amount of time in seconds before a player is respawned after dying during the ExtraLife modifier. Need delay for 049 to rez players. Default is 24f.")]
+        public float ExtraLife_RespawnDelay { get; set; } = 24f;
     }
 }

@@ -140,6 +140,7 @@ public class ExplosiveRagdolls : Modifier
         Description = "Ragdolls explode after 10 seconds",
         FormattedName = "Birthday Party",
         Impact = ImpactLevel.MajorGameplay,
-        MustPreload = false
+        MustPreload = false,
+        Balance = 1
     };
 }

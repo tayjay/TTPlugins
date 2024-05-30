@@ -332,7 +332,7 @@ namespace RoundModifiers.Modifiers.LevelUp
         {
             Boost newBoost = null;
             int tries = 0;
-            while (tries++< 20)
+            while (tries++< 30)
             {
                 newBoost = GetBoostByLevel(PlayerLevel[player.NetId]);
                 if (newBoost.AssignBoost(player))
@@ -727,7 +727,8 @@ namespace RoundModifiers.Modifiers.LevelUp
             Aliases = new []{"lvlup"},
             Description = "Players can level up and gain boosts.",
             Impact = ImpactLevel.Gamemode,
-            MustPreload = false
+            MustPreload = false,
+            Balance = 0
         };
     }
 }

@@ -84,7 +84,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"914"},
             Description = "SCP-914 is out of order.",
             Impact = ImpactLevel.MinorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = -2
         };
     }
 }

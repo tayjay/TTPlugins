@@ -66,7 +66,8 @@ public class HealthBars : Modifier
         Aliases = new[] { "hb", "hp" },
         Description = "Adds health bars to players",
         Impact = ImpactLevel.MinorGameplay,
-        MustPreload = false
+        MustPreload = false,
+        Balance = -1
     };
 
     public class HPBar : MonoBehaviour

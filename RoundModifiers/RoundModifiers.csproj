@@ -124,8 +124,10 @@
         <Compile Include="Modifiers\BodyBlock.cs" />
         <Compile Include="Modifiers\BoneZone.cs" />
         <Compile Include="Modifiers\Bouncy.cs" />
+        <Compile Include="Modifiers\DoNotLook.cs" />
         <Compile Include="Modifiers\Escape.cs" />
         <Compile Include="Modifiers\ExplosiveRagdolls.cs" />
+        <Compile Include="Modifiers\ExtraLife.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IBlinkEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IConsumeEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IEnragingEvent.cs" />
@@ -137,6 +139,7 @@
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp173XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp939XP.cs" />
         <Compile Include="Modifiers\NoJumping.cs" />
+        <Compile Include="Modifiers\Peanuts.cs" />
         <Compile Include="Modifiers\Scp1507\Flamingos.cs" />
         <Compile Include="Modifiers\Scp1507\Scp1507Role.cs" />
         <Compile Include="Modifiers\Scp1507\SwarmAbility.cs" />
@@ -224,12 +227,12 @@
         <Compile Include="Modifiers\Scp249.cs" />
         <Compile Include="Modifiers\Scp507\Scp507.cs" />
         <Compile Include="Modifiers\Scp507\Scp507Role.cs" />
+        <Compile Include="Modifiers\ScpShuffle.cs" />
         <Compile Include="Modifiers\SpectatorGame.cs" />
         <Compile Include="Modifiers\WeaponStatsOld.cs" />
         <Compile Include="Modifiers\WeaponStats\AnyAmmoStat.cs" />
         <Compile Include="Modifiers\WeaponStats\CleansingStat.cs" />
         <Compile Include="Modifiers\WeaponStats\CloneStat.cs" />
-        <Compile Include="Modifiers\WeaponStats\CustomAttachment.cs" />
         <Compile Include="Modifiers\WeaponStats\DangerStat.cs" />
         <Compile Include="Modifiers\WeaponStats\DefibStat.cs" />
         <Compile Include="Modifiers\WeaponStats\EffectStat.cs" />
@@ -244,6 +247,7 @@
         <Compile Include="Modifiers\WeaponStats\Interfaces\IReloading.cs" />
         <Compile Include="Modifiers\WeaponStats\Interfaces\IShooting.cs" />
         <Compile Include="Modifiers\WeaponStats\NoneStat.cs" />
+        <Compile Include="Modifiers\WeaponStats\PaintBallStat.cs" />
         <Compile Include="Modifiers\WeaponStats\SharpStat.cs" />
         <Compile Include="Modifiers\WeaponStats\ShootEffectStat.cs" />
         <Compile Include="Modifiers\WeaponStats\SlipperyStat.cs" />
@@ -251,7 +255,6 @@
         <Compile Include="Modifiers\WeaponStats\TargetShotEffectStat.cs" />
         <Compile Include="Modifiers\WeaponStats\VampireStat.cs" />
         <Compile Include="Modifiers\WeaponStats\WeaponStats2.cs" />
-        <Compile Include="Modifiers\WeaponStats\WeaponStatsEffect.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="RoundModifiers.cs" />
     </ItemGroup>

@@ -124,6 +124,7 @@ public class Pills : Modifier
         Description = "Painkillers give you a random effect",
         FormattedName = "<color=yellow>Painkiller Roulette</color>",
         Impact = ImpactLevel.MinorGameplay,
-        MustPreload = false
+        MustPreload = false,
+        Balance = 2
     };
 }

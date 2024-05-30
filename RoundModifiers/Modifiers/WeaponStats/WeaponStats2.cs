@@ -231,7 +231,7 @@ public class WeaponStats2 : Modifier
         yield return Timing.WaitForSeconds(1f);
         while (true)
         {
-            foreach(Player player in Player.List.Where(p=>p.IsHuman))
+            foreach(Player player in Player.List.Where(p=>p.IsHuman && p.IsAlive))
             {
                 try
                 {
@@ -296,6 +296,9 @@ public class WeaponStats2 : Modifier
         AllStats.Add(new SharpStat());
         AllStats.Add(new TargetShotEffectStat(effectFriendly:true, friendlyEffectType:EffectType.AntiScp207));
         AllStats.Add(new TargetShotEffectStat(effectEnemy:true, enemyEffectType:EffectType.SinkHole));
+        AllStats.Add(new TargetShotEffectStat(effectEnemy:true, enemyEffectType:EffectType.Bleeding));
+        AllStats.Add(new TargetShotEffectStat(effectEnemy:true, enemyEffectType:EffectType.Ensnared));
+        AllStats.Add(new TargetShotEffectStat(effectFriendly:true, enemyEffectType:EffectType.Invisible));
         AllStats.Add(new SlipperyStat());
         AllStats.Add(new CleansingStat());
         //AllStats.Add(new AnyAmmoStat());
@@ -307,6 +310,7 @@ public class WeaponStats2 : Modifier
         AllStats.Add(new ExtraDamageStat());
         AllStats.Add(new InstantReloadStat());
         AllStats.Add(new DangerStat());
+        AllStats.Add(new PaintBallStat());
         
         WeighStats();
         
@@ -343,7 +347,8 @@ public class WeaponStats2 : Modifier
         Description = "Adds stats to weapons",
         Aliases = new []{"stats"},
         FormattedName = "<color=green>Weapon Stats</color>",
-        Impact = ImpactLevel.MinorGameplay,
-        MustPreload = true
+        Impact = ImpactLevel.MajorGameplay, //Updated May 27 2024
+        MustPreload = true,
+        Balance = 3
     };
 }

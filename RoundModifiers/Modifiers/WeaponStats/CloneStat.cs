@@ -11,7 +11,7 @@ public class CloneStat : Stat, IDying
 {
 
     public override string Name => "Clone";
-    public override int Rarity => 10;
+    public override int Rarity => 5;
     public override string Description => "This weapon will clone the target on death";
     
     public void OnOwnerDying(DyingEventArgs ev)

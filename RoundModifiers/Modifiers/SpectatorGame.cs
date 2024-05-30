@@ -1,23 +1,37 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
+using PlayerRoles;
 using RoundModifiers.API;
 
 namespace RoundModifiers.Modifiers;
 
 public class SpectatorGame : Modifier
 {
-    
-    private Dictionary<Player, int> spectatorPoints = new Dictionary<Player, int>();
+
+    private Dictionary<Player, float> spectatorPoints;
 
     public void OnRespawnWave(RespawningTeamEventArgs ev)
     {
-            
         Player[] oldPlayers = ev.Players.ToArray();
             
         IOrderedEnumerable<Player> orderedPoints = oldPlayers.OrderBy( GetPoints);
+        if (orderedPoints.Count() != ev.Players.Count)
+        {
+            Log.Error("SpectatorGame: Player count mismatch!");
+            return;
+        }
+
+        foreach (Player player in orderedPoints)
+        {
+            if(player.Role == RoleTypeId.Spectator) continue;
+            Log.Error("SpectatorGame: Player is not a spectator!");
+            return;
+        }
+        
         ev.Players.Clear();
         ev.Players.AddRange(orderedPoints);
         spectatorPoints.Clear();
@@ -27,12 +41,12 @@ public class SpectatorGame : Modifier
     {
         foreach (Player player in ev.Player.CurrentSpectatingPlayers)
         {
-            spectatorPoints[player]++;
+            spectatorPoints[player]+=1;
         }
         spectatorPoints[ev.Player] = 0;
     }
 
-    private int GetPoints(Player player)
+    private float GetPoints(Player player)
     {
         if(spectatorPoints.TryGetValue(player, out var points))
             return points;
@@ -44,6 +58,8 @@ public class SpectatorGame : Modifier
     {
         Exiled.Events.Handlers.Server.RespawningTeam += OnRespawnWave;
         Exiled.Events.Handlers.Player.Died += OnPlayerDeath;
+
+        spectatorPoints = DictionaryPool<Player, float>.Pool.Get();
     }
 
     protected override void UnregisterModifier()
@@ -51,7 +67,7 @@ public class SpectatorGame : Modifier
         Exiled.Events.Handlers.Server.RespawningTeam -= OnRespawnWave;
         Exiled.Events.Handlers.Player.Died -= OnPlayerDeath;
             
-        spectatorPoints.Clear();
+        DictionaryPool<Player, float>.Pool.Return(spectatorPoints);
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()

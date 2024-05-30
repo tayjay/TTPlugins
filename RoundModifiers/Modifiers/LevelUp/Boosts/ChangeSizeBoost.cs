@@ -24,7 +24,7 @@ public class ChangeSizeBoost : Boost
     {
         HasBoost[player.NetId] = true;
         //player.ChangeSize(NewScale);
-        player.Scale = Vector3.one * NewScale;
+        player.Scale = player.Scale * NewScale;
         return true;
     }
 

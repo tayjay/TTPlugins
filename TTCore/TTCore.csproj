@@ -160,10 +160,8 @@
         <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshModifierVolume.cs" />
         <Compile Include="Npcs\AI\Pathing\NavMeshComponents\NavMeshSurface.cs" />
         <Compile Include="Npcs\NpcManager.cs" />
-        <Compile Include="Patches\AttachmentUtilsPatch.cs" />
         <Compile Include="Patches\FirearmBasicMessagesHandlerPatch.cs" />
         <Compile Include="Patches\FirearmPatch.cs" />
-        <Compile Include="Patches\PlayerEffectsControllerPatch.cs" />
         <Compile Include="Patches\ScpAttackAbilityBasePatch.cs" />
         <Compile Include="Patches\ScpSpawnerPatch.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>

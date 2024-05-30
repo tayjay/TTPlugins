@@ -203,7 +203,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"249"},
             Description = "SCP-249 is loose in the facility.",
             Impact = ImpactLevel.MajorGameplay,
-            MustPreload = false
+            MustPreload = false,
+            Balance = 1
         };
     }
 }
