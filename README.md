@@ -26,8 +26,5 @@ Currently written for latest EXILED 8.X.X
          
 * **SCriPt**
    * A Lua to EXILED scripting framework (MoonSharp)
-        * Write Lua script in a similar structure to EXILED C# code
-        * Started writing this as a way to automate server testing
-        * New scripts can be added to the local Scirpts folder of the server install without recompiling any DLLs.
-        * Not feature complete yet
+   * Moved to it's own [Repo](https://github.com/tayjay/SCriPt)
       
