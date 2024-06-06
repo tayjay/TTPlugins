@@ -83,7 +83,8 @@ namespace RoundModifiers.Modifiers
             Description = "The lights are changing colors!",
             Impact = ImpactLevel.Graphics,
             MustPreload = false,
-            Balance = 0
+            Balance = 0,
+            Category = Category.Visual | Category.Lights
         };
         
         /*public override string Name { get; } = "Rainbow";

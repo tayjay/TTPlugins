@@ -125,6 +125,7 @@ public class Pills : Modifier
         FormattedName = "<color=yellow>Painkiller Roulette</color>",
         Impact = ImpactLevel.MinorGameplay,
         MustPreload = false,
-        Balance = 2
+        Balance = 2,
+        Category = Category.Utility
     };
 }

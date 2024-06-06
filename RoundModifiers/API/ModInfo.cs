@@ -12,6 +12,7 @@
             MustPreload = false;
             Hidden = false;
             Balance = 0;
+            Category = Category.None;
         }
 
         /**
@@ -56,5 +57,12 @@
          * The balance of the modifier. This is used to determine which direction this modifier will balance the game, positive towards the humans, negative towards the SCPs
          */
         public int Balance { get; set; }
+        
+        /**
+         * The category of the modifier. This is used to determine if there are conflicts when combining modifiers.
+         * Multiple Categories can be added using the bitwise OR operator.
+         * Category.Visual | Category.ScpRole
+         */
+        public Category Category { get; set; }
     }
 }

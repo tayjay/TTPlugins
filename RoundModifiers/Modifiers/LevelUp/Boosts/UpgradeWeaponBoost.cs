@@ -5,6 +5,7 @@ using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using Exiled.API.Features.Pools;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
+using TTCore.HUDs;
 
 namespace RoundModifiers.Modifiers.LevelUp.Boosts
 {
@@ -21,6 +22,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
             if(player.IsCuffed) return false;
             if(HasBoost.ContainsKey(player.NetId)) return false;
             if(player.IsScp) return false;
+            if(player.IsDead) return false;
             return ApplyBoost(player);
         }
 
@@ -33,13 +35,20 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
         public void OnGameTick()
         {
             List<uint> keys = ListPool<uint>.Pool.Get(HasBoost.Keys);
+            List<uint> toRemove = ListPool<uint>.Pool.Get();
             foreach(uint netId in keys)
             {
                 Player player = Player.Get(netId);
                 if(player == null) continue;
                 if(player.IsScp) continue;
+                if(player.IsDead) continue;
+                if(player.IsCuffed) continue;
                 bool processed = false;
-                if(player.CurrentItem.IsWeapon) continue; //Don't want to remove the item from player while using.
+                if (player.CurrentItem.IsWeapon)//Don't want to remove the item from player while using.
+                {
+                    player.ShowHUDHint("Please holster your weapon to upgrade it.", 1f);
+                    continue;
+                } 
                 //This will apply regardless of Tier
                 foreach (Item item in player.Items)
                 {
@@ -50,7 +59,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                     player.RemoveItem(item);
                     player.AddItem(newFirearm);
                     player.AddAmmo(GetAmmoType(newFirearm), newFirearm.MaxAmmo);
-                    HasBoost.Remove(netId);
+                    toRemove.Add(netId);
                     processed = true;
                     break;
                 }
@@ -60,17 +69,23 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                 if (Tier >= Tier.Uncommon)
                 {
                     player.AddItem(GenerateOutcome(ItemType.GunCOM15, ItemType.GunCOM18, ItemType.GunFSP9));
-                    HasBoost.Remove(netId);
+                    toRemove.Add(netId);
                     continue;
                 }
                 else
                 {
                     player.AddItem(GenerateOutcome(ItemType.Radio, ItemType.Flashlight, ItemType.Medkit));
-                    HasBoost.Remove(netId);
+                    toRemove.Add(netId);
                     continue;
                 }
             }
             ListPool<uint>.Pool.Return(keys);
+            foreach(uint netId in toRemove)
+            {
+                HasBoost.Remove(netId);
+            }
+            ListPool<uint>.Pool.Return(toRemove);
+            
         }
 
         public ItemType UpgradeWeapon(Firearm firearm)

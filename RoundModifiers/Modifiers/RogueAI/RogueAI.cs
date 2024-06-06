@@ -373,7 +373,8 @@ namespace RoundModifiers.Modifiers.RogueAI
             WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility(".", isNoisy:true, aggressionLevel: 4),2));
             WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility(".g1", isHeld: true), 3));
             WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility(".g7", aggressionLevel: 4), 2));
-            WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility("XMAS_BOUNCYBALLS", aggressionLevel: 6, oneShot:true), 2));
+            //WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility("XMAS_BOUNCYBALLS", aggressionLevel: 6, oneShot:true), 2));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new BallsAbility("Balls", "Spawns bouncy balls in random rooms", Side.None), 2));
             WeightedAbilities.Add(new WeightedItem<Ability>(new AnnouncementAbility("security seriously needs to get their heads checked . psi", aggressionLevel: 8, oneShot:true), 2));
             WeightedAbilities.Add(new WeightedItem<Ability>(new TattleAbility(), 2));
             WeightedAbilities.Add(new WeightedItem<Ability>(new ActivateNukeAbility(Side.ChaosInsurgency), 1));
@@ -410,7 +411,8 @@ namespace RoundModifiers.Modifiers.RogueAI
             Description = "An AI that will try to help or hinder the players based on who is currently winning.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = 0
+            Balance = 0,
+            Category = Category.Facility
         };
             
     }

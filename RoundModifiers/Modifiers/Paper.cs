@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Server;
 using PlayerRoles;
 using RoundModifiers.API;
 using TTCore.Extensions;
+using TTCore.Handlers;
 using UnityEngine;
 
 namespace RoundModifiers.Modifiers;
@@ -27,16 +28,29 @@ public class Paper : Modifier
         //ev.Player.ChangeSize(new Vector3(1,1,0.01f));
         ev.Player.Scale = new Vector3(1,1,0.01f);
     }
+
+    public void OnRoundEnded(RoundEndedEventArgs ev)
+    {
+        
+        TTCore.TTCore.Instance.PlayerSizeManager.ResetAll();
+        foreach(Player player in Player.List)
+        {
+            player.Scale = Vector3.one;
+        }
+        
+    }
     
     protected override void RegisterModifier()
     {
         Exiled.Events.Handlers.Player.Spawned += OnSpawn;
+        Exiled.Events.Handlers.Server.RoundEnded += OnRoundEnded;
     }
 
     protected override void UnregisterModifier()
     {
         TTCore.TTCore.Instance.PlayerSizeManager.ResetAll();
         Exiled.Events.Handlers.Player.Spawned -= OnSpawn;
+        Exiled.Events.Handlers.Server.RoundEnded -= OnRoundEnded;
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()
@@ -47,6 +61,7 @@ public class Paper : Modifier
         FormattedName = "<color=yellow>S-C-Paper Mario</color>",
         Impact = ImpactLevel.MajorGameplay,
         MustPreload = false,
-        Balance = 0
+        Balance = 0,
+        Category = Category.Scale
     };
 }

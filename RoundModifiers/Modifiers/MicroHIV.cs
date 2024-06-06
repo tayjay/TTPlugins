@@ -46,7 +46,8 @@ namespace RoundModifiers.Modifiers
             Description = "Using the MicroHID drains your health.",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false,
-            Balance = 2
+            Balance = 2,
+            Category = Category.Utility
         };
     }
 }

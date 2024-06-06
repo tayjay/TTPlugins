@@ -1,5 +1,6 @@
 ﻿using System;
 using CommandSystem;
+using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using RoundModifiers.API;
 
@@ -14,6 +15,12 @@ namespace RoundModifiers.Commands.RemoteAdmin
                 if (arguments.Count != 1)
                 {
                     response = "Usage: mod add <modifier>";
+                    return false;
+                }
+                
+                if(Round.InProgress)
+                {
+                    response = "You cannot add modifiers while a round is in progress. Please use 'mod next' to set modifiers for the next round.";
                     return false;
                 }
 

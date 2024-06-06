@@ -106,6 +106,11 @@ namespace RoundModifiers
             AddModifier<Peanuts>();
             AddModifier<DoNotLook>();
             AddModifier<ExtraLife>();
+            AddModifier<GunGame>();
+            AddModifier<Flamingos>();
+            AddModifier<Nicknames>();
+            
+            BlacklistModifiers();
         }
         
         public void AddModifier<T>() where T : Modifier, new()
@@ -123,6 +128,8 @@ namespace RoundModifiers
             foreach(Modifier mod in Modifiers.Values)
                 mod.Unregister();
         }
+        
+        
         
         /**
          * Get a modifier by name
@@ -177,6 +184,24 @@ namespace RoundModifiers
         public bool IsModifierActive(Modifier mod)
         {
             return mod.IsEnabled;
+        }
+
+        public void BlacklistModifiers()
+        {
+            string[] blacklist = Config.BlacklistedModifiers;
+            foreach (string mod in blacklist)
+            {
+                if (TryGetModifier(mod, out Modifier modifier, true))
+                {
+                    modifier.Unregister();
+                    Modifiers.Remove(modifier.ModInfo);
+                    Log.Info("Blacklisted modifier: "+modifier.ModInfo.Name);
+                }
+                else
+                {
+                    Log.Info("Could not find modifier to blacklist: "+mod);
+                }
+            }
         }
 
         public override string Author { get; } = "TayTay";

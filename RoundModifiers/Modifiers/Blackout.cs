@@ -136,7 +136,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new [] {"bo"},
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false,
-            Balance = -2
+            Balance = -2,
+            Category = Category.Lights
         };
 
 

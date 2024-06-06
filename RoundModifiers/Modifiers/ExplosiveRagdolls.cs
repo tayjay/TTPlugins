@@ -141,6 +141,7 @@ public class ExplosiveRagdolls : Modifier
         FormattedName = "Birthday Party",
         Impact = ImpactLevel.MajorGameplay,
         MustPreload = false,
-        Balance = 1
+        Balance = 1,
+        Category = Category.OnDeath
     };
 }

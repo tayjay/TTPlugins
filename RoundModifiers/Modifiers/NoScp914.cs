@@ -85,7 +85,8 @@ namespace RoundModifiers.Modifiers
             Description = "SCP-914 is out of order.",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false,
-            Balance = -2
+            Balance = -2,
+            Category = Category.Facility
         };
     }
 }

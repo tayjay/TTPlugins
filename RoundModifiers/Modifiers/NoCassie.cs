@@ -44,7 +44,8 @@ namespace RoundModifiers.Modifiers
             Description = "Disables all Cassie announcements.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = -1
+            Balance = -1,
+            Category = Category.Facility
         };
     }
 }

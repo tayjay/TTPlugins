@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CommandSystem;
 using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using Exiled.Permissions.Extensions;
 using RoundModifiers.API;
@@ -25,9 +26,15 @@ public class ModRandomCommand : ICommand
             
             if (arguments.Count == 0)
             {
+                if(Round.InProgress)
+                {
+                    response = "You cannot set modifiers while a round is in progress. Please use 'mod random next' to set modifiers for the next round.";
+                    return false;
+                }
+                
                 //Modifiy this round
                 RoundModifiers.Instance.RoundManager.ClearRoundModifiers();
-                var mods = RoundModifiers.Instance.Modifiers.Where(pair => !pair.Key.MustPreload); 
+                var mods = RoundModifiers.Instance.Modifiers.Where(pair => !pair.Key.MustPreload && pair.Key.Impact!=ImpactLevel.Gamemode); 
                 /*int randomCount = Random.Range(2, 6);
                 while(randomCount-- > 0)
                 {
@@ -74,6 +81,15 @@ public class ModRandomCommand : ICommand
                     }
                     if(modInfos.Contains(nextMod))
                         continue;
+                    // Check if the modifier category conflicts with any already selected.
+                    bool valid = true;
+                    foreach(var mod in modInfos)
+                    {
+                        if(nextMod.Category.HasFlag(mod.Category) || mod.Category.HasFlag(nextMod.Category))
+                            valid = false;
+                    }
+                    if(!valid)
+                        continue;
                     modInfos.Add(nextMod);
                     balance += nextMod.Balance;
                     if(modInfos.Count >= MinModifiers && balance == 0)
@@ -90,16 +106,8 @@ public class ModRandomCommand : ICommand
             {
                 //Modify next round
                 RoundModifiers.Instance.RoundManager.ClearNextRoundModifiers();
-                var mods = RoundModifiers.Instance.Modifiers;
-                /*int randomCount = Random.Range(2, 6);
-                while(randomCount-- > 0)
-                {
-                    var mod = mods.GetRandomValue();
-                    if(RoundModifiers.Instance.RoundManager.NextRoundModifiers.Contains(mod.Key))
-                        continue;
-                    modifiers.Add(mod.Key.Name);
-                    RoundModifiers.Instance.RoundManager.AddNextRoundModifier(mod.Value.ModInfo);
-                }*/
+                var mods = RoundModifiers.Instance.Modifiers.Where(pair => pair.Key.Impact!=ImpactLevel.Gamemode); 
+                
                 while(modInfos.Count < MaxModifiers)
                 {
                     ModInfo nextMod;
@@ -134,6 +142,15 @@ public class ModRandomCommand : ICommand
                         nextMod = mods.GetRandomValue().Key;
                     }
                     if(modInfos.Contains(nextMod))
+                        continue;
+                    // Check if the modifier category conflicts with any already selected.
+                    bool valid = true;
+                    foreach(var mod in modInfos)
+                    {
+                        if(nextMod.Category.HasFlag(mod.Category) || mod.Category.HasFlag(nextMod.Category))
+                            valid = false;
+                    }
+                    if(!valid)
                         continue;
                     modInfos.Add(nextMod);
                     balance += nextMod.Balance;

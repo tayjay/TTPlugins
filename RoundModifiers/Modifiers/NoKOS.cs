@@ -50,7 +50,8 @@ namespace RoundModifiers.Modifiers
             Description = "Class-D and Scientists cannot be killed and are arrested when shot, unless holding an illegal item",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false,
-            Balance = 1
+            Balance = 1,
+            Category = Category.Combat
         };
     }
 }

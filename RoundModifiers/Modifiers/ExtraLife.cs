@@ -1,12 +1,15 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using PlayerRoles;
 using RoundModifiers;
 using RoundModifiers.API;
+using Utils.NonAllocLINQ;
 
 namespace RoundModifiers.Modifiers;
 
@@ -20,17 +23,58 @@ public class ExtraLife : Modifier
     public double MinimumRoundTime => RoundModifiers.Instance.Config.ExtraLife_MinimumRoundTime;
     public float RespawnDelay => RoundModifiers.Instance.Config.ExtraLife_RespawnDelay;
     public LeadingTeam EarlyWin { get; set; } = LeadingTeam.Draw;
+    
+    public List<uint> ToBeKilledPlayers { get; set; }
 
     public void OnDeath(DiedEventArgs ev)
     {
         if(Round.ElapsedTime.TotalSeconds > MinimumRoundTime) return;
+        if(ToBeKilledPlayers.Contains(ev.Player.NetId))
+        {
+            ToBeKilledPlayers.Remove(ev.Player.NetId);
+            if(ToBeKilledPlayers.Count == 0)
+            {
+                if(EarlyWin == LeadingTeam.Draw)
+                    EarlyWin = LeadingTeam.Anomalies;
+                else
+                {
+                    EarlyWin = LeadingTeam.Draw;
+                }
+            }
+        }
+
+        if (ev.TargetOldRole.GetTeam() == Team.SCPs && ev.Attacker!=null && ev.Attacker.Role.Team != Team.SCPs)
+        {
+            if (EarlyWin == LeadingTeam.Draw)
+                EarlyWin = ev.Attacker.LeadingTeam;
+            else
+            {
+                EarlyWin = LeadingTeam.Draw;
+            }
+        }
         
         Timing.CallDelayed(RespawnDelay, () =>
         {
             if(ev.Player.IsAlive) return;
             ev.Player.RoleManager.ServerSetRole(ev.TargetOldRole, RoleChangeReason.Respawn);
+            ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 15f);
+            if(ev.TargetOldRole.GetTeam() == Team.SCPs)
+            {
+                ev.Player.Health = ev.Player.MaxHealth/2;
+            }
         });
     }
+
+    public void OnRoundStart()
+    {
+        foreach (Player player in Player.List)
+        {
+            if(player.Role.Team == Team.SCPs) continue;
+            ToBeKilledPlayers.Add(player.NetId);
+        }
+    }
+    
+    
 
     public void OnEndingRound(EndingRoundEventArgs ev)
     {
@@ -59,14 +103,19 @@ public class ExtraLife : Modifier
     {
         Exiled.Events.Handlers.Player.Died += OnDeath;
         Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
+        Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
 
         EarlyWin = LeadingTeam.Draw;
+        ToBeKilledPlayers = ListPool<uint>.Pool.Get();
     }
 
     protected override void UnregisterModifier()
     {
         Exiled.Events.Handlers.Player.Died -= OnDeath;
         Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
+        Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+        
+        ListPool<uint>.Pool.Return(ToBeKilledPlayers);
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo
@@ -77,6 +126,7 @@ public class ExtraLife : Modifier
         Description = "Players are revived after death for a short time",
         Impact = ImpactLevel.MajorGameplay,
         MustPreload = false,
-        Balance = 1
+        Balance = 1,
+        Category = Category.OnDeath
     };
 }

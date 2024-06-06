@@ -85,6 +85,7 @@ public class MysteryBox : Modifier
         Description = "A mystery box that gives you a random item.",
         Impact = ImpactLevel.MinorGameplay,
         MustPreload = false,
-        Balance = 2
+        Balance = 2,
+        Category = Category.Utility
     };
 }

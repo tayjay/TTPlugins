@@ -107,7 +107,8 @@ namespace RoundModifiers.Modifiers
             Description = "Randomly changes the size of spawned players.",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = true,
-            Balance = 0
+            Balance = 0,
+            Category = Category.Scale
         };
     }
 }

@@ -67,7 +67,8 @@ public class HealthBars : Modifier
         Description = "Adds health bars to players",
         Impact = ImpactLevel.MinorGameplay,
         MustPreload = false,
-        Balance = -1
+        Balance = -1,
+        Category = Category.Visual
     };
 
     public class HPBar : MonoBehaviour

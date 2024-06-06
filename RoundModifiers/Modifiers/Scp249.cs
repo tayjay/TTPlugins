@@ -204,7 +204,8 @@ namespace RoundModifiers.Modifiers
             Description = "SCP-249 is loose in the facility.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = 1
+            Balance = 1,
+            Category = Category.Facility
         };
     }
 }

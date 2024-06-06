@@ -75,7 +75,8 @@ namespace RoundModifiers.Modifiers
             Description = "Disables decontamination and replaces it with a slow damaging effect.",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false,
-            Balance = -1
+            Balance = -1,
+            Category = Category.Facility
         };
     }
 }

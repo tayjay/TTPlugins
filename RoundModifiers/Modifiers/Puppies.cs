@@ -56,7 +56,8 @@ namespace RoundModifiers.Modifiers
             Description = "All SCPs are mini 939s",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = -2
+            Balance = -2,
+            Category = Category.ScpRole | Category.Scale | Category.Health
         };
     }
 }

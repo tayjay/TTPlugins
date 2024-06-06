@@ -207,7 +207,8 @@ namespace RoundModifiers.Modifiers
             Description = "SCPs are disguised as humans.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = -3
+            Balance = -3,
+            Category = Category.Visual | Category.ScpRole
         };
         
         

@@ -16,7 +16,8 @@ namespace RoundModifiers
         public bool ShowRoundModInLobby{ get; set; } = true;
         [Description("Whether a broadcast of what modifiers are currently active will appear at the start of the round. Default is true.")]
         public bool ShowRoundModInGame{ get; set; } = true;
-        
+
+        public string[] BlacklistedModifiers { get; set; } = new[] {"Blacklisted"};
         
         //Modifiers
         

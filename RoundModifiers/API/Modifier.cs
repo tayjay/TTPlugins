@@ -1,4 +1,5 @@
-﻿using TTCore.API;
+﻿using System;
+using TTCore.API;
 
 namespace RoundModifiers.API
 {
@@ -36,12 +37,15 @@ namespace RoundModifiers.API
         Gamemode,
     }
 
+    [Flags]
     public enum Category
     {
         None,
         Visual,
         ScpRole,
+        ScpItem,
         HumanRole,
+        CustomRole,
         Gamemode,
         Scale,
         Health,
@@ -51,5 +55,9 @@ namespace RoundModifiers.API
         Lights,
         Names,
         Voice,
+        OnDeath,
+        Combat,
+        Utility,
+        Overhaul
     }
 }

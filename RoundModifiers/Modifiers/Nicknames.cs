@@ -70,32 +70,24 @@ public class Nicknames : Modifier
         }
     };
 
-    public string[] HumanNames { get; set; } = new[]
-    {
-        "Alan", "Steeve", "Mary", "John", "Alice", "Bob", "Carol", "David", "Eve", "Frank",
-        "Grace", "Helen", "Ian", "Judy", "Kevin", "Linda", "Mike", "Nora", "Oliver", "Patricia",
-        "Quinn", "Rachel", "Sam", "Tina", "Ursula", "Vince", "Wendy", "Xavier", "Yvonne", "Zack",
-        "Amber", "Bruce", "Cindy", "Derek", "Elena", "Felix", "Gina", "Harry", "Isla", "Justin",
-        "Kara", "Leo", "Mona", "Nathan", "Oscar", "Penny", "Quincy", "Rose", "Seth", "Tara",
-        "Ulysses", "Victor", "Willa", "Xander", "Yasmin", "Zeke", "April", "Blaine", "Claire",
-        "Dante", "Elise", "Frederick", "Gloria", "Howard", "Ingrid", "Joel", "Krista", "Luke",
-        "Megan", "Neil", "Opal", "Paul", "Queenie", "Roger", "Susan", "Thomas", "Una", "Vernon",
-        "Whitney", "Xenia", "Yuri", "Zara", "Aaron", "Beth", "Carter", "Deanna", "Elliott", "Faye",
-        "George", "Hannah", "Ivan", "Jean", "Kyle", "Leslie", "Mitchell", "Nadia", "Owen", "Paula",
-        "Quentin", "Ruth", "Spencer", "Tiffany", "Uma", "Vincent", "Wallace", "Xena", "Yvette", "Zion"
-    };
+    public string[] HumanNames => RoundModifiers.Instance.Config.Nicknames_HumanNames;
+
     
     public void OnPlayerChangeRole(ChangingRoleEventArgs ev)
     {
         if(!ev.NewRole.IsAlive()) return;
-        ev.Player.DisplayNickname = ClassTitles[ev.NewRole];
+        if(!ev.NewRole.IsHuman()) return;
+        if(ev.NewRole == RoleTypeId.Scp3114) return;
+        string newName = ClassTitles[ev.NewRole];
+            
         if (ev.NewRole == RoleTypeId.ClassD)
         {
-            ev.Player.DisplayNickname += Random.Range((int)1000, (int)9999);
+            newName += Random.Range((int)1000, (int)9999);
         } else if (ev.NewRole.IsHuman())
         {
-            ev.Player.DisplayNickname += HumanNames[Random.Range(0, HumanNames.Length)];
+            newName += HumanNames[Random.Range(0, HumanNames.Length)];
         }
+        ev.Player.DisplayNickname = newName;
         ev.Player.ShowHUDHint("Your name is " + ev.Player.DisplayNickname, 10f);
     }
     
@@ -103,17 +95,26 @@ public class Nicknames : Modifier
     {
         ev.Player.DisplayNickname = null;
     }
+    
+    public void OnPressNoClip(TogglingNoClipEventArgs ev)
+    {
+        if(ev.Player.IsNoclipPermitted) return;
+        ev.Player.ShowHUDHint("Your name is " + ev.Player.DisplayNickname, 10f);
+    }
 
     protected override void RegisterModifier()
     {
         Exiled.Events.Handlers.Player.ChangingRole += OnPlayerChangeRole;
         Exiled.Events.Handlers.Player.Died += OnPlayerDeath;
+        Exiled.Events.Handlers.Player.TogglingNoClip += OnPressNoClip;
+        
     }
 
     protected override void UnregisterModifier()
     {
         Exiled.Events.Handlers.Player.ChangingRole -= OnPlayerChangeRole;
         Exiled.Events.Handlers.Player.Died -= OnPlayerDeath;
+        Exiled.Events.Handlers.Player.TogglingNoClip -= OnPressNoClip;
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()
@@ -123,6 +124,8 @@ public class Nicknames : Modifier
         Aliases = new []{"nick"},
         FormattedName = "<color=green>Nicknames</color>",
         Impact = ImpactLevel.MinorGameplay,
-        MustPreload = false
+        MustPreload = false,
+        Balance = 0,
+        Category = Category.Names
     };
 }

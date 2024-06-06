@@ -49,7 +49,8 @@ namespace RoundModifiers.Modifiers
             Description = "Facility Guards spawn as Chaos Insurgents.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = 1
+            Balance = 1,
+            Category = Category.HumanRole
         };
     }
 }

@@ -67,6 +67,7 @@ public class Keyless : Modifier
         FormattedName = "<color=yellow>Keyless</color>",
         Impact = ImpactLevel.MajorGameplay,
         MustPreload = false,
-        Balance = 2
+        Balance = 2,
+        Category = Category.Utility
     };
 }

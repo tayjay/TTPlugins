@@ -45,7 +45,8 @@ namespace RoundModifiers.Modifiers
             Description = "Players cannot use the radio.",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false,
-            Balance = -2
+            Balance = -2,
+            Category = Category.Voice
         };
     }
 }

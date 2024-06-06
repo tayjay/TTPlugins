@@ -219,7 +219,8 @@ namespace RoundModifiers.Modifiers
             Description = "All Scps are skeletons.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = -3
+            Balance = -3,
+            Category = Category.ScpRole | Category.Health
         };
     }
 }

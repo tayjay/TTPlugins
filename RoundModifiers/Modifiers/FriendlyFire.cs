@@ -15,11 +15,7 @@ namespace RoundModifiers.Modifiers
         
         public void OnRoundStart()
         {
-            WasFriendlyFireEnabled = Server.FriendlyFire;
-            WasFriendlyFireDetectionPaused = FriendlyFireConfig.PauseDetector;
-            Server.FriendlyFire = true;
-            FriendlyFireConfig.PauseDetector = true;
-            ServerConfigSynchronizer.RefreshAllConfigs();
+            
             //todo: Prevent player bans for friendly fire
             
            
@@ -27,6 +23,12 @@ namespace RoundModifiers.Modifiers
         
         protected override void RegisterModifier()
         {
+            WasFriendlyFireEnabled = Server.FriendlyFire;
+            WasFriendlyFireDetectionPaused = FriendlyFireConfig.PauseDetector;
+            Server.FriendlyFire = true;
+            FriendlyFireConfig.PauseDetector = true;
+            ServerConfigSynchronizer.RefreshAllConfigs();
+            
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
         }
 
@@ -47,7 +49,8 @@ namespace RoundModifiers.Modifiers
             Description = "Friendly fire is enabled.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = -1
+            Balance = -1,
+            Category = Category.Combat
         };
     }
 }

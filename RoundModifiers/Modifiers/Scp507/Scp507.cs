@@ -10,6 +10,7 @@ using Exiled.Events.EventArgs.Player;
 using LightContainmentZoneDecontamination;
 using MEC;
 using PlayerRoles;
+using PlayerStatsSystem;
 using RoundModifiers.API;
 using TTCore.HUDs;
 using UnityEngine;
@@ -50,11 +51,13 @@ public class Scp507 : Modifier
 
             Ragdoll.CreateAndSpawn(ev.Player.Role.Type, ev.Player.DisplayNickname, ev.DamageHandler, ev.Player.Position,
                 ev.Player.Rotation, ev.Player);
+            ev.Player.RoleManager.ServerSetRole(RoleTypeId.ClassD, RoleChangeReason.Revived, RoleSpawnFlags.None); // Patching client assuming player dead and permanently blinding them
             //Teleport to random room in facility
             ev.Player.Teleport(FindSafeLocation(ev.Player));
             ev.Player.DisableAllEffects(EffectCategory.Negative);
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
+            ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 7f);
         }
     }
     
@@ -80,10 +83,13 @@ public class Scp507 : Modifier
                 ev.Player.DropItem(item);
             }
             //Teleport to random room in facility
+            Ragdoll.CreateAndSpawn(ev.Player.Role.Type, ev.Player.DisplayNickname, "SCP-507", ev.Player.Position,
+                ev.Player.Rotation, ev.Player);
             ev.Player.Teleport(FindSafeLocation(ev.Player));
             ev.Player.DisableAllEffects(EffectCategory.Negative);
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
+            ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 3f);
         }
     }
 
@@ -109,10 +115,13 @@ public class Scp507 : Modifier
                 ev.Player.DropItem(item);
             }
             //Teleport to random room in facility
+            Ragdoll.CreateAndSpawn(ev.Player.Role.Type, ev.Player.DisplayNickname, "SCP-507", ev.Player.Position,
+                ev.Player.Rotation, ev.Player);
             ev.Player.Teleport(FindSafeLocation(ev.Player));
             ev.Player.DisableAllEffects(EffectCategory.Negative);
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
+            ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 3f);
         }
     }
 
@@ -149,10 +158,13 @@ public class Scp507 : Modifier
                 player.DropItem(item);
             }
             //Teleport to random room in facility
+            Ragdoll.CreateAndSpawn(player.Role.Type, player.DisplayNickname, "SCP-507", player.Position,
+                player.Rotation, player);
             player.Teleport(FindSafeLocation(player));
             player.DisableAllEffects(EffectCategory.Negative);
             player.DisableAllEffects(EffectCategory.Harmful);
             player.Health = player.MaxHealth;
+            player.EnableEffect(EffectType.SpawnProtected, 1, 3f);
         }
     }
 
@@ -193,7 +205,7 @@ public class Scp507 : Modifier
         int attempts = 0;
         while (attempts < 10)
         {
-            if (room.Type == RoomType.Pocket)
+            if (room.Type == RoomType.Pocket || room.Type == RoomType.HczTesla)
             {
                 room = Room.Random(zone);
                 attempts++;
@@ -242,6 +254,7 @@ public class Scp507 : Modifier
         FormattedName = "<color=red>SCP-507</color>",
         Impact = ImpactLevel.MajorGameplay,
         MustPreload = false,
-        Balance = 0
+        Balance = 0,
+        Category = Category.CustomRole
     };
 }

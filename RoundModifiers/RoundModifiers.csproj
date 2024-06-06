@@ -128,6 +128,7 @@
         <Compile Include="Modifiers\Escape.cs" />
         <Compile Include="Modifiers\ExplosiveRagdolls.cs" />
         <Compile Include="Modifiers\ExtraLife.cs" />
+        <Compile Include="Modifiers\GunGame.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IBlinkEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IConsumeEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IEnragingEvent.cs" />
@@ -140,6 +141,7 @@
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp939XP.cs" />
         <Compile Include="Modifiers\NoJumping.cs" />
         <Compile Include="Modifiers\Peanuts.cs" />
+        <Compile Include="Modifiers\RogueAI\Abilities\BallsAbility.cs" />
         <Compile Include="Modifiers\Scp1507\Flamingos.cs" />
         <Compile Include="Modifiers\Scp1507\Scp1507Role.cs" />
         <Compile Include="Modifiers\Scp1507\SwarmAbility.cs" />
@@ -248,6 +250,7 @@
         <Compile Include="Modifiers\WeaponStats\Interfaces\IShooting.cs" />
         <Compile Include="Modifiers\WeaponStats\NoneStat.cs" />
         <Compile Include="Modifiers\WeaponStats\PaintBallStat.cs" />
+        <Compile Include="Modifiers\WeaponStats\PortalStat.cs" />
         <Compile Include="Modifiers\WeaponStats\SharpStat.cs" />
         <Compile Include="Modifiers\WeaponStats\ShootEffectStat.cs" />
         <Compile Include="Modifiers\WeaponStats\SlipperyStat.cs" />

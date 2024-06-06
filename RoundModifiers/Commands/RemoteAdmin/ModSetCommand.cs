@@ -21,6 +21,12 @@ namespace RoundModifiers.Commands.RemoteAdmin
                     response = "Usage: mod set <modifier>";
                     return false;
                 }
+                
+                if(Round.InProgress)
+                {
+                    response = "You cannot set modifiers while a round is in progress. Please use 'mod next' to set modifiers for the next round.";
+                    return false;
+                }
 
                 List<ModInfo> modInfo = ListPool<ModInfo>.Pool.Get();
                 

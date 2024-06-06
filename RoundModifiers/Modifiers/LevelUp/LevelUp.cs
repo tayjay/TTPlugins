@@ -726,9 +726,10 @@ namespace RoundModifiers.Modifiers.LevelUp
             FormattedName = "<color=#FFD700>Level Up</color>",
             Aliases = new []{"lvlup"},
             Description = "Players can level up and gain boosts.",
-            Impact = ImpactLevel.Gamemode,
+            Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
-            Balance = 0
+            Balance = 0,
+            Category = Category.Overhaul
         };
     }
 }

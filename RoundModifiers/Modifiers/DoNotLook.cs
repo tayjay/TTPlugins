@@ -32,6 +32,7 @@ public class DoNotLook : Modifier
         Description = "All SCPs are 096",
         Impact = ImpactLevel.MajorGameplay,
         MustPreload = false,
-        Balance = -2
+        Balance = -2,
+        Category = Category.ScpRole
     };
 }

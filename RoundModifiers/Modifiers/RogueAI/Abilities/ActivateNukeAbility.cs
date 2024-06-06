@@ -12,13 +12,14 @@ namespace RoundModifiers.Modifiers.RogueAI.Abilities
 
         public override bool Setup()
         {
-            if(Warhead.IsInProgress)
+            return true;
+            /*if(Warhead.IsInProgress)
             {
                 return true;
             }
             if(Random.Range(0,100)<10)
                 return true;
-            return false;
+            return false;*/
         }
 
         public override void Start()
@@ -30,7 +31,13 @@ namespace RoundModifiers.Modifiers.RogueAI.Abilities
             }
             else
             {
-                Warhead.Start();
+                if(Warhead.LeverStatus)
+                    if(HelpingSide==Side.Scp)
+                        Warhead.LeverStatus = false;
+                    else
+                        Warhead.Start();
+                else
+                    Warhead.LeverStatus = true;
             }
             
         }

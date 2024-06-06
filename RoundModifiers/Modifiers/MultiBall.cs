@@ -107,7 +107,8 @@ namespace RoundModifiers.Modifiers
             Aliases = new []{"018","balls"},
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = true,
-            Balance = 3
+            Balance = 3,
+            Category = Category.ScpItem
         };
     }
 }

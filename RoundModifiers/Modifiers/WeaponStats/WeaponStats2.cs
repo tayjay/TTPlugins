@@ -349,6 +349,7 @@ public class WeaponStats2 : Modifier
         FormattedName = "<color=green>Weapon Stats</color>",
         Impact = ImpactLevel.MajorGameplay, //Updated May 27 2024
         MustPreload = true,
-        Balance = 3
+        Balance = 3,
+        Category = Category.Weapon|Category.Overhaul
     };
 }
