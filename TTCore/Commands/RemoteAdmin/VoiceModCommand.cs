@@ -24,4 +24,5 @@ public class VoiceModCommand : ICommand
     public string Command { get; } = "voicemod";
     public string[] Aliases { get; } = { "vm" };
     public string Description { get; } = "Toggles voice mod for players.";
+    public bool SanitizeResponse => true;
 }

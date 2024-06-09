@@ -4,6 +4,9 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API.Features;
+using Exiled.Events.Commands.PluginManager;
+using Exiled.Events.Commands.Reload;
+using Exiled.Loader;
 using RoundModifiers.API;
 using RoundModifiers.Handlers;
 using RoundModifiers.Modifiers;
@@ -12,6 +15,7 @@ using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.RogueAI;
 using RoundModifiers.Modifiers.Scp507;
 using RoundModifiers.Modifiers.WeaponStats;
+using TTCore.Reflection;
 using TTCore.Handlers;
 
 namespace RoundModifiers
@@ -42,7 +46,21 @@ namespace RoundModifiers
             RoundManager.Register();
             CustomRole.RegisterRoles(false, null);
             //CustomEffects.RegisterEffect<WeaponStatsEffect>();
+            OptionalSCriPt optionalSCriPt = new OptionalSCriPt();
+            if(optionalSCriPt.IsPresent)
+            {
+                OptionalReference connector = optionalSCriPt.SetupConnector(this);
+                connector.CallMethod("AddGlobal", typeof(LuaModifiers), "RoundModifiers");
+            }
+            
+            /*if(OptionalPlugin.GetPlugin("SCriPt", out OptionalPlugin SCriPtConnection))
+            {
+                object connector = SCriPtConnection.CallMethod("SetupConnector", this);
+                TTReflection.CallVoidMethod(connector, "AddGlobal", typeof(LuaModifiers), "RoundModifiers");
+            }*/
         }
+        
+        
         
         public override void OnDisabled()
         {
@@ -206,6 +224,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 4, 0);
+        public override System.Version Version { get; } = new System.Version(0, 4, 2);
     }
 }

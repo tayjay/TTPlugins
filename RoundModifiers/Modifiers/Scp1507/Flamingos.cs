@@ -4,6 +4,7 @@ using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pools;
 using Exiled.CustomRoles.API;
@@ -12,6 +13,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using Interactables.Interobjects;
 using Interactables.Interobjects.DoorUtils;
+using InventorySystem.Items.Jailbird;
 using MEC;
 using PlayerRoles;
 using RoundModifiers.API;
@@ -54,6 +56,7 @@ public class Flamingos : Modifier
 
     public void OnSwing(SwingingEventArgs ev)
     {
+        if(!Scp1507Role.Check(ev.Player)) return;
         Door door = Door.GetClosest(ev.Player.Position, out float distance);
         if (door == null || distance > 3) return;
         Log.Debug("Found door!");
@@ -105,6 +108,11 @@ public class Flamingos : Modifier
                 Scp1507Role.AddRole(ragdoll.Owner);
                 ragdoll.Destroy();
             }
+        }
+        
+        if(ev.Item is Jailbird jb)
+        {
+            jb.TotalCharges += 2;
         }
         
     }
@@ -189,6 +197,13 @@ public class Flamingos : Modifier
                 ev.Player.VoiceChannel = VoiceChatChannel.RoundSummary;
             });
         }
+
+        // Patch to remove role when player dies
+        if (Scp1507Role.Check(ev.Player) && ev.NewRole == RoleTypeId.Spectator)
+        {
+            Scp1507Role.RemoveRole(ev.Player);
+            ev.Player.Scale = Vector3.one;
+        }
     }
     
     public void OnRoundStart()
@@ -233,15 +248,28 @@ public class Flamingos : Modifier
 
     public void OnEndingRound(EndingRoundEventArgs ev)
     {
-        if(Player.List.Count(p => p.IsAlive && !Scp1507Role.Check(p)) == 0)
+        if(Player.List.Count(p => p.IsAlive && p.Role!=RoleTypeId.Tutorial) == 0)
         {
             ev.IsAllowed = true;
-            ev.LeadingTeam = LeadingTeam.Anomalies;
+            ev.LeadingTeam = LeadingTeam.Draw;
         }
-        if(Player.List.Count(p => Scp1507Role.Check(p)) > 0) //Stop round from ending if there are still flamingos
+        if(Player.List.Count(p => p.Role == RoleTypeId.Tutorial) > 0) //Stop round from ending if there are still flamingos
         {
             ev.IsAllowed = false;
         }
+    }
+
+    
+    // Attempting to allow flamingos to voice chat with each other
+    public void OnVoiceChatting(VoiceChattingEventArgs ev)
+    {
+        if(ev.Player.Role != RoleTypeId.Tutorial) return;
+        if(ev.VoiceMessage.Channel == VoiceChatChannel.RoundSummary) return;
+        ev.IsAllowed = false;
+        ev.VoiceMessage = ev.VoiceMessage with { Channel = VoiceChatChannel.RoundSummary };
+        foreach(Player p in Player.List.Where(p=>p.Role == RoleTypeId.Tutorial))
+            p.ReferenceHub.connectionToClient.Send(ev.VoiceMessage);
+        
     }
     
     
@@ -271,6 +299,7 @@ public class Flamingos : Modifier
         Exiled.Events.Handlers.Player.UsingItemCompleted += FinishUsingScp1576;
         Exiled.Events.Handlers.Player.PickingUpItem += OnPickingUpItem;
         Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
+        Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
         
     }
 
@@ -294,6 +323,7 @@ public class Flamingos : Modifier
         Exiled.Events.Handlers.Player.UsingItemCompleted -= FinishUsingScp1576;
         Exiled.Events.Handlers.Player.PickingUpItem -= OnPickingUpItem;
         Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
+        Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
 
         Timing.KillCoroutines(FlamingoCoroutine);
         Timing.KillCoroutines(TapeRecorderCoroutine);

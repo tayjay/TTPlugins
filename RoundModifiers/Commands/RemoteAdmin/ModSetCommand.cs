@@ -57,5 +57,6 @@ namespace RoundModifiers.Commands.RemoteAdmin
         public string Command { get; } = "set";
         public string[] Aliases { get; } = new[] { "setmodifier" };
         public string Description { get; } = "Sets the round modifier.";
+        public bool SanitizeResponse => true;
     }
 }

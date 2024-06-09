@@ -8,6 +8,7 @@ using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
 using LightContainmentZoneDecontamination;
+using MapGeneration;
 using MEC;
 using PlayerRoles;
 using PlayerStatsSystem;
@@ -24,6 +25,9 @@ public class Scp507 : Modifier
     public static Scp507Role Scp507Role { get; set; }
     
     public uint TargetPlayerId { get; set; }
+    
+    private bool WasFriendlyFireEnabled = false;
+    private bool WasFriendlyFireDetectionPaused = false;
     
     //Upon dying, or random timer ending they are teleported to a random location on the map.
     public void OnDying(DyingEventArgs ev)
@@ -90,6 +94,7 @@ public class Scp507 : Modifier
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
             ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 3f);
+            ev.Player.RoleManager.ServerSetRole(RoleTypeId.ClassD, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.None);
         }
     }
 
@@ -102,6 +107,7 @@ public class Scp507 : Modifier
             {
                 Scp507Role.AddRole(ev.Player); 
                 Round.IgnoredPlayers.Add(ev.Player.ReferenceHub);
+                
             }
             List<Item> items = new List<Item>();
             foreach (var item in ev.Player.Items)
@@ -122,6 +128,7 @@ public class Scp507 : Modifier
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
             ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 3f);
+            ev.Player.RoleManager.ServerSetRole(RoleTypeId.ClassD, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.None);
         }
     }
 
@@ -145,6 +152,7 @@ public class Scp507 : Modifier
             {
                 Scp507Role.AddRole(player);
                 Round.IgnoredPlayers.Add(player.ReferenceHub);
+                
             }
             List<Item> items = new List<Item>();
             foreach (var item in player.Items)
@@ -165,9 +173,12 @@ public class Scp507 : Modifier
             player.DisableAllEffects(EffectCategory.Harmful);
             player.Health = player.MaxHealth;
             player.EnableEffect(EffectType.SpawnProtected, 1, 3f);
+            yield return Timing.WaitForSeconds(1f);
+            player.RoleManager.ServerSetRole(RoleTypeId.ClassD, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.None);
         }
     }
 
+    // todo: Fix this as VoiceChannel doesn't seem to to be a syncvar
     public void OnPressNoClip(TogglingNoClipEventArgs ev)
     {
         if (ev.Player.GetCustomRoles().Contains(Scp507Role))
@@ -211,6 +222,15 @@ public class Scp507 : Modifier
                 attempts++;
                 continue;
             }
+            // Patching: Getting stuck out of bounds in Entrance
+            if (room.Zone == ZoneType.Entrance && room.RoomShape == RoomShape.Endroom &&
+                room.Type != RoomType.EzGateA && room.Type != RoomType.EzGateB)
+            {
+                room = Room.Random(zone);
+                attempts++;
+                continue;
+            }
+
             Log.Debug("Attempting to teleport 507 to "+room.Name+" in "+zone+" zone.");
             if(!room.Players.Any())
                 return room.Position + Vector3.up;
@@ -232,6 +252,12 @@ public class Scp507 : Modifier
         Exiled.Events.Handlers.Player.Handcuffing += OnCuffed;
         Exiled.Events.Handlers.Player.TogglingNoClip += OnPressNoClip;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+        
+        WasFriendlyFireEnabled = Server.FriendlyFire;
+        WasFriendlyFireDetectionPaused = FriendlyFireConfig.PauseDetector;
+        Server.FriendlyFire = true;
+        FriendlyFireConfig.PauseDetector = true;
+        ServerConfigSynchronizer.RefreshAllConfigs();
     }
 
     protected override void UnregisterModifier()
@@ -244,6 +270,11 @@ public class Scp507 : Modifier
         
         Scp507Role = null;
         Timing.KillCoroutines(teleportHandle);
+        
+        Server.FriendlyFire = WasFriendlyFireEnabled;
+        FriendlyFireConfig.PauseDetector = WasFriendlyFireDetectionPaused;
+        ServerConfigSynchronizer.RefreshAllConfigs();
+        
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()

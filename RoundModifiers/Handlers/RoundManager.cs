@@ -35,6 +35,10 @@ namespace RoundModifiers.Handlers
         
         private List<string> BlacklistedModifiers;
 
+        public bool VotingPaused { get; set; }
+        
+        public int NextRoundModCount { get; set; }
+
         public RoundManager()
         {
             ActiveModifiers = new List<ModInfo>();
@@ -43,6 +47,8 @@ namespace RoundModifiers.Handlers
             BlacklistedModifiers = new List<string>(); //RoundModifiers.Instance.Config.DisabledModifiers.ToList();
             ModifiersHidden = false;
             NextModifiersHidden = false;
+            VotingPaused = false;
+            NextRoundModCount = 1;
         }
         
         //**********************************************
@@ -51,7 +57,7 @@ namespace RoundModifiers.Handlers
 
         public bool VotingEnabled()
         {
-            return RoundModifiers.Instance.Config.EnableVoting;
+            return RoundModifiers.Instance.Config.EnableVoting && !VotingPaused;
         }
         
         public bool RemoveVote(Player player, out string response)
@@ -79,7 +85,7 @@ namespace RoundModifiers.Handlers
         
         public bool RandomVote(Player player, out string response)
         {
-            return TakeVote(player, RoundModifiers.Instance.Modifiers.GetRandomValue().Key, out response);
+            return TakeVote(player, RoundModifiers.Instance.Modifiers.Where(f=>!f.Key.Hidden).GetRandomValue().Key, out response);
         }
         
         public bool TakeVote(Player player, ModInfo modifier, out string response)

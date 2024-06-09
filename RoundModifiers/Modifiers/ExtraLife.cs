@@ -7,6 +7,7 @@ using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using MEC;
 using PlayerRoles;
+using Respawning;
 using RoundModifiers;
 using RoundModifiers.API;
 using Utils.NonAllocLINQ;
@@ -23,6 +24,8 @@ public class ExtraLife : Modifier
     public double MinimumRoundTime => RoundModifiers.Instance.Config.ExtraLife_MinimumRoundTime;
     public float RespawnDelay => RoundModifiers.Instance.Config.ExtraLife_RespawnDelay;
     public LeadingTeam EarlyWin { get; set; } = LeadingTeam.Draw;
+    
+    public int RespawnWave { get; set; } = 0;
     
     public List<uint> ToBeKilledPlayers { get; set; }
 
@@ -73,6 +76,12 @@ public class ExtraLife : Modifier
             ToBeKilledPlayers.Add(player.NetId);
         }
     }
+
+    
+    public void OnRespawn(RespawningTeamEventArgs ev)
+    {
+        RespawnWave++;
+    }
     
     
 
@@ -89,12 +98,65 @@ public class ExtraLife : Modifier
         else
         {
             if(EarlyWin == LeadingTeam.Draw) return;
+            if(EarlyWin == ev.LeadingTeam) return;
             if (ev.LeadingTeam == LeadingTeam.Draw)
             {
                 ev.LeadingTeam = EarlyWin;
             } else if(ev.LeadingTeam != LeadingTeam.Draw)
             {
-                ev.LeadingTeam = LeadingTeam.Draw;
+                float foundationPoints = 0;
+                float chaosPoints = 0;
+                float scpPoints = 0;
+                foundationPoints += RoundSummary.EscapedScientists;
+                scpPoints += (float)RoundSummary.KilledBySCPs / (RespawnWave+1);
+                scpPoints += RoundSummary.SurvivingSCPs;
+                chaosPoints += RoundSummary.EscapedClassD;
+
+                switch (EarlyWin)
+                {
+                    case LeadingTeam.Anomalies:
+                        scpPoints += 5;
+                        break;
+                    case LeadingTeam.ChaosInsurgency:
+                        chaosPoints += 5;
+                        break;
+                    case LeadingTeam.FacilityForces:
+                        foundationPoints += 5;
+                        break;
+                }
+
+                switch (ev.LeadingTeam)
+                {
+                    case LeadingTeam.Anomalies:
+                        scpPoints += 5;
+                        break;
+                    case LeadingTeam.ChaosInsurgency:
+                        chaosPoints += 5;
+                        break;
+                    case LeadingTeam.FacilityForces:
+                        foundationPoints += 5;
+                        break;
+                }
+                
+                if (scpPoints > chaosPoints && scpPoints > foundationPoints)
+                {
+                    ev.LeadingTeam = LeadingTeam.Anomalies;
+                } else if (chaosPoints > scpPoints && chaosPoints > foundationPoints)
+                {
+                    ev.LeadingTeam = LeadingTeam.ChaosInsurgency;
+                } else if (foundationPoints > scpPoints && foundationPoints > chaosPoints)
+                {
+                    ev.LeadingTeam = LeadingTeam.FacilityForces;
+                }
+                else
+                {
+                    ev.LeadingTeam = LeadingTeam.Draw;
+                }
+
+
+
+
+
             }
         }
     }
@@ -104,8 +166,10 @@ public class ExtraLife : Modifier
         Exiled.Events.Handlers.Player.Died += OnDeath;
         Exiled.Events.Handlers.Server.EndingRound += OnEndingRound;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+        Exiled.Events.Handlers.Server.RespawningTeam += OnRespawn;
 
         EarlyWin = LeadingTeam.Draw;
+        RespawnWave = 0;
         ToBeKilledPlayers = ListPool<uint>.Pool.Get();
     }
 
@@ -114,6 +178,7 @@ public class ExtraLife : Modifier
         Exiled.Events.Handlers.Player.Died -= OnDeath;
         Exiled.Events.Handlers.Server.EndingRound -= OnEndingRound;
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+        Exiled.Events.Handlers.Server.RespawningTeam -= OnRespawn;
         
         ListPool<uint>.Pool.Return(ToBeKilledPlayers);
     }

@@ -40,24 +40,24 @@ namespace RoundModifiers.API
     [Flags]
     public enum Category
     {
-        None,
-        Visual,
-        ScpRole,
-        ScpItem,
-        HumanRole,
-        CustomRole,
-        Gamemode,
-        Scale,
-        Health,
-        Weapon,
-        NewRole,
-        Facility,
-        Lights,
-        Names,
-        Voice,
-        OnDeath,
-        Combat,
-        Utility,
-        Overhaul
+        None, // No category
+        Visual, // Changes the visual appearance of something
+        ScpRole, // Changes what SCP roles spawn
+        ScpItem, // Changes the behaviour of an SCP item
+        HumanRole, // Changes what Human roles spawn
+        CustomRole, // Adds a custom role to the round
+        Gamemode, // Full change of game logic for the round
+        Scale, // Changes the scale/size of players/objects
+        Health, // Modifies the health of players
+        Weapon, // Modifies weapons and how they work
+        Facility, // Changes behaviour of something facility wide
+        Lights, // Changes the behaviour of lights
+        Names, // Changes the names of players
+        Voice, // Changes the voice of players
+        OnDeath, // Changes what happens when a player dies
+        Combat, // Changes combat mechanics
+        Utility, // Changes utility mechanics
+        HUD, // Adds a HUD to the players screen
+        Overhaul // Massive change to the game, but not a full gamemode
     }
 }

@@ -57,5 +57,6 @@ namespace TTCore.Commands.RemoteAdmin.Npc
         public string Command { get; } = "spawn";
         public string[] Aliases { get; } = new []{ "create"};
         public string Description { get; } = "Spawns an NPC";
+        public bool SanitizeResponse => true;
     }
 }

@@ -26,5 +26,29 @@ namespace TTAddons
         
         [Description("Enable weapon stats. Default is true.")]
         public bool EnableWeaponStats { get; set; } = false;
+        
+        [Description("How long do Zombies get spawn protection for? Allows resurrecting players in Tesla gates. Default is 3f seconds.")]
+        public float Scp0492SpawnProtection { get; set; } = 3f;
+        
+        [Description("Enable SCP-049 resurrection logic replacement? Allows changing maximum zombie resurrections, how long they have to revive, etc. Default is false.")]
+        public bool ReplaceScp049ResurrectLogic { get; set; } = false;
+        
+        [Description("How many times can Scp049 resurrect a player? Default is 2.")]
+        public int Scp049MaxResurrections { get; set; } = 2;
+        
+        [Description("How long does Scp049 have to resurrect a player that was a target of 'Doctor's good sense'? Default is 18f seconds.")]
+        public float Scp049TargetCorpseDuration { get; set; } = 18f;
+        
+        [Description("How long does Scp049 have to resurrect a normal player? Default is 12f seconds.")]
+        public float Scp049HumanCorpseDuration { get; set; } = 12f;
+        
+        [Description("How much Hume Shield does Scp049 get for resurrecting a player? Default is 200f.")]
+        public float Scp049ResurrectTargetReward { get; set; } = 200f;
+        
+        [Description("Should Scp079's experience scale with player count? Default is false")]
+        public bool EnableScp079XpScaling { get; set; } = false;
+        
+        [Description("Base player count for Scp079 experience scaling. Smaller numbers make the SCP weaker at higher player counts, bigger numbers make the SCP stronger at lower player counts. Default is 15.")]
+        public int Scp079BasePlayerCount { get; set; } = 15;
     }
 }

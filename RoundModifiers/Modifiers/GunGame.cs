@@ -10,6 +10,7 @@ using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
 using InventorySystem.Items.Firearms.Attachments;
+using MapGeneration;
 using MEC;
 using PlayerRoles;
 using RoundModifiers.API;
@@ -18,6 +19,7 @@ using TTCore.Events.Handlers;
 using TTCore.HUDs;
 using TTCore.Utilities;
 using UnityEngine;
+using Utils.NonAllocLINQ;
 
 namespace RoundModifiers.Modifiers;
 
@@ -62,7 +64,8 @@ public class GunGame : Modifier
         ItemType.AntiSCP207,
         ItemType.SCP1853,
         ItemType.SCP2176,
-        ItemType.SCP268
+        ItemType.SCP268,
+        ItemType.SCP018
     };
     
     public List<WeightedItem<ItemType>> CatchupItemsWeighted => new()
@@ -78,13 +81,16 @@ public class GunGame : Modifier
         new WeightedItem<ItemType>(ItemType.SCP207, 2),
         new WeightedItem<ItemType>(ItemType.AntiSCP207, 2),
         new WeightedItem<ItemType>(ItemType.SCP1853, 2),
-        new WeightedItem<ItemType>(ItemType.SCP2176, 1),
-        new WeightedItem<ItemType>(ItemType.SCP268, 1)
+        new WeightedItem<ItemType>(ItemType.SCP244a, 1),
+        new WeightedItem<ItemType>(ItemType.SCP268, 1),
+        new WeightedItem<ItemType>(ItemType.SCP018, 1)
     };
     
     public bool IsGameActive { get; set; }
     
-    public Dictionary<Player,int> PlayerGunLevels { get; set; }
+    //public Dictionary<Player,int> PlayerGunLevels { get; set; }
+    public Dictionary<Player,List<ItemType>> PlayerKillItems { get; set; }
+    public Dictionary<Player, ItemType> PlayerCurrentWeapon { get; set; }
     
     private bool WasFriendlyFireEnabled = false;
     private bool WasFriendlyFireDetectionPaused = false;
@@ -124,14 +130,18 @@ public class GunGame : Modifier
     public void OnPlayerSpawn(SpawnedEventArgs ev)
     {
         if(ev.Player.Role == RoleTypeId.Spectator) return;
+        if(ev.Player.Role.Side == Side.Scp) return;
         // Setup player for the gamemode
         ev.Player.ClearInventory(true);
-        if(!PlayerGunLevels.ContainsKey(ev.Player))
-            PlayerGunLevels.Add(ev.Player, 0);
-        ItemType weapon = Weapons[PlayerGunLevels[ev.Player]];
-        ev.Player.AddItem(weapon);
         
-        ev.Player.CurrentItem = ev.Player.Items.First(item => item.Type == weapon);
+        if(!PlayerKillItems.ContainsKey(ev.Player))
+            PlayerKillItems.Add(ev.Player, ListPool<ItemType>.Pool.Get());
+        if(!PlayerCurrentWeapon.ContainsKey(ev.Player))
+            PlayerCurrentWeapon.Add(ev.Player, GetNextWeapon(ev.Player));
+        
+        ev.Player.AddItem(PlayerCurrentWeapon[ev.Player]);
+        
+        ev.Player.CurrentItem = ev.Player.Items.First(item => item.Type == PlayerCurrentWeapon[ev.Player]);
         if (ev.Player.CurrentItem is Firearm firearm)
         {
             ev.Player.AddAmmo(firearm.AmmoType, (byte)(firearm.MaxAmmo*3));
@@ -139,24 +149,32 @@ public class GunGame : Modifier
         }
             
         ev.Player.IsBypassModeEnabled = true;
-        double average = PlayerGunLevels.Values.Average();
+        //double average = PlayerGunLevels.Values.Average();
+        int leaderPoints = GetLeaderPoints();
+        int playerPoints = PlayerKillItems[ev.Player].Count;
         
-        if (PlayerGunLevels[ev.Player] < average - 2)
+        
+        if (playerPoints < leaderPoints - 2)
         {
-            WeightedRandomSelector<ItemType> selector = new WeightedRandomSelector<ItemType>(CatchupItemsWeighted);
+            WeightedRandomSelector<ItemType> selector = new WeightedRandomSelector<ItemType>(CatchupItemsWeighted.Where(item => ev.Player.Items.All(i => i.Type != item.Item)));
             ev.Player.AddItem(selector.SelectItem());
             ev.Player.ShowHUDHint("You are falling behind, here is a helpful item", 5f);
         }
-        if (PlayerGunLevels[ev.Player] < average - 3)
+        if (playerPoints < leaderPoints - 3)
         {
-            WeightedRandomSelector<ItemType> selector = new WeightedRandomSelector<ItemType>(CatchupItemsWeighted);
+            WeightedRandomSelector<ItemType> selector = new WeightedRandomSelector<ItemType>(CatchupItemsWeighted.Where(item => ev.Player.Items.All(i => i.Type != item.Item)));
             ev.Player.AddItem(selector.SelectItem());
         }
-        if (PlayerGunLevels[ev.Player] < average - 4)
+        if (playerPoints < leaderPoints - 4)
         {
-            WeightedRandomSelector<ItemType> selector = new WeightedRandomSelector<ItemType>(CatchupItemsWeighted);
+            WeightedRandomSelector<ItemType> selector = new WeightedRandomSelector<ItemType>(CatchupItemsWeighted.Where(item => ev.Player.Items.All(i => i.Type != item.Item)));
             ev.Player.AddItem(selector.SelectItem());
         }
+    }
+    
+    public int GetLeaderPoints()
+    {
+        return PlayerKillItems.Values.Max(list => list.Count);
     }
 
     public void OnDying(DyingEventArgs ev)
@@ -169,7 +187,8 @@ public class GunGame : Modifier
         }*/
         if(!IsGameActive) return; //All items will drop during overtime
         ev.ItemsToDrop.Clear();
-        ev.Player.RemoveItem(item => item !=null,true);
+        //ev.Player.RemoveItem(item => item !=null,true);
+        ev.Player.ClearInventory();
     }
 
     public void Respawn(RespawningTeamEventArgs ev)
@@ -188,8 +207,9 @@ public class GunGame : Modifier
         });
         
         // Handled giving points
-        if (ev.Attacker == null) return;
+        /*if (ev.Attacker == null) return;
         if (ev.Attacker == ev.Player) return;
+        if (ev.Attacker.Role.Side == Side.Scp) return;
         if (!PlayerGunLevels.ContainsKey(ev.Attacker))
         {
             PlayerGunLevels.Add(ev.Attacker, 0);
@@ -217,7 +237,59 @@ public class GunGame : Modifier
             }
             ev.Attacker.CurrentItem = ev.Attacker.Items.First(i => i.Type == Weapons[PlayerGunLevels[ev.Attacker]]);
             
+        }*/
+        ProcessKill(ev.Attacker, ev.Player);
+    }
+
+    public void ProcessKill(Player killer, Player victim)
+    {
+        if(killer == null) return;
+        if(killer == victim) return;
+        if(killer.Role.Side == Side.Scp) return;
+        if (!PlayerKillItems.ContainsKey(killer))
+        {
+            PlayerKillItems.Add(killer, ListPool<ItemType>.Pool.Get());
         }
+        
+        if (!PlayerKillItems[killer].Contains(PlayerCurrentWeapon[killer]))
+        {
+            //This is a new weapon kill, give'em a point
+            PlayerKillItems[killer].Add(killer.CurrentItem.Type);
+        }
+
+        if (PlayerKillItems[killer].Count == Weapons.Length)
+        {
+            // Convert to SCP
+            StartEndgame(killer);
+            return;
+        }
+        else
+        {
+            killer.RemoveItem(item => Weapons.Contains(item.Type));
+            PlayerCurrentWeapon[killer] = GetNextWeapon(killer);
+            killer.ClearAmmo();
+            killer.AddItem(PlayerCurrentWeapon[killer]);
+            foreach(Item item in killer.Items)
+            {
+                if(item is Firearm firearm)
+                {
+                    killer.SetAmmo(firearm.AmmoType, (byte)(firearm.MaxAmmo*3));
+                    firearm.ClearAttachments();
+                }
+            }
+            killer.CurrentItem = killer.Items.First(i => i.Type == PlayerCurrentWeapon[killer]);
+        }
+        
+
+    }
+
+    public ItemType GetNextWeapon(Player player)
+    {
+        //Get already completed guns
+        List<ItemType> completedGuns = PlayerKillItems[player];
+        //Get the next gun
+        ItemType nextGun = Weapons.GetRandomValue(gun => !completedGuns.Contains(gun));
+        return nextGun;
     }
 
     private CoroutineHandle NukeTimer;
@@ -226,7 +298,7 @@ public class GunGame : Modifier
     {
         if (IsGameActive)
         {
-            NukeTimer = Timing.CallDelayed(240f, () =>
+            NukeTimer = Timing.CallDelayed(180f, () =>
             {
                 if (Round.IsEnded) return;
                 Warhead.DetonationTimer = 60f;
@@ -237,6 +309,7 @@ public class GunGame : Modifier
         Round.IsLocked = false;
         Map.ChangeLightsColor(new Color(2,0,0));
         //Server.FriendlyFire = false;
+        winner.ClearInventory();
         winner.RoleManager.ServerSetRole(RoleTypeId.Scp3114, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.AssignInventory);
         Cassie.Message("SCP 3 1 1 4 has breached containment");
         
@@ -256,15 +329,17 @@ public class GunGame : Modifier
     
     public void OnInspecting(InspectFirearmEventArgs ev)
     {
-        int place = PlayerGunLevels.Count(pair => pair.Value > PlayerGunLevels[ev.Player])+1;
-        string placeSuffix = place switch
+        int currentPoints = PlayerKillItems[ev.Player].Count;
+        int playersWithMorePoints = PlayerKillItems.Count(value=>value.Value.Count > currentPoints);
+        playersWithMorePoints += 1;
+        string placeSuffix = playersWithMorePoints switch
         {
             1 => "st",
             2 => "nd",
             3 => "rd",
             _ => "th"
         };
-        string displayText = $"You are in {place}{placeSuffix} place with {PlayerGunLevels[ev.Player]}/{Weapons.Length} kills";
+        string displayText = $"You are in {playersWithMorePoints}{placeSuffix} place with {PlayerKillItems[ev.Player]}/{Weapons.Length} kills";
         ev.Player.ShowHUDHint(displayText, 5f);
     }
     
@@ -286,6 +361,9 @@ public class GunGame : Modifier
             if(room.Type == RoomType.Pocket) continue;
             if(room.Type == RoomType.HczTesla) continue;
             if(Player.List.Count <= OneZoneThreshold && room.Zone == ZoneType.HeavyContainment) continue;
+            // Patch: People getting stuck out of bounds
+            if(room.Zone == ZoneType.Entrance && room.RoomShape == RoomShape.Endroom && room.Type != RoomType.EzGateA && room.Type != RoomType.EzGateB) continue;
+            
             int threat = GetRoomThreat(room);
             if(threat > 6) continue;
             roomThreats.Add(room, threat);
@@ -322,6 +400,11 @@ public class GunGame : Modifier
         IsGameActive = true;
     }
     
+    public void OnBanningPlayer(BanningEventArgs ev)
+    {
+        ev.IsAllowed = false;
+    }
+    
     protected override void RegisterModifier()
     {
         //Register Events
@@ -337,17 +420,19 @@ public class GunGame : Modifier
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
         Exiled.Events.Handlers.Player.Joined += OnPlayerJoined;
         Exiled.Events.Handlers.Map.SpawningItem += OnSpawnItem;
+        Exiled.Events.Handlers.Player.Banning += OnBanningPlayer;
         
         
         
         
-        PlayerGunLevels = DictionaryPool<Player, int>.Pool.Get();
+        PlayerKillItems = DictionaryPool<Player, List<ItemType>>.Pool.Get();
+        PlayerCurrentWeapon = DictionaryPool<Player, ItemType>.Pool.Get();
         
         WasFriendlyFireEnabled = Server.FriendlyFire;
-        WasFriendlyFireDetectionPaused = FriendlyFireConfig.PauseDetector;
+        WasFriendlyFireDetectionPaused = FriendlyFireConfig.PauseDetector; 
         Server.FriendlyFire = true;
         FriendlyFireConfig.PauseDetector = true;
-        ServerConfigSynchronizer.RefreshAllConfigs();
+        //ServerConfigSynchronizer.RefreshAllConfigs();
         
         IsGameActive = false;
 
@@ -368,12 +453,15 @@ public class GunGame : Modifier
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
         Exiled.Events.Handlers.Player.Joined -= OnPlayerJoined;
         Exiled.Events.Handlers.Map.SpawningItem -= OnSpawnItem;
+        Exiled.Events.Handlers.Player.Banning -= OnBanningPlayer;
         
         
         
         
         
-        DictionaryPool<Player, int>.Pool.Return(PlayerGunLevels);
+        
+        DictionaryPool<Player, List<ItemType>>.Pool.Return(PlayerKillItems);
+        DictionaryPool<Player, ItemType>.Pool.Return(PlayerCurrentWeapon);
         
         Server.FriendlyFire = WasFriendlyFireEnabled;
         FriendlyFireConfig.PauseDetector = WasFriendlyFireDetectionPaused;

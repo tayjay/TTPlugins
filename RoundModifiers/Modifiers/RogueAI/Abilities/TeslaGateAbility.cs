@@ -22,11 +22,21 @@ namespace RoundModifiers.Modifiers.RogueAI.Abilities
             {
                 if (room.TeslaGate != null)
                 {
-                    if (room.Players.Count() < 1)
+                    if (HelpingSide == Side.Scp)
                     {
+                        if (room.Players.Count() < 1)
+                        {
+                            Gate = room.TeslaGate;
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        // if not helping SCPS, let it touch them with no one nearby
                         Gate = room.TeslaGate;
                         return true;
                     }
+                    
                 }
             }
             return false;
@@ -63,6 +73,15 @@ namespace RoundModifiers.Modifiers.RogueAI.Abilities
                         return false;
                         //Only want to kill one person
                     }
+                }
+            }
+
+            if (HelpingSide != Side.Scp)
+            {
+                if (UnityEngine.Random.Range(0, 1) < 0.2)
+                {
+                    Gate.ForceTrigger();
+                    return false;
                 }
             }
             return true;

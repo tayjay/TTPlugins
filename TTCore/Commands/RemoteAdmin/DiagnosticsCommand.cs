@@ -45,4 +45,5 @@ public class DiagnosticsCommand : ICommand
     public string Command { get; } = "diagnostics";
     public string[] Aliases { get; } = { "diag" };
     public string Description { get; }
+    public bool SanitizeResponse => true;
 }

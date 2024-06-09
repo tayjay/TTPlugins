@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using RoundModifiers.API;
 
 namespace RoundModifiers.Modifiers
@@ -15,10 +16,12 @@ namespace RoundModifiers.Modifiers
         
         public void OnRoundStart()
         {
-            
             //todo: Prevent player bans for friendly fire
-            
-           
+        }
+
+        public void OnBanningPlayer(BanningEventArgs ev)
+        {
+            ev.IsAllowed = false;
         }
         
         protected override void RegisterModifier()
@@ -30,6 +33,7 @@ namespace RoundModifiers.Modifiers
             ServerConfigSynchronizer.RefreshAllConfigs();
             
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+            Exiled.Events.Handlers.Player.Banning += OnBanningPlayer;
         }
 
         protected override void UnregisterModifier()

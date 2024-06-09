@@ -30,5 +30,6 @@ namespace RoundModifiers.Commands.RemoteAdmin
         public string Command { get; } = "list";
         public string[] Aliases { get; } = new[] { "listmodifiers", "all" };
         public string Description { get; } = "Lists all round modifiers.";
+        public bool SanitizeResponse => true;
     }
 }

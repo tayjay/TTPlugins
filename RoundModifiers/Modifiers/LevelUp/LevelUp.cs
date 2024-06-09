@@ -111,8 +111,8 @@ namespace RoundModifiers.Modifiers.LevelUp
             _boosts.Add(new NoInstaKillBoost(Tier.Epic));
             _boosts.Add(new HealAOEBoost(Tier.Epic));
             _boosts.Add(new BecomeScpBoost(Tier.Legendary));
-            _boosts.Add(new UpgradeWeaponBoost(Tier.Common));
-            _boosts.Add(new UpgradeWeaponBoost(Tier.Uncommon));
+            //_boosts.Add(new UpgradeWeaponBoost(Tier.Common));
+            //_boosts.Add(new UpgradeWeaponBoost(Tier.Uncommon));
             _boosts.Add(new ChangeSizeBoost());
             //SCP Boosts
             _boosts.Add(new HealBoost(Tier.Common));
@@ -729,7 +729,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
             Balance = 0,
-            Category = Category.Overhaul
+            Category = Category.Overhaul | Category.HUD
         };
     }
 }

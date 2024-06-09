@@ -51,5 +51,6 @@ namespace RoundModifiers.Commands.RemoteAdmin
         public string Command { get; } = "add";
         public string[] Aliases { get; } = new[] { "addmodifier" };
         public string Description { get; } = "Add a round modifier to the list.";
+        public bool SanitizeResponse => true;
     }
 }

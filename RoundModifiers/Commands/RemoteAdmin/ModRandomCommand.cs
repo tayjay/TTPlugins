@@ -35,19 +35,12 @@ public class ModRandomCommand : ICommand
                 //Modifiy this round
                 RoundModifiers.Instance.RoundManager.ClearRoundModifiers();
                 var mods = RoundModifiers.Instance.Modifiers.Where(pair => !pair.Key.MustPreload && pair.Key.Impact!=ImpactLevel.Gamemode); 
-                /*int randomCount = Random.Range(2, 6);
-                while(randomCount-- > 0)
-                {
-                    var mod = mods.GetRandomValue();
-                    if(RoundModifiers.Instance.RoundManager.ActiveModifiers.Contains(mod.Key))
-                        continue;
-                    modifiers.Add(mod.Key.Name);
-                    RoundModifiers.Instance.RoundManager.AddRoundModifier(mod.Value.ModInfo);
-                }*/
+                int attempts = 0;
                 
                 //New balanced random
-                while(modInfos.Count < MaxModifiers)
+                while(modInfos.Count < MaxModifiers || attempts < 10)
                 {
+                    attempts++;
                     ModInfo nextMod;
                     //Pick a new modifier based on current balance
                     // If the balance is greater than 1, pick a negative modifier
@@ -85,7 +78,7 @@ public class ModRandomCommand : ICommand
                     bool valid = true;
                     foreach(var mod in modInfos)
                     {
-                        if(nextMod.Category.HasFlag(mod.Category) || mod.Category.HasFlag(nextMod.Category))
+                        if(nextMod.Category.HasFlag(mod.Category))
                             valid = false;
                     }
                     if(!valid)
@@ -107,9 +100,10 @@ public class ModRandomCommand : ICommand
                 //Modify next round
                 RoundModifiers.Instance.RoundManager.ClearNextRoundModifiers();
                 var mods = RoundModifiers.Instance.Modifiers.Where(pair => pair.Key.Impact!=ImpactLevel.Gamemode); 
-                
-                while(modInfos.Count < MaxModifiers)
+                int attempts = 0;
+                while(modInfos.Count < MaxModifiers || attempts < 10)
                 {
+                    attempts++;
                     ModInfo nextMod;
                     //Pick a new modifier based on current balance
                     // If the balance is greater than 1, pick a negative modifier
@@ -147,7 +141,7 @@ public class ModRandomCommand : ICommand
                     bool valid = true;
                     foreach(var mod in modInfos)
                     {
-                        if(nextMod.Category.HasFlag(mod.Category) || mod.Category.HasFlag(nextMod.Category))
+                        if(nextMod.Category.HasFlag(mod.Category))
                             valid = false;
                     }
                     if(!valid)
@@ -181,4 +175,5 @@ public class ModRandomCommand : ICommand
     public string Command { get; } = "random";
     public string[] Aliases { get; } = { "rand" };
     public string Description { get; } = "Randomly selects modifiers for this or next round.";
+    public bool SanitizeResponse => true;
 }

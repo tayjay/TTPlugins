@@ -66,5 +66,6 @@ namespace RoundModifiers.Commands.RemoteAdmin
         public string Command { get; } = "next";
         public string[] Aliases { get; } = new[] { "setnext" };
         public string Description { get; } = "Sets the modifier for the next round.";
+        public bool SanitizeResponse => true;
     }
 }

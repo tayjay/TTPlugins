@@ -28,5 +28,6 @@ namespace TTAddons.Commands.Client
         public string Command { get; } = "unstuck";
         public string[] Aliases { get; } = new[] {"stuck"};
         public string Description { get; } = "Unstucks the player. (Only works for SCPs at the start of a round.)";
+        public bool SanitizeResponse => true;
     }
 }

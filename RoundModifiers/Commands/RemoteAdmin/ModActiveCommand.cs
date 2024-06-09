@@ -32,5 +32,6 @@ namespace RoundModifiers.Commands.RemoteAdmin
         public string Command { get; } = "active";
         public string[] Aliases { get; } = new[] { "current", "cur" };
         public string Description { get; } = "Lists all active round modifiers.";
+        public bool SanitizeResponse => true;
     }
 }

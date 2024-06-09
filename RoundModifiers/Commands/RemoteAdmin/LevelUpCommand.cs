@@ -55,4 +55,5 @@ public class LevelUpCommand : ICommand
     public string Command { get; } = "levelup";
     public string[] Aliases { get; } = { "lvl" };
     public string Description { get; } = "Manage the LevelUp mod.";
+    public bool SanitizeResponse => true;
 }

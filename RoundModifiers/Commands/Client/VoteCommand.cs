@@ -50,6 +50,11 @@ namespace RoundModifiers.Commands.Client
                 } else if(RoundModifiers.Instance.TryGetModifier(selection, out var modifier))
                 {
                     //vote for modifier
+                    if(modifier.ModInfo.Hidden)
+                    {
+                        response = "Invalid vote.";
+                        return false;
+                    }
                     return RoundModifiers.Instance.RoundManager.TakeVote(player, modifier.ModInfo, out response);
                 }
                 else
@@ -66,5 +71,6 @@ namespace RoundModifiers.Commands.Client
         public string Command { get; } = "vote";
         public string[] Aliases { get; } = {"v"};
         public string Description { get; } = "Vote if you want a modifier this round.";
+        public bool SanitizeResponse => true;
     }
 }

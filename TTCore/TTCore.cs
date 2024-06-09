@@ -3,10 +3,12 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using HarmonyLib;
 using PlayerRoles.FirstPersonControl;
+using TTCore.Events.Handlers;
 using TTCore.Handlers;
 using TTCore.HUDs;
 using TTCore.Npcs;
 using TTCore.Npcs.AI.Pathing;
+using TTCore.Reflection;
 using UnityEngine;
 
 namespace TTCore
@@ -37,6 +39,18 @@ namespace TTCore
             base.OnEnabled();
             Setup();
             Log.Info("TTCore has been enabled!");
+            OptionalSCriPt optionalSCriPt = new OptionalSCriPt();
+            if (optionalSCriPt.IsPresent)
+            {
+                OptionalReference optionalReference = optionalSCriPt.SetupConnector(this);
+                optionalReference.CallMethod("AddGlobal", typeof(Custom), "TTCustom");
+                
+            }
+            else
+            {
+                Log.Debug("SCriPt is not present!");
+            }
+            
         }
         
         public override void OnDisabled()
@@ -93,7 +107,7 @@ namespace TTCore
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 4, 0);
+        public override System.Version Version { get; } = new System.Version(0, 4, 2);
         
     }
 }

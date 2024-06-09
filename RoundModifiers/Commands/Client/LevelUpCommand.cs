@@ -50,4 +50,5 @@ public class LevelUpCommand : ICommand
     public string Command { get; } = "levelup";
     public string[] Aliases { get; } = { "level", "lvl", "xp" };
     public string Description { get; } = "Client command for the LevelUp modifier.";
+    public bool SanitizeResponse => true;
 } 

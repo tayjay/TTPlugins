@@ -69,4 +69,5 @@ public class ScaleCommand : ICommand
     public string Command { get; } = "scale";
     public string[] Aliases { get; } = {"size"};
     public string Description { get; } = "Scales the player to a designated size.";
+    public bool SanitizeResponse => true;
 }

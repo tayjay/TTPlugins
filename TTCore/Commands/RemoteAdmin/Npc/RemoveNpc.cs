@@ -62,5 +62,6 @@ namespace TTCore.Commands.RemoteAdmin.Npc
         public string Command { get; } = "remove";
         public string[] Aliases { get; } = new []{"kill", "delete", "del"};
         public string Description { get; } = "Removes an NPC";
+        public bool SanitizeResponse => true;
     }
 }

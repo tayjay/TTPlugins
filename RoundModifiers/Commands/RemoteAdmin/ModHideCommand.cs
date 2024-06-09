@@ -51,4 +51,5 @@ public class ModHideCommand : ICommand
     public string Command { get; } = "hide";
     public string[] Aliases { get; } = new[] {"redact"};
     public string Description { get; } = "Hide or show the modifiers for the current or next round.";
+    public bool SanitizeResponse => true;
 }
