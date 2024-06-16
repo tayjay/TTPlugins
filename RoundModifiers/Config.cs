@@ -33,6 +33,10 @@ namespace RoundModifiers
         [Description("The amount of health drained when Firing the MicroHID. Default is 3.5f.")]
         public float MicroHIV_FireDrain { get; set; } = 3.5f;
         
+        //GunGame
+        [Description("Should guns be given in a sequential order (true) or randomly (false)? Default is true.")]
+        public bool GunGame_Sequential { get; set; } = true;
+        
         
         //RandomSpawnSize
         [Description("The minimum and maximum size of spawned objects. Default is 0.5f and 1.2f")]
@@ -148,5 +152,9 @@ namespace RoundModifiers
         
         [Description("The amount of time in seconds before a player is respawned after dying during the ExtraLife modifier. Need delay for 049 to rez players. Default is 24f.")]
         public float ExtraLife_RespawnDelay { get; set; } = 24f;
+        
+        //ScpChat
+        [Description("Whether SCPs can change the state of the ability. Default is true.")]
+        public bool ScpChat_CanChangeState { get; set; } = true;
     }
 }

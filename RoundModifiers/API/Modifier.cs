@@ -58,6 +58,8 @@ namespace RoundModifiers.API
         Combat, // Changes combat mechanics
         Utility, // Changes utility mechanics
         HUD, // Adds a HUD to the players screen
-        Overhaul // Massive change to the game, but not a full gamemode
+        Overhaul, // Massive change to the game, but not a full gamemode
+        Scp914, // Changes the behaviour of SCP-914
+        Combo, // A combination of multiple modifiers
     }
 }

@@ -9,7 +9,6 @@ using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
-using InventorySystem.Items.Firearms.Attachments;
 using MapGeneration;
 using MEC;
 using PlayerRoles;
@@ -20,8 +19,9 @@ using TTCore.HUDs;
 using TTCore.Utilities;
 using UnityEngine;
 using Utils.NonAllocLINQ;
+using Firearm = Exiled.API.Features.Items.Firearm;
 
-namespace RoundModifiers.Modifiers;
+namespace RoundModifiers.Modifiers.GunGame;
 
 public class GunGame : Modifier
 {
@@ -32,10 +32,12 @@ public class GunGame : Modifier
     // Want to add a catchup system so players that are in the lower levels can catch up to the higher levels
     // Give them helpful items
     
+    
+    public bool SequentialGuns => RoundModifiers.Instance.Config.GunGame_Sequential;
+    
     // Guns
     public ItemType[] Weapons => new[]
     {
-        ItemType.GunCOM15,
         ItemType.GunCOM18,
         ItemType.GunFSP9,
         ItemType.GunCrossvec,
@@ -49,6 +51,7 @@ public class GunGame : Modifier
         ItemType.GunCom45,
         ItemType.ParticleDisruptor,
         ItemType.Jailbird,
+        ItemType.GunCOM15,
         ItemType.MicroHID
     };
 
@@ -70,20 +73,20 @@ public class GunGame : Modifier
     
     public List<WeightedItem<ItemType>> CatchupItemsWeighted => new()
     {
-        new WeightedItem<ItemType>(ItemType.ArmorCombat, 6),
+        
         new WeightedItem<ItemType>(ItemType.Medkit, 6),
         new WeightedItem<ItemType>(ItemType.Adrenaline, 6),
         new WeightedItem<ItemType>(ItemType.Painkillers, 7),
         new WeightedItem<ItemType>(ItemType.GrenadeFlash, 5),
         new WeightedItem<ItemType>(ItemType.GrenadeHE, 4),
         new WeightedItem<ItemType>(ItemType.SCP500, 3),
-        new WeightedItem<ItemType>(ItemType.ArmorHeavy, 3),
         new WeightedItem<ItemType>(ItemType.SCP207, 2),
         new WeightedItem<ItemType>(ItemType.AntiSCP207, 2),
         new WeightedItem<ItemType>(ItemType.SCP1853, 2),
         new WeightedItem<ItemType>(ItemType.SCP244a, 1),
         new WeightedItem<ItemType>(ItemType.SCP268, 1),
-        new WeightedItem<ItemType>(ItemType.SCP018, 1)
+        new WeightedItem<ItemType>(ItemType.SCP018, 1),
+        new WeightedItem<ItemType>(ItemType.ArmorCombat, 0.5f),
     };
     
     public bool IsGameActive { get; set; }
@@ -144,7 +147,8 @@ public class GunGame : Modifier
         ev.Player.CurrentItem = ev.Player.Items.First(item => item.Type == PlayerCurrentWeapon[ev.Player]);
         if (ev.Player.CurrentItem is Firearm firearm)
         {
-            ev.Player.AddAmmo(firearm.AmmoType, (byte)(firearm.MaxAmmo*3));
+            if(firearm.AmmoType == AmmoType.None) return;
+            ev.Player.SetAmmo(firearm.AmmoType, (byte)(firearm.MaxAmmo*3));
             firearm.ClearAttachments();
         }
             
@@ -268,11 +272,13 @@ public class GunGame : Modifier
             killer.RemoveItem(item => Weapons.Contains(item.Type));
             PlayerCurrentWeapon[killer] = GetNextWeapon(killer);
             killer.ClearAmmo();
+            if(PlayerCurrentWeapon[killer] == ItemType.None) return;
             killer.AddItem(PlayerCurrentWeapon[killer]);
             foreach(Item item in killer.Items)
             {
                 if(item is Firearm firearm)
                 {
+                    if(firearm.AmmoType == AmmoType.None) continue;
                     killer.SetAmmo(firearm.AmmoType, (byte)(firearm.MaxAmmo*3));
                     firearm.ClearAttachments();
                 }
@@ -288,11 +294,23 @@ public class GunGame : Modifier
         //Get already completed guns
         List<ItemType> completedGuns = PlayerKillItems[player];
         //Get the next gun
-        ItemType nextGun = Weapons.GetRandomValue(gun => !completedGuns.Contains(gun));
+        ItemType nextGun = ItemType.None;
+        if (SequentialGuns)
+        {
+            if(PlayerKillItems[player].Count >= Weapons.Length) return ItemType.None;
+            nextGun = Weapons[PlayerKillItems[player].Count];
+        }
+        else
+        {
+            if(PlayerKillItems[player].Count >= Weapons.Length) return ItemType.None;
+            nextGun = Weapons.GetRandomValue(gun => !completedGuns.Contains(gun));
+        }
+        
         return nextGun;
     }
 
     private CoroutineHandle NukeTimer;
+    private CoroutineHandle HudUpdate;
 
     public void StartEndgame(Player winner)
     {
@@ -312,7 +330,11 @@ public class GunGame : Modifier
         winner.ClearInventory();
         winner.RoleManager.ServerSetRole(RoleTypeId.Scp3114, RoleChangeReason.RemoteAdmin, RoleSpawnFlags.AssignInventory);
         Cassie.Message("SCP 3 1 1 4 has breached containment");
-        
+        Timing.CallDelayed(0.3f, () =>
+        {
+            winner.MaxHealth = 400;
+            winner.Health = winner.MaxHealth;
+        });
     }
     
     public void OnInteractElevator(InteractingElevatorEventArgs ev)
@@ -329,7 +351,7 @@ public class GunGame : Modifier
     
     public void OnInspecting(InspectFirearmEventArgs ev)
     {
-        int currentPoints = PlayerKillItems[ev.Player].Count;
+        /*int currentPoints = PlayerKillItems[ev.Player].Count;
         int playersWithMorePoints = PlayerKillItems.Count(value=>value.Value.Count > currentPoints);
         playersWithMorePoints += 1;
         string placeSuffix = playersWithMorePoints switch
@@ -340,8 +362,10 @@ public class GunGame : Modifier
             _ => "th"
         };
         string displayText = $"You are in {playersWithMorePoints}{placeSuffix} place with {PlayerKillItems[ev.Player]}/{Weapons.Length} kills";
-        ev.Player.ShowHUDHint(displayText, 5f);
+        ev.Player.ShowHUDHint(displayText, 5f);*/
     }
+    
+    
     
     public void OnSpawnItem(SpawningItemEventArgs ev)
     {
@@ -358,6 +382,7 @@ public class GunGame : Modifier
         foreach (Room room in Room.List)
         {
             if(room.Zone == ZoneType.LightContainment || room.Zone == ZoneType.Surface || room.Zone == ZoneType.Unspecified || room.Zone == ZoneType.Other) continue;
+            if(room.Type == RoomType.HczEzCheckpointA || room.Type == RoomType.HczEzCheckpointB) continue;
             if(room.Type == RoomType.Pocket) continue;
             if(room.Type == RoomType.HczTesla) continue;
             if(Player.List.Count <= OneZoneThreshold && room.Zone == ZoneType.HeavyContainment) continue;
@@ -398,6 +423,78 @@ public class GunGame : Modifier
     {
         Round.IsLocked = true;
         IsGameActive = true;
+        Server.FriendlyFire = true;
+        FriendlyFireConfig.PauseDetector = true;
+        HudUpdate = Timing.RunCoroutine(HudUpdateTick());
+    }
+
+    public IEnumerator<float> HudUpdateTick()
+    {
+        while (!Round.IsEnded)
+        {
+            foreach (Player player in Player.List.ToList())
+            {
+                try
+                {
+                    if(player==null) continue;
+                    if(player.IsNPC) continue;
+                    if(player.IsDead) continue;
+                
+                    
+                    if (!player.TryGetHUD(out HUD hud))
+                    {
+                        hud = HUD.SetupHUD(player, new GunGameHUDLayout(hud));
+                    }
+                    if (hud == null) continue;
+                    GunGameHUDLayout layout = hud.GetLayout<GunGameHUDLayout>();
+                    if (layout == null)
+                    {
+                        hud.SetLayout(new GunGameHUDLayout(hud));
+                        layout = hud.GetLayout<GunGameHUDLayout>();
+                    }
+                
+                    layout.Name = player.Nickname;
+                    layout.Kills = PlayerKillItems[player].Count;
+                    layout.CurrentWeapon = PlayerCurrentWeapon[player].ToString();
+                    if (RoundModifiers.Instance.Config.GunGame_Sequential)
+                    {
+                        if(PlayerKillItems[player].Count+1 >= Weapons.Length) 
+                            layout.NextWeapon = "SCP-3114";
+                        else
+                            layout.NextWeapon = Weapons[PlayerKillItems[player].Count+1].ToString();
+                    }
+                    
+                    int currentPoints = PlayerKillItems[player].Count;
+                    int playersWithMorePoints = PlayerKillItems.Count(value=>value.Value.Count > currentPoints);
+                    playersWithMorePoints += 1;
+                    
+                    layout.Place = playersWithMorePoints;
+                    if (layout.Place == 1)
+                    {
+                        //Find person in second place
+                        var second = PlayerKillItems.OrderByDescending(pair => pair.Value.Count).Skip(1).First();
+                        layout.OtherName = second.Key.Nickname;
+                        layout.OtherKills = second.Value.Count;
+                        layout.OtherPlace = 2;
+                    }
+                    else
+                    {
+                        //Find person in first place
+                        var first = PlayerKillItems.OrderByDescending(pair => pair.Value.Count).First();
+                        layout.OtherName = first.Key.Nickname;
+                        layout.OtherKills = first.Value.Count;
+                        layout.OtherPlace = 1;
+                    }
+                    
+                    //Log.Debug("HUD Updated");
+                } catch (System.Exception e)
+                {
+                    Log.Error("Error in LevelUpHandler HUD Update: "+e);
+                }
+                yield return Timing.WaitForOneFrame;
+            }
+            yield return Timing.WaitForSeconds((float)(1f-(Server.PlayerCount/Server.Tps)));
+        }
     }
     
     public void OnBanningPlayer(BanningEventArgs ev)
@@ -470,6 +567,7 @@ public class GunGame : Modifier
         IsGameActive = false;
         
         Timing.KillCoroutines(NukeTimer);
+        Timing.KillCoroutines(HudUpdate);
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo
@@ -481,6 +579,6 @@ public class GunGame : Modifier
         MustPreload = true,
         Balance = 0,
         Impact = ImpactLevel.Gamemode,
-        Category = Category.Combat | Category.Gamemode | Category.HumanRole | Category.ScpRole
+        Category = Category.Combat | Category.Gamemode | Category.HumanRole | Category.ScpRole | Category.HUD
     };
 }

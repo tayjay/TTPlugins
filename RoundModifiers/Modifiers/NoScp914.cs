@@ -81,12 +81,12 @@ namespace RoundModifiers.Modifiers
         {
             Name = "NoScp914",
             FormattedName = "<color=purple>No Scp-914</color>",
-            Aliases = new []{"914"},
+            Aliases = new []{"no914"},
             Description = "SCP-914 is out of order.",
             Impact = ImpactLevel.MinorGameplay,
             MustPreload = false,
             Balance = -2,
-            Category = Category.Facility
+            Category = Category.Scp914
         };
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using PlayerRoles;
@@ -15,6 +16,17 @@ public class Peanuts : Modifier
     {
         if(ev.NewRole.GetSide()==Side.Scp && ev.NewRole != RoleTypeId.Scp173)
             ev.NewRole = RoleTypeId.Scp173;
+        
+        if (ev.NewRole == RoleTypeId.Scp173)
+        {
+            Timing.CallDelayed(1f, () =>
+            {
+                ev.Player.MaxHealth *= 0.5f;
+                ev.Player.Health = ev.Player.MaxHealth;
+                ev.Player.ChangeSize(0.5f);
+            });
+        }
+        
     }
     protected override void RegisterModifier()
     {

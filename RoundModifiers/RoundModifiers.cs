@@ -10,6 +10,7 @@ using Exiled.Loader;
 using RoundModifiers.API;
 using RoundModifiers.Handlers;
 using RoundModifiers.Modifiers;
+using RoundModifiers.Modifiers.GunGame;
 using RoundModifiers.Modifiers.Scp1507;
 using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.RogueAI;
@@ -127,6 +128,11 @@ namespace RoundModifiers
             AddModifier<GunGame>();
             AddModifier<Flamingos>();
             AddModifier<Nicknames>();
+            //AddModifier<GhostHunting>();
+            AddModifier<ScpChat>();
+            
+            
+            AddModifier<ComboImposter>();
             
             BlacklistModifiers();
         }
@@ -224,6 +230,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 4, 2);
+        public override System.Version Version { get; } = new System.Version(0, 4, 3);
     }
 }

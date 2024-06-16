@@ -522,6 +522,21 @@ namespace RoundModifiers.Modifiers.LevelUp
             }
         }
 
+        public void OnScp914UpgradingPickup(UpgradingPickupEventArgs ev)
+        {
+            foreach (XP xp in _xp)
+            {
+                if(xp is IUpgradingPickupEvent)
+                    ((IUpgradingPickupEvent) xp).OnScp914UpgradingPickup(ev);
+            }
+            
+            foreach (Boost boost in _boosts)
+            {
+                if(boost is IUpgradingPickupEvent)
+                    ((IUpgradingPickupEvent) boost).OnScp914UpgradingPickup(ev);
+            }
+        }
+
         public void OnGameTick()
         {
             foreach (XP xp in _xp)
@@ -667,6 +682,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
             Exiled.Events.Handlers.Player.Joined += OnPlayerJoin;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += OnScp914UpgradingPlayer;
+            Exiled.Events.Handlers.Scp914.UpgradingPickup += OnScp914UpgradingPickup;
             Exiled.Events.Handlers.Player.ChangingRole += OnRevive;
             
             //SCP
@@ -698,6 +714,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Server.RestartingRound -= OnRoundRestart;
             Exiled.Events.Handlers.Player.Joined -= OnPlayerJoin;
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= OnScp914UpgradingPlayer;
+            Exiled.Events.Handlers.Scp914.UpgradingPickup -= OnScp914UpgradingPickup;
             Exiled.Events.Handlers.Player.ChangingRole -= OnRevive;
             MEC.Timing.KillCoroutines(TickHandle);
             /*Traverse.Create(Exiled.Events.Handlers.Player.Escaping).Field("InnerEvent").GetValue<CustomEventHandler>()

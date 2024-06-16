@@ -3,6 +3,7 @@ using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
@@ -16,6 +17,7 @@ using RoundModifiers.API;
 using TTCore.HUDs;
 using UnityEngine;
 using VoiceChat;
+using VoiceChat.Networking;
 
 namespace RoundModifiers.Modifiers.Scp507;
 
@@ -23,6 +25,7 @@ public class Scp507 : Modifier
 {
     //Scp507 is a new role that is given to a class D, they don't know they are 507 until some event happens to reveal them.
     public static Scp507Role Scp507Role { get; set; }
+    public bool ListenToScpChat { get; set; } = true;
     
     public uint TargetPlayerId { get; set; }
     
@@ -181,18 +184,34 @@ public class Scp507 : Modifier
     // todo: Fix this as VoiceChannel doesn't seem to to be a syncvar
     public void OnPressNoClip(TogglingNoClipEventArgs ev)
     {
-        if (ev.Player.GetCustomRoles().Contains(Scp507Role))
+        if (Scp507Role.Check(ev.Player))
         {
-            if (ev.Player.VoiceChannel == VoiceChatChannel.Proximity)
+            ListenToScpChat = !ListenToScpChat;
+            if (ListenToScpChat)
             {
-                ev.Player.VoiceChannel = VoiceChatChannel.ScpChat;
-                ev.Player.ShowHUDHint("You are now in SCP Chat", 5f);
-            } else if (ev.Player.VoiceChannel == VoiceChatChannel.ScpChat)
+                ev.Player.Broadcast(5, "You are now listening to SCP chat.");
+            }
+            else
             {
-                ev.Player.VoiceChannel = VoiceChatChannel.Proximity;
-                ev.Player.ShowHUDHint("You are now in Human Chat", 5f);
+                ev.Player.Broadcast(5, "You are no longer listening to SCP chat.");
             }
         }
+    }
+
+    public void OnVoiceChatting(VoiceChattingEventArgs ev)
+    {
+        if (ev.VoiceMessage.Channel != VoiceChatChannel.ScpChat) return;
+        //Want to also send to 507
+        Player scp507 = Player.Get(TargetPlayerId);
+        if(!Scp507Role.Check(scp507)) return;
+        //Create a copy of the voice message
+        VoiceMessage message = ev.VoiceMessage with
+        {
+            Channel = VoiceChatChannel.Proximity
+        };
+        scp507.ReferenceHub.connectionToClient.Send(message);
+            
+        
     }
 
     public Vector3 FindSafeLocation(Player player)
@@ -243,6 +262,22 @@ public class Scp507 : Modifier
 
     }
     
+    public void OnInteractingDoor(InteractingDoorEventArgs ev)
+    {
+        //Prevent people from entering 079 prematurely
+        if (ev.Door is Gate gate)
+        {
+            if (gate.Room.Type == RoomType.Hcz079)
+            {
+                if (Generator.Get(GeneratorState.Engaged).Count() != 3)
+                {
+                    ev.IsAllowed = false;
+                }
+            }
+                
+        }
+    }
+    
     //They cannot die, and are neutral to all teams, but are allowed to kill anyone.
     protected override void RegisterModifier()
     {
@@ -252,6 +287,9 @@ public class Scp507 : Modifier
         Exiled.Events.Handlers.Player.Handcuffing += OnCuffed;
         Exiled.Events.Handlers.Player.TogglingNoClip += OnPressNoClip;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+        Exiled.Events.Handlers.Player.InteractingDoor += OnInteractingDoor;
+        Exiled.Events.Handlers.Player.VoiceChatting += OnVoiceChatting;
+        ListenToScpChat = true;
         
         WasFriendlyFireEnabled = Server.FriendlyFire;
         WasFriendlyFireDetectionPaused = FriendlyFireConfig.PauseDetector;
@@ -267,6 +305,8 @@ public class Scp507 : Modifier
         Exiled.Events.Handlers.Player.Handcuffing -= OnCuffed;
         Exiled.Events.Handlers.Player.TogglingNoClip -= OnPressNoClip;
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+        Exiled.Events.Handlers.Player.InteractingDoor -= OnInteractingDoor;
+        Exiled.Events.Handlers.Player.VoiceChatting -= OnVoiceChatting;
         
         Scp507Role = null;
         Timing.KillCoroutines(teleportHandle);

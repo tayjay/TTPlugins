@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using MEC;
 using PlayerRoles;
 using TTCore.Npcs.AI;
@@ -41,9 +42,15 @@ namespace TTCore.Npcs
         {
             npc = Npc.Spawn(npcName, RoleTypeId.Spectator);
             npc.RemoteAdminPermissions = PlayerPermissions.AFKImmunity;
+            /*if (npc.Role is FpcRole fpcRole)
+            {
+                fpcRole.FirstPersonController.FpcModule.Motor.UpdatePosition();
+            }*/
+
             Npcs.Add(npc);
             return true;
         }
+        
         
         
     }

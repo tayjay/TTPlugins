@@ -14,7 +14,7 @@ public class Scp1507Role : CustomRole
     public override string Name { get; set; } = "SCP-1507";
     public override string Description { get; set; }  = "Flamingos!";
     public override string CustomInfo { get; set; } = "SCP-1507";
-    public override Vector3 Scale { get; set; } = new Vector3(0.35f, 0.35f, 0.35f);
+    public override Vector3 Scale { get; set; } = new Vector3(0.4f, 0.4f, 0.4f);
     public override RoleTypeId Role { get; set; } = RoleTypeId.Tutorial;
     public override bool KeepRoleOnDeath { get; set; } = false;
     public override bool KeepRoleOnChangingRole { get; set; } = false;

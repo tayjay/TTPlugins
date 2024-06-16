@@ -43,7 +43,32 @@ public class Flamingos : Modifier
         if (Scp1507Role.Check(ev.Player))
         {
             ev.IsAllowed = false;
-            return;
+            foreach (Ragdoll ragdoll in Ragdoll.Get(Player.List.Where(p=>p.IsDead)))
+            {
+                if(ragdoll.Owner.IsAlive) continue;
+                if(ragdoll.Role != RoleTypeId.Tutorial) continue;
+                if (Vector3.Distance(ragdoll.Position, ev.Player.Position) < 3)
+                {
+                    Log.Debug("Found ragdoll!");
+                    if(RespawnAttempts.ContainsKey(ragdoll.Owner))
+                    {
+                        RespawnAttempts[ragdoll.Owner]++;
+                    }
+                    else
+                    {
+                        RespawnAttempts[ragdoll.Owner] = 1;
+                    }
+
+                    if (RespawnAttempts[ragdoll.Owner] < 4)
+                    {
+                        ev.Player.ShowHUDHint("Attempting to respawn player...");
+                        continue;//Change to break to only do 1 flamingo at a time
+                    }
+                    ragdoll.Owner.RoleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.Revived,RoleSpawnFlags.None);
+                    Scp1507Role.AddRole(ragdoll.Owner);
+                    ragdoll.Destroy();
+                }
+            }
         }
     }
 
@@ -64,6 +89,7 @@ public class Flamingos : Modifier
         if (door is CheckpointDoor checkpointDoor)
         {
             checkpointDoor.CurrentStage = Interactables.Interobjects.CheckpointDoor.CheckpointSequenceStage.Granted;
+            ev.Player.ShowHitMarker();
         }
         else if (door is BreakableDoor damagable)
         {
@@ -83,36 +109,11 @@ public class Flamingos : Modifier
             }
         }
 
-        foreach (Ragdoll ragdoll in Ragdoll.Get(Player.List.Where(p=>p.IsDead)))
-        {
-            if(ragdoll.Owner.IsAlive) continue;
-            if(ragdoll.Role != RoleTypeId.Tutorial) continue;
-            if (Vector3.Distance(ragdoll.Position, ev.Player.Position) < 3)
-            {
-                Log.Debug("Found ragdoll!");
-                if(RespawnAttempts.ContainsKey(ragdoll.Owner))
-                {
-                    RespawnAttempts[ragdoll.Owner]++;
-                }
-                else
-                {
-                    RespawnAttempts[ragdoll.Owner] = 1;
-                }
-
-                if (RespawnAttempts[ragdoll.Owner] < 10)
-                {
-                    ev.Player.ShowHUDHint("Attempting to respawn player...");
-                    continue;//Change to break to only do 1 flamingo at a time
-                }
-                ragdoll.Owner.RoleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.Revived,RoleSpawnFlags.None);
-                Scp1507Role.AddRole(ragdoll.Owner);
-                ragdoll.Destroy();
-            }
-        }
+        
         
         if(ev.Item is Jailbird jb)
         {
-            jb.TotalCharges += 2;
+            jb.TotalCharges -= 2;
         }
         
     }
@@ -267,7 +268,7 @@ public class Flamingos : Modifier
         if(ev.VoiceMessage.Channel == VoiceChatChannel.RoundSummary) return;
         ev.IsAllowed = false;
         ev.VoiceMessage = ev.VoiceMessage with { Channel = VoiceChatChannel.RoundSummary };
-        foreach(Player p in Player.List.Where(p=>p.Role == RoleTypeId.Tutorial))
+        foreach(Player p in Player.List.Where(p=>p.Role == RoleTypeId.Tutorial && p != ev.Player))
             p.ReferenceHub.connectionToClient.Send(ev.VoiceMessage);
         
     }

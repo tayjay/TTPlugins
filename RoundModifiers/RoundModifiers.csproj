@@ -102,9 +102,11 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="API\ComboModifier.cs" />
         <Compile Include="API\LuaModifiers.cs" />
         <Compile Include="API\ModInfo.cs" />
         <Compile Include="API\Modifier.cs" />
+        <Compile Include="Commands\Client\RoleResetCommand.cs" />
         <Compile Include="Commands\Client\LevelUpCommand.cs" />
         <Compile Include="Commands\Client\VoteCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\LevelUpCommand.cs" />
@@ -125,16 +127,20 @@
         <Compile Include="Modifiers\BodyBlock.cs" />
         <Compile Include="Modifiers\BoneZone.cs" />
         <Compile Include="Modifiers\Bouncy.cs" />
+        <Compile Include="Modifiers\ComboImposter.cs" />
+        <Compile Include="Modifiers\ComboPowerless.cs" />
         <Compile Include="Modifiers\DoNotLook.cs" />
         <Compile Include="Modifiers\Escape.cs" />
         <Compile Include="Modifiers\ExplosiveRagdolls.cs" />
         <Compile Include="Modifiers\ExtraLife.cs" />
         <Compile Include="Modifiers\GhostHunting.cs" />
-        <Compile Include="Modifiers\GunGame.cs" />
+        <Compile Include="Modifiers\GunGame\GunGame.cs" />
+        <Compile Include="Modifiers\GunGame\GunGameHUDLayout.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IBlinkEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IConsumeEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IEnragingEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IPocketDimensionEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IUpgradingPickupEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IVoiceEvent.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp0492XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp096XP.cs" />
@@ -231,6 +237,7 @@
         <Compile Include="Modifiers\Scp249.cs" />
         <Compile Include="Modifiers\Scp507\Scp507.cs" />
         <Compile Include="Modifiers\Scp507\Scp507Role.cs" />
+        <Compile Include="Modifiers\ScpChat.cs" />
         <Compile Include="Modifiers\ScpShuffle.cs" />
         <Compile Include="Modifiers\SpectatorGame.cs" />
         <Compile Include="Modifiers\WeaponStatsOld.cs" />

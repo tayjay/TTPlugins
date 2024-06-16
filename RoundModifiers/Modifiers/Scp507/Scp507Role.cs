@@ -44,6 +44,7 @@ public sealed class Scp507Role : CustomRole
         base.RoleAdded(player);
         Round.IgnoredPlayers.Add(player.ReferenceHub);
         player.IsBypassModeEnabled = true;
-        player.ShowHUDHint("You are SCP-507\nYou cannot die, and win alongside any team.\nHave fun!", 17f);
+        player.ShowHUDHint("You are SCP-507\nYou cannot die, and win alongside any team.\nIf your vision goes dark use the ~ command '.507' to reset your role.", 17f);
+        player.Broadcast(8,"Use the ~ command '.507' if your vision goes dark.");
     }
 }

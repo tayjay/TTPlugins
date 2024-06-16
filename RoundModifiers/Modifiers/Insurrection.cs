@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
+using Respawning;
 using RoundModifiers.API;
 
 namespace RoundModifiers.Modifiers
@@ -15,6 +16,7 @@ namespace RoundModifiers.Modifiers
             {
                 Log.Debug("Setting " + ev.Player.Nickname + " to Chaos.");
                 ev.Player.RoleManager.ServerSetRole(RoleTypeId.ChaosConscript, RoleChangeReason.RoundStart, RoleSpawnFlags.None);
+                Respawn.GrantTickets(SpawnableTeamType.ChaosInsurgency, 10);
             }
             
         }

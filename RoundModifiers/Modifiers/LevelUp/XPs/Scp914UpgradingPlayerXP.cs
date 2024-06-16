@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Scp914;
@@ -6,7 +8,7 @@ using RoundModifiers.Modifiers.LevelUp.Interfaces;
 
 namespace RoundModifiers.Modifiers.LevelUp.XPs
 {
-    public class Scp914UpgradingPlayerXP : XP, IUpgradingPlayerEvent
+    public class Scp914UpgradingPlayerXP : XP, IUpgradingPickupEvent
     {
         
         public List<uint> HasUpgraded { get; set; }
@@ -20,15 +22,20 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         {
             return HasUpgraded.Contains(player.NetId);
         }
-
-        public void OnScp914UpgradingPlayer(UpgradingPlayerEventArgs ev)
-        {
-            GiveXP(ev.Player, 100);
-        }
         
         public override void Reset()
         {
             ListPool<uint>.Pool.Return(HasUpgraded);
+        }
+
+        public void OnScp914UpgradingPickup(UpgradingPickupEventArgs ev)
+        {
+            List<Player> playerIn914 = Room.Get(RoomType.Lcz914).Players.ToList();
+            foreach (Player p in playerIn914)
+            {
+                GiveXP(p, 100);
+                HasUpgraded.Add(p.NetId);
+            }
         }
     }
 }

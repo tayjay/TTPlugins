@@ -407,7 +407,7 @@ namespace RoundModifiers.Modifiers.RogueAI
         {
             Name = "RogueAI",
             FormattedName = "<color=red>Rogue AI</color>",
-            Aliases = new []{"ai"},
+            Aliases = new []{"ai","rougeai"},
             Description = "An AI that will try to help or hinder the players based on who is currently winning.",
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,

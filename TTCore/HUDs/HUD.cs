@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.API.Features.Pools;
 using MEC;
 using UnityEngine;
 
@@ -202,7 +203,7 @@ public class HUD
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
             Exiled.Events.Handlers.Server.RestartingRound += OnRoundRestart;
-            Huds = new Dictionary<Player, HUD>();
+            Huds = DictionaryPool<Player, HUD>.Pool.Get();
         }
         
         public static void Unregister()
@@ -212,6 +213,7 @@ public class HUD
             ClearHUDs();
             //UnregisterObjectType("HUD");
             Timing.KillCoroutines(HUDCoroutine);
+            DictionaryPool<Player,HUD>.Pool.Return(Huds);
         }
 }
 

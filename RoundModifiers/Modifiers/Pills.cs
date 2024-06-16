@@ -2,11 +2,15 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
+using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Usables.Scp330;
 using NorthwoodLib.Pools;
+using PlayerRoles;
 using RoundModifiers.API;
 using TTCore.HUDs;
+using UnityEngine;
 
 namespace RoundModifiers.Modifiers;
 
@@ -105,16 +109,40 @@ public class Pills : Modifier
         }
     }
     
+    public void OnFillingLocker(FillingLockerEventArgs ev)
+    {
+        ItemType spawningItem = ev.Pickup.Type;
+        if(spawningItem != ItemType.Painkillers) return;
+        float random = Random.Range(0f, 1f);
+        if (random <= 0.8f)
+        {
+            Pickup.Create(ItemType.Painkillers).Spawn(ev.Pickup.Position, ev.Pickup.Rotation);
+            Pickup.Create(ItemType.Painkillers).Spawn(ev.Pickup.Position, ev.Pickup.Rotation);
+            //ev.Pickup.UnSpawn();
+            //ev.IsAllowed = false;
+        }
+    }
+
+    public void OnSpawned(SpawnedEventArgs ev)
+    {
+        if(ev.Player.Role!=RoleTypeId.Scientist) return;
+        ev.Player.AddItem(ItemType.Painkillers);
+    }
+    
     protected override void RegisterModifier()
     {
         Exiled.Events.Handlers.Player.UsedItem += OnTakePills;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+        Exiled.Events.Handlers.Map.FillingLocker += OnFillingLocker;
+        Exiled.Events.Handlers.Player.Spawned += OnSpawned;
     }
 
     protected override void UnregisterModifier()
     {
         Exiled.Events.Handlers.Player.UsedItem -= OnTakePills;
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+        Exiled.Events.Handlers.Map.FillingLocker -= OnFillingLocker;
+        Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()
