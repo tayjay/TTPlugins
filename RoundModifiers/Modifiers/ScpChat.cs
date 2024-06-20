@@ -6,6 +6,7 @@ using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
+using PlayerRoles.Voice;
 using RoundModifiers.API;
 using UnityEngine;
 using VoiceChat;
@@ -23,17 +24,26 @@ public class ScpChat : Modifier
     public void OnVoiceChatting(VoiceChattingEventArgs ev)
     {
         if(ev.VoiceMessage.Channel!=VoiceChatChannel.ScpChat) return;
+        if (ev.Player.Role == RoleTypeId.Scp079) return;
         if(!ProximityChatting[ev.Player]) return;
-        VoiceMessage message = ev.VoiceMessage with
-        {
-            Channel = VoiceChatChannel.Proximity
-        };
+        if(!Round.InProgress) return;
+        //ev.VoiceModule.CurrentChannel = VoiceChatChannel.Proximity;
+        
         foreach (Player player in Player.List.Where(
-                     player => Vector3.Distance(player.Position, ev.Player.Position) < 30))
+                     player => player.Role.Team != Team.SCPs))
         {
-            if(player.Role.Team == Team.SCPs) continue;
+            VoiceMessage message = ev.VoiceMessage with
+            {
+                Channel = VoiceChatChannel.Proximity
+            };
+            if(player.Role == RoleTypeId.Spectator && ev.Player.CurrentSpectatingPlayers.Contains(player)) continue;
+            if(player.ReferenceHub.roleManager.CurrentRole is not IVoiceRole voiceRole) continue;
+            if(voiceRole.VoiceModule.ValidateReceive(message.Speaker, VoiceChatChannel.Proximity) == VoiceChatChannel.None) continue;
+            if(Vector3.Distance(message.Speaker.transform.position, player.Position) > 20f) continue;
+            ev.VoiceModule.CurrentChannel = VoiceChatChannel.Proximity;
             player.Connection.Send(message);
         }
+        ev.VoiceModule.CurrentChannel = VoiceChatChannel.ScpChat;
     }
 
     public void OnSpawned(SpawnedEventArgs ev)
@@ -41,11 +51,18 @@ public class ScpChat : Modifier
         if(ev.Player.Role.Team == Team.SCPs)
         {
             if(ev.Player.Role==RoleTypeId.Scp079) return;
-            ProximityChatting.Add(ev.Player, true);
-            if(CanChangeState)
-                ev.Player.Broadcast(5, "<color=green>Proximity Chat Enabled. Press Left-Alt to disable.</color>");
+
+            if (CanChangeState)
+            {
+                ev.Player.Broadcast(5, "<color=green>Proximity Chat Disabled. Press Left-Alt to enable.</color>");
+                ProximityChatting.Add(ev.Player, false);
+            }
             else
+            {
+                ProximityChatting.Add(ev.Player, true);
                 ev.Player.Broadcast(5, "<color=green>Proximity Chat Enabled.</color>");
+            }
+                
         }
     }
 
@@ -66,17 +83,17 @@ public class ScpChat : Modifier
             }
         }
         
-        if (ev.Player.Role.Team == Team.SCPs)
+        if (ev.Player?.Role.Team == Team.SCPs)
         {
             if (ProximityChatting[ev.Player])
             {
                 ProximityChatting[ev.Player] = false;
-                ev.Player.Broadcast(2, "<color=red>Proximity Chat Disabled. Press Left-Alt to enable.</color>");
+                ev.Player.Broadcast(1, "<color=red>Proximity Chat Disabled. Press Left-Alt to enable.</color>");
             }
             else
             {
                 ProximityChatting[ev.Player] = true;
-                ev.Player.Broadcast(2, "<color=green>Proximity Chat Enabled. Press Left-Alt to disable.</color>");
+                ev.Player.Broadcast(1, "<color=green>Proximity Chat Enabled. Press Left-Alt to disable.</color>");
             }
         }
         

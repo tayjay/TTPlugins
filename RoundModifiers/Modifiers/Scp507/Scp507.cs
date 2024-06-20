@@ -200,16 +200,32 @@ public class Scp507 : Modifier
 
     public void OnVoiceChatting(VoiceChattingEventArgs ev)
     {
-        if (ev.VoiceMessage.Channel != VoiceChatChannel.ScpChat) return;
-        //Want to also send to 507
-        Player scp507 = Player.Get(TargetPlayerId);
-        if(!Scp507Role.Check(scp507)) return;
-        //Create a copy of the voice message
-        VoiceMessage message = ev.VoiceMessage with
+        if (!ListenToScpChat) return;
+        if (ev.VoiceMessage.Channel == VoiceChatChannel.ScpChat)
         {
-            Channel = VoiceChatChannel.Proximity
-        };
-        scp507.ReferenceHub.connectionToClient.Send(message);
+            //Want to also send to 507
+            Player scp507 = Player.Get(TargetPlayerId);
+            if(!Scp507Role.Check(scp507)) return;
+            //Create a copy of the voice message
+            VoiceMessage message = ev.VoiceMessage with
+            {
+                Channel = VoiceChatChannel.RoundSummary
+            };
+            scp507.ReferenceHub.connectionToClient.Send(message);
+        } else if (Scp507Role.Check(ev.Player))
+        {
+            //Want to send to SCP chat
+            VoiceMessage message = ev.VoiceMessage with
+            {
+                Channel = VoiceChatChannel.RoundSummary
+            };
+            foreach (Player player in Player.List.Where(
+                player => player.Role.Team == Team.SCPs))
+            {
+                player.ReferenceHub.connectionToClient.Send(message);
+            }
+        }
+        
             
         
     }

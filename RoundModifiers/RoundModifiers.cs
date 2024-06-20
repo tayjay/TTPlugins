@@ -230,6 +230,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 4, 3);
+        public override System.Version Version { get; } = new System.Version(0, 4, 4);
     }
 }

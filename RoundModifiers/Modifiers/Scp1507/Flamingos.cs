@@ -101,6 +101,7 @@ public class Flamingos : Modifier
             }
         } else if (door is Gate gate)
         {
+            if(gate.Room.Type==RoomType.Hcz079 && Generator.Get(GeneratorState.Engaged).Count() != 3) return;
             if (gate.IsFullyClosed)
             {
                 Log.Debug("Opening gate!");

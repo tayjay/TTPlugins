@@ -45,28 +45,28 @@ public class Nicknames : Modifier
             RoleTypeId.ChaosRifleman, "Agent of Chaos "
         },
         {
-            RoleTypeId.Scp049, "SCP-049"
+            RoleTypeId.Scp049, "The Doctor"
         },
         {
-            RoleTypeId.Scp0492, "SCP-049-2"
+            RoleTypeId.Scp0492, "Zombie"
         },
         {
-            RoleTypeId.Scp079, "SCP-079"
+            RoleTypeId.Scp079, "Computer"
         },
         {
-            RoleTypeId.Scp096, "SCP-096"
+            RoleTypeId.Scp096, "Shy Guy"
         },
         {
-            RoleTypeId.Scp106, "SCP-106"
+            RoleTypeId.Scp106, "Larry"
         },
         {
-            RoleTypeId.Scp173, "SCP-173"
+            RoleTypeId.Scp173, "Peanut"
         },
         {
-            RoleTypeId.Scp939, "SCP-939"
+            RoleTypeId.Scp939, "Dog"
         },
         {
-            RoleTypeId.Scp3114, "SCP-3114"
+            RoleTypeId.Scp3114, "Skeleton"
         }
     };
 
@@ -86,6 +86,10 @@ public class Nicknames : Modifier
         } else if (ev.NewRole.IsHuman())
         {
             newName += HumanNames[Random.Range(0, HumanNames.Length)];
+        }
+        else if(ev.NewRole.IsAlive())
+        {
+            newName = ClassTitles[ev.NewRole];
         }
         ev.Player.DisplayNickname = newName;
         ev.Player.ShowHUDHint("Your name is " + ev.Player.DisplayNickname, 10f);
