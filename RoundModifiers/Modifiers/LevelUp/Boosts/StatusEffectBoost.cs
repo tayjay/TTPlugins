@@ -26,11 +26,14 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
             switch (_effectType)
             {
                 case EffectType.Scp207:
-                    return !player.IsEffectActive<AntiScp207>() && !player.IsEffectActive<Scp1853>();
+                    return !player.IsEffectActive<AntiScp207>() && !player.IsEffectActive<Scp1853>() && !player.IsEffectActive<Scp207>();
                 case EffectType.AntiScp207:
-                    return !player.IsEffectActive<Scp207>();
+                    return !player.IsEffectActive<Scp207>() && !player.IsEffectActive<Scp1853>() && !player.IsEffectActive<AntiScp207>() && !player.IsEffectActive<DamageReduction>();
                 case EffectType.Scp1853:
-                    return !player.IsEffectActive<Scp207>();
+                    return !player.IsEffectActive<Scp207>() && !player.IsEffectActive<AntiScp207>() && !player.IsEffectActive<Scp1853>();
+                case EffectType.DamageReduction:
+                    return !player.IsEffectActive<AntiScp207>() && !player.IsEffectActive<DamageReduction>();
+                
             }
             return true;
         }
@@ -54,7 +57,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
             {
                 intensity += effect.Intensity; //Add stacking of status effects
             }
-            player.EnableEffect(_effectType, intensity, 1000000);
+            player.EnableEffect(_effectType, intensity, 0);
             Log.Info("Giving "+player.Nickname+" "+_effectType.ToString()+" status effect.");
             if(_onRespawn)
                 HasBoost[player.NetId] = true;

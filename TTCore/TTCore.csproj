@@ -12,7 +12,7 @@
         <AssemblyName>TTCore</AssemblyName>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
-        <LangVersion>latest</LangVersion>
+        <LangVersion>preview</LangVersion>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
@@ -116,9 +116,12 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\IRegistered.cs" />
+        <Compile Include="API\SpawnerBase.cs" />
+        <Compile Include="API\SpawnerManager.cs" />
         <Compile Include="Commands\RemoteAdmin\DiagnosticsCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\Npc\NpcCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\Npc\RemoveNpc.cs" />
+        <Compile Include="Commands\RemoteAdmin\Npc\SpawnAICommand.cs" />
         <Compile Include="Commands\RemoteAdmin\Npc\SpawnNpc.cs" />
         <Compile Include="Commands\RemoteAdmin\ScaleCommand.cs" />
         <Compile Include="Commands\RemoteAdmin\VoiceModCommand.cs" />
@@ -126,6 +129,45 @@
         <Compile Include="Components\AttachObjectToPlayerHandler.cs" />
         <Compile Include="Components\PickupCollisionHandler.cs" />
         <Compile Include="Components\ProjectileCollisionHandler.cs" />
+        <Compile Include="Events\Handlers\NpcEvents.cs" />
+        <Compile Include="Npcs\AI\Core\Management\AIDataProfileBase.cs" />
+        <Compile Include="Npcs\AI\Core\Management\AIPlayerManager.cs" />
+        <Compile Include="Npcs\AI\Core\Management\AIPlayerProfile.cs" />
+        <Compile Include="Npcs\AI\Core\Management\FakeClient.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIAddon.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModuleRunner.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIBehaviorBase.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIChaseEnemy.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIFirearmShoot.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIFirearmStrafeShoot.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIFollow.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIFollowPath.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIGrenadeStrafeThrow.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIGrenadeThrow.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIItemConsume.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIItemPickup.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIMeleeScpModuleBase.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIModuleBase.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIPathfinder.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIRoleModuleBase.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIScanner.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIScp049Module.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIScp106Module.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIScp939Module.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIWander.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\AIZombieModule.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\Strafer.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIModules\StraferExtension.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIMovementEngine.cs" />
+        <Compile Include="Npcs\AI\Core\World\AIPlayer.cs" />
+        <Compile Include="Npcs\AI\Core\World\AISpawner.cs" />
+        <Compile Include="Npcs\AI\Core\World\AISquad.cs" />
+        <Compile Include="Npcs\AI\Core\World\Targetables\TargetableBase.cs" />
+        <Compile Include="Npcs\AI\Core\World\Targetables\TargetableItem.cs" />
+        <Compile Include="Npcs\AI\Core\World\Targetables\TargetablePlayer.cs" />
+        <Compile Include="Npcs\AI\Pathing\NavMeshManager.cs" />
+        <Compile Include="Npcs\AI\Pathing\Path.cs" />
+        <Compile Include="Npcs\AI\Pathing\PathManager.cs" />
         <Compile Include="Reflection\IOptional.cs" />
         <Compile Include="Reflection\OptionalPlugin.cs" />
         <Compile Include="Reflection\OptionalReference.cs" />
@@ -173,6 +215,8 @@
         <Compile Include="TTConfig.cs" />
         <Compile Include="TTCore.cs" />
         <Compile Include="Utilities\AudioUtils.cs" />
+        <Compile Include="Utilities\NpcUtilities.cs" />
+        <Compile Include="Utilities\Reflection.cs" />
         <Compile Include="Utilities\TransformUtils.cs" />
         <Compile Include="Utilities\Vector3Utils.cs" />
         <Compile Include="Utilities\WeightedItem.cs" />

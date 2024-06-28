@@ -21,7 +21,7 @@ public class Brain : MonoBehaviour
         
         Behaviours = new List<AIBehaviour>();
         //AddBehaviourOfType<DummyBehaviour>();
-        //AddBehaviourOfType<MoveBehaviour>();
+        AddBehaviourOfType<MoveBehaviour>();
         
         if(Npc == null && GameObject != null)
             this.Npc = Player.Get(GameObject) as Npc;

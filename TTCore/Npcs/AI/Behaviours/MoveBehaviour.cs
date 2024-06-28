@@ -74,9 +74,11 @@ public class MoveBehaviour : AIBehaviour
         }
         
         MoveTargetPrim = Primitive.Create(new PrimitiveSettings(PrimitiveType.Sphere, Color.red, Vector3.zero, Vector3.zero,
-            Vector3.one * -0.1f, true));
+            Vector3.one * 0.1f, true));
         TempMoveTargetPrim = Primitive.Create(new PrimitiveSettings(PrimitiveType.Sphere, Color.green, Vector3.zero, Vector3.zero,
-            Vector3.one * -0.1f, true));
+            Vector3.one * 0.1f, true));
+        MoveTargetPrim.Collidable = false;
+        TempMoveTargetPrim.Collidable = false;
         
         Path = new NavMeshPath();
         gameObject.AddComponent<AgentLinkMover>();

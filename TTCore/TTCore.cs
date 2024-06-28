@@ -23,8 +23,9 @@ namespace TTCore
         
         public PlayerSizeManager PlayerSizeManager { get; private set; }
         public NpcManager NpcManager { get; private set; }
-        public NavMeshBuilder NavMeshBuilder { get; private set; }
+        //public NavMeshBuilder NavMeshBuilder { get; private set; }
         public VoiceHandler VoiceHandler { get; private set; }
+        public NpcEvents NpcEvents { get; private set; }
 
         private TTCore()
         {
@@ -81,6 +82,8 @@ namespace TTCore
                 VoiceHandler.Register();
             if(Config.EnableCustomEffects)
                 CustomEffects.Register();
+            NpcEvents = new NpcEvents();
+            NpcEvents.Register();
             
             //NavMeshBuilder.Register();
             
@@ -96,6 +99,8 @@ namespace TTCore
             if(Config.EnableCustomEffects)
                 CustomEffects.Unregister();
             //NavMeshBuilder.Unregister();
+            NpcEvents.Unregister();
+            NpcEvents = null;
             PlayerSizeManager = null;
             NpcManager = null;
             //NavMeshBuilder = null;
@@ -107,7 +112,7 @@ namespace TTCore
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 4, 2);
+        public override System.Version Version { get; } = new System.Version(0, 5, 0);
         
     }
 }

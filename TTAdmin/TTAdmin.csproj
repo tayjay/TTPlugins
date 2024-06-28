@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props"
+            Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+    <PropertyGroup>
+        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+        <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+        <ProjectGuid>{0E70952B-5A05-4519-9BE0-1FC07B303A83}</ProjectGuid>
+        <OutputType>Library</OutputType>
+        <AppDesignerFolder>Properties</AppDesignerFolder>
+        <RootNamespace>TTAdmin</RootNamespace>
+        <AssemblyName>TTAdmin</AssemblyName>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+        <FileAlignment>512</FileAlignment>
+        <LangVersion>default</LangVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugSymbols>true</DebugSymbols>
+        <DebugType>full</DebugType>
+        <Optimize>false</Optimize>
+        <OutputPath>bin\Debug\</OutputPath>
+        <DefineConstants>DEBUG;TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <DebugType>pdbonly</DebugType>
+        <Optimize>true</Optimize>
+        <OutputPath>bin\Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <ErrorReport>prompt</ErrorReport>
+        <WarningLevel>4</WarningLevel>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+    <PropertyGroup>
+      <PostBuildEvent>xcopy /Y "E:\Projects\SCPSL\TTPlugins\TTAdmin\bin\Debug\TTAdmin.dll" "C:\Users\tayjm\AppData\Roaming\EXILED\Plugins"</PostBuildEvent>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="0Harmony">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>..\..\REFERENCE\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\CommandSystem.Core.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.API, Version=8.9.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Exiled.API.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.CreditTags, Version=8.9.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Exiled.CreditTags.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.CustomItems, Version=8.9.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Exiled.CustomItems.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.CustomRoles, Version=8.9.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Exiled.CustomRoles.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.Events, Version=8.9.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Exiled.Events.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.Loader, Version=8.9.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Exiled.Loader.dll</HintPath>
+        </Reference>
+        <Reference Include="Exiled.Permissions, Version=8.9.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\Exiled.Permissions.dll</HintPath>
+        </Reference>
+        <Reference Include="Mirror">
+          <HintPath>..\..\REFERENCE\Mirror.dll</HintPath>
+        </Reference>
+        <Reference Include="NorthwoodLib, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\NorthwoodLib.dll</HintPath>
+        </Reference>
+        <Reference Include="PluginAPI, Version=13.1.2.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\PluginAPI.dll</HintPath>
+        </Reference>
+        <Reference Include="Pooling">
+          <HintPath>..\..\REFERENCE\Pooling.dll</HintPath>
+        </Reference>
+        <Reference Include="System" />
+        <Reference Include="System.Core" />
+        <Reference Include="System.Data" />
+        <Reference Include="System.Xml" />
+        <Reference Include="UnityEngine">
+          <HintPath>..\..\ReplayPlugin\bin\Debug\UnityEngine.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\..\REFERENCE\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.PhysicsModule">
+          <HintPath>..\..\REFERENCE\UnityEngine.PhysicsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
+          <HintPath>..\packages\EXILED.8.9.5\lib\net48\YamlDotNet.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="Admin\TTAdminCommandSender.cs" />
+        <Compile Include="Config.cs" />
+        <Compile Include="Data\CommandData.cs" />
+        <Compile Include="Data\DoorData.cs" />
+        <Compile Include="Data\EffectData.cs" />
+        <Compile Include="Data\Events\BannedEventData.cs" />
+        <Compile Include="Data\Events\BasicEventData.cs" />
+        <Compile Include="Data\Events\ChangedItemEventData.cs" />
+        <Compile Include="Data\Events\ConsoleEventExecutedData.cs" />
+        <Compile Include="Data\Events\DetonatedEventData.cs" />
+        <Compile Include="Data\Events\DiedEventData.cs" />
+        <Compile Include="Data\Events\EngagingGeneratorEventData.cs" />
+        <Compile Include="Data\Events\EventData.cs" />
+        <Compile Include="Data\Events\GeneratedEventData.cs" />
+        <Compile Include="Data\Events\HurtEventData.cs" />
+        <Compile Include="Data\Events\InteractingDoorEventData.cs" />
+        <Compile Include="Data\Events\InteractingElevatorEventData.cs" />
+        <Compile Include="Data\Events\JoinedEventData.cs" />
+        <Compile Include="Data\Events\KickedEventData.cs" />
+        <Compile Include="Data\Events\KillingPlayerEventData.cs" />
+        <Compile Include="Data\Events\LeftEventData.cs" />
+        <Compile Include="Data\Events\PlayerGameConsoleCommandExecutedData.cs" />
+        <Compile Include="Data\Events\RemoteAdminCommandExecutedData.cs" />
+        <Compile Include="Data\Events\RespawningTeamEventData.cs" />
+        <Compile Include="Data\Events\RoundEndedEventData.cs" />
+        <Compile Include="Data\Events\RoundStartData.cs" />
+        <Compile Include="Data\Events\SpawnedEventData.cs" />
+        <Compile Include="Data\Events\StartingGeneratorEventData.cs" />
+        <Compile Include="Data\Events\StoppingGeneratorEventData.cs" />
+        <Compile Include="Data\Events\WarheadStartingEventData.cs" />
+        <Compile Include="Data\Events\WarheadStoppingEventData.cs" />
+        <Compile Include="Data\FacilityData.cs" />
+        <Compile Include="Data\GeneratorData.cs" />
+        <Compile Include="Data\IData.cs" />
+        <Compile Include="Data\InventoryData.cs" />
+        <Compile Include="Data\LiftData.cs" />
+        <Compile Include="Data\PickupData.cs" />
+        <Compile Include="Data\PlayerData.cs" />
+        <Compile Include="Data\RoomData.cs" />
+        <Compile Include="Data\RoundData.cs" />
+        <Compile Include="Data\Scp914Data.cs" />
+        <Compile Include="Data\WarheadData.cs" />
+        <Compile Include="Handlers\EventsHandler.cs" />
+        <Compile Include="Handlers\SubscriptionHandler.cs" />
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="TTAdmin.cs" />
+        <Compile Include="WebNew\Handlers\BothRequestHandler.cs" />
+        <Compile Include="WebNew\Handlers\GetFacilityRequest.cs" />
+        <Compile Include="WebNew\Handlers\GetItemsRequest.cs" />
+        <Compile Include="WebNew\Handlers\GetRoomInfoRequest.cs" />
+        <Compile Include="WebNew\Handlers\GetRoundInfoRequest.cs" />
+        <Compile Include="WebNew\Handlers\LobbyActionRequest.cs" />
+        <Compile Include="WebNew\Handlers\Player\GetAllPlayerInfoRequest.cs" />
+        <Compile Include="WebNew\Handlers\Player\GetPlayerInfoRequest.cs" />
+        <Compile Include="WebNew\Handlers\Player\PlayerInventoryRequest.cs" />
+        <Compile Include="WebNew\Handlers\Scp914\GetScp914DataRequest.cs" />
+        <Compile Include="WebNew\Handlers\Scp914\PostScp914Request.cs" />
+        <Compile Include="WebNew\Handlers\Scp914\Scp914Request.cs" />
+        <Compile Include="WebNew\Responses\ErrorResponse.cs" />
+        <Compile Include="WebNew\Responses\InvalidApiKeyResponse.cs" />
+        <Compile Include="WebNew\Responses\JsonResponse.cs" />
+        <Compile Include="WebNew\Responses\Response.cs" />
+        <Compile Include="WebNew\Handlers\ExecuteCommandHandler.cs" />
+        <Compile Include="WebNew\Handlers\GetCASSIEWordsRequest.cs" />
+        <Compile Include="WebNew\Handlers\GetPlayerCountHandler.cs" />
+        <Compile Include="WebNew\Handlers\GetTpsHandler.cs" />
+        <Compile Include="WebNew\Handlers\IRequestHandler.cs" />
+        <Compile Include="WebNew\Handlers\RequestHandler.cs" />
+        <Compile Include="WebNew\Handlers\RoundActionRequest.cs" />
+        <Compile Include="WebNew\Program.cs" />
+        <Compile Include="WebNew\RestServer.cs" />
+        <Compile Include="WebNew\TestServer.cs" />
+        <Compile Include="WebNew\WsServer.cs" />
+        <Compile Include="WebSocketServer\Client.cs" />
+        <Compile Include="WebSocketServer\Helpers.cs" />
+        <Compile Include="WebSocketServer\Server.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\TTCore\TTCore.csproj">
+        <Project>{2e1376d2-d773-4e5a-9b12-d81172b75063}</Project>
+        <Name>TTCore</Name>
+      </ProjectReference>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="App.config" />
+      <None Include="packages.config" />
+    </ItemGroup>
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
+    <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+         Other similar extension points exist, see Microsoft.Common.targets.
+    <Target Name="BeforeBuild">
+    </Target>
+    <Target Name="AfterBuild">
+    </Target>
+    -->
+
+</Project>

@@ -16,6 +16,8 @@ public class HealBoost : Boost
 
     public override bool ApplyBoost(Player player)
     {
+        float healAmount = 100 + (100*(int)Tier);
+        if(player.Health + healAmount > player.MaxHealth*1.5f) return false; //Don't extra overheal
         player.Heal(100 + (100*(int)Tier), true);
         return true;
     }

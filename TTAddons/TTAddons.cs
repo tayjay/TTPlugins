@@ -108,7 +108,7 @@ namespace TTAddons
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTAddons";
-        public override System.Version Version { get; } = new System.Version(0, 4, 2);
+        public override System.Version Version { get; } = new System.Version(0, 5, 0);
 
     }
 }

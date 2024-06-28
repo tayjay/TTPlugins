@@ -26,7 +26,7 @@ namespace TTAddons.Patches
             public static bool Prefix(Scp049ResurrectAbility __instance, ref ReferenceHub owner, ref Scp049ResurrectAbility.ResurrectError __result)
             {
                 if(!ShouldReplaceScp049ResurrectAbility) return true;
-                Log.Info("Scp049ResurrectAbility_CheckMaxResurrections");
+                //Log.Info("Scp049ResurrectAbility_CheckMaxResurrections");
                 int resurrectionsNumber = Scp049ResurrectAbility.GetResurrectionsNumber(owner);
                 if (resurrectionsNumber < MaxResurrections)
                 {
@@ -45,7 +45,7 @@ namespace TTAddons.Patches
             public static bool Prefix(Scp049ResurrectAbility __instance, ref BasicRagdoll ragdoll, ref Scp049ResurrectAbility.ResurrectError __result)
             {
                 if(!ShouldReplaceScp049ResurrectAbility) return true;
-                Log.Info("Scp049ResurrectAbility_CheckBeginConditions");
+                //Log.Info("Scp049ResurrectAbility_CheckBeginConditions");
                 ReferenceHub ownerHub = ragdoll.Info.OwnerHub;
                 bool flag = ownerHub == (ReferenceHub) null;
                 if (ragdoll.Info.RoleType == RoleTypeId.Scp0492)
@@ -99,7 +99,7 @@ namespace TTAddons.Patches
             public static bool Prefix(Scp049ResurrectAbility __instance)
             {
                 if(!ShouldReplaceScp049ResurrectAbility) return true;
-                Log.Info("Scp049ResurrectAbility_ServerComplete");
+                //Log.Info("Scp049ResurrectAbility_ServerComplete");
                 ReferenceHub ownerHub = __instance.CurRagdoll.Info.OwnerHub;
                 if (!EventManager.ExecuteEvent((IEventArguments) new Scp049ResurrectBodyEvent(__instance.Owner, ownerHub, __instance.CurRagdoll)))
                     return false;

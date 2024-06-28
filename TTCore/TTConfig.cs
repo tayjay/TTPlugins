@@ -16,6 +16,9 @@ namespace TTCore
         
         [Description("Enable voice modification for players")]
         public bool EnableVoiceModification { get; set; } = true;
+        
+        [Description("Enable AI NPCs")]
+        public bool EnableAi { get; set; } = true;
 
         
     }

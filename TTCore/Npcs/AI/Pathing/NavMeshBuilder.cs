@@ -18,6 +18,22 @@ public class NavMeshBuilder : IRegistered
 {
     
     public static readonly LayerMask HitregMask = (LayerMask) LayerMask.GetMask("Default", "Glass");
+
+    
+    private static int _layerMask;
+    public static LayerMask CalculatedMask
+    {
+        get
+        {
+            int layer = LayerMask.NameToLayer("Player");
+            for (int layer2 = 0; layer2 < 32; ++layer2)
+            {
+                if (!Physics.GetIgnoreLayerCollision(layer, layer2))
+                    _layerMask |= 1 << layer2;
+            }
+            return (LayerMask) _layerMask;
+        }
+    }
     
     public CoroutineHandle BuildHandle;
     
@@ -36,8 +52,8 @@ public class NavMeshBuilder : IRegistered
 
         NavMeshBuildSettings settings = NavMesh.GetSettingsByID(-1);
         
-        settings.agentRadius = 0.25f;
-        settings.agentHeight = 1f;
+        settings.agentRadius = 0.5f;
+        settings.agentHeight = 2f;
         
         GameObject facilityParentZone = new GameObject("facilityParentZone");
         try
@@ -164,16 +180,17 @@ public class NavMeshBuilder : IRegistered
             {
                 door.IsOpen = true;
             }*/
-            Timing.CallDelayed(1f, () =>
-            {
-                BuildHandle = Timing.RunCoroutine(Build()); //Timing.RunCoroutine(Build());
-            });
+            
             /*Timing.CallDelayed(Timing.WaitUntilDone(BuildHandle), () =>
             {
                 Log.Info("NavMesh built");
                 Map.Broadcast(3, "NavMesh built", shouldClearPrevious:true);
             });*/
         }
+        /*Timing.CallDelayed(1f, () =>
+        {
+            BuildHandle = Timing.RunCoroutine(Build()); //Timing.RunCoroutine(Build());
+        });*/
             
     }
 

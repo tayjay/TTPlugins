@@ -108,7 +108,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             _boosts.Add(new UpgradeKeycardBoost());
             _boosts.Add(new UpgradeKeycardBoost());
             _boosts.Add(new LightFootedBoost());
-            _boosts.Add(new NoInstaKillBoost(Tier.Epic));
+            //_boosts.Add(new NoInstaKillBoost(Tier.Epic));
             _boosts.Add(new HealAOEBoost(Tier.Epic));
             _boosts.Add(new BecomeScpBoost(Tier.Legendary));
             //_boosts.Add(new UpgradeWeaponBoost(Tier.Common));

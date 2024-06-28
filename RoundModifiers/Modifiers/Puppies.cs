@@ -1,5 +1,10 @@
-﻿using Exiled.API.Features;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Exiled.API.Features;
+using Exiled.API.Features.Pools;
+using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp939;
 using MEC;
 using PlayerRoles;
 using RoundModifiers.API;
@@ -38,14 +43,51 @@ namespace RoundModifiers.Modifiers
             }
             
         }
+
+        public void OnSavingVoice(SavingVoiceEventArgs ev)
+        {
+            if(!RoundModifiers.Instance.Config.Puppies_ShareVoices) return;
+            if(!ev.IsAllowed) return;
+
+            if (!AlreadySavedVoices.ContainsKey(ev.Stolen.Id))
+            {
+                AlreadySavedVoices.Add(ev.Stolen.Id, new List<Player>());
+            }
+            if(AlreadySavedVoices[ev.Stolen.Id].Contains(ev.Player))
+            {
+                ev.IsAllowed = false;
+                return;
+            }
+            AlreadySavedVoices[ev.Stolen.Id].Add(ev.Player);
+            
+            // Try giving the voice to other puppies
+            foreach (Player scp939Player in Player.List.Where(p => p.Role == RoleTypeId.Scp939 && p.Id != ev.Player.Id))
+            {
+                Scp939Role scp939 = scp939Player.Role as Scp939Role;
+                if (scp939 == null) continue;
+                if (scp939.MimicryRecorder.SavedVoices
+                    .Any(r => r.Owner.PlayerId == ev.Stolen.Footprint.PlayerId))
+                    return;
+                scp939.MimicryRecorder.SaveRecording(ev.Stolen.ReferenceHub);
+            }
+        }
+        
+        public Dictionary<int,List<Player>> AlreadySavedVoices { get; set; }
+        
         protected override void RegisterModifier()
         {
             Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;
+            Exiled.Events.Handlers.Scp939.SavingVoice += OnSavingVoice;
+
+            AlreadySavedVoices = DictionaryPool<int, List<Player>>.Pool.Get();
         }
 
         protected override void UnregisterModifier()
         {
             Exiled.Events.Handlers.Player.ChangingRole -= OnChangingRole;
+            Exiled.Events.Handlers.Scp939.SavingVoice -= OnSavingVoice;
+            
+            DictionaryPool<int, List<Player>>.Pool.Return(AlreadySavedVoices);
         }
 
         public override ModInfo ModInfo { get; } = new ModInfo

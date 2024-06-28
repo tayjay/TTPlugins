@@ -103,6 +103,8 @@ namespace RoundModifiers
         public bool Puppies_AffectScp079 { get; set; } = true;
         [Description("Should Scp-3114 (Skeleton) be converted by the Puppies modifier? Default is true.")]
         public bool Puppies_AffectScp3114 { get; set; } = true;
+        [Description("Should Puppies share voices when any of them get a kill? Default is true.")]
+        public bool Puppies_ShareVoices { get; set; } = true;
         
         //Scp249
         [Description("The amount of time in seconds between door movements during the Scp249 modifier. Default is 30f. Suggest lowering this with larget DoorCount values.")]

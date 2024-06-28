@@ -1,4 +1,6 @@
-﻿using Exiled.API.Interfaces;
+﻿using System;
+using System.ComponentModel;
+using Exiled.API.Interfaces;
 
 namespace TTAdmin
 {
@@ -6,5 +8,35 @@ namespace TTAdmin
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
+
+        //public string Host { get; set; } = "127.0.0.1";
+        
+        [Description("Whether to use SSL for the server.")]
+        public bool UseSsl { get; set; } = false;
+        
+        [Description("Path to the certificate file.")]
+        public string CertificatePath { get; set; } = "";
+        
+        [Description("Password for the certificate file.")]
+        public string CertificatePassword { get; set; } = "";
+        
+        [Description("Whether to enable the REST server.")]
+        public bool RestEnabled { get; set; } = false;
+        
+        [Description("Port for the REST server.")]
+        public int RestPort { get; set; } = 8080;
+        
+        [Description("Whether to enable the WebSocket server.")]
+        public bool WebSocketEnabled { get; set; } = false;
+        
+        [Description("Port for the WebSocket server.")]
+        public int WebSocketPort { get; set; } = 8081;
+        
+        [Description("Size of the WebSocket buffer. Default is 1024.")]
+        public int WsBufferSize { get; set; } = 1024;
+        
+        [Description("API key for the WebSocket server. Delete the whole row to generate a new key.")]
+        public string ApiKey { get; set; } = Guid.NewGuid().ToString();
+        
     }
 }

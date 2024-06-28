@@ -12,7 +12,7 @@ public class Scp939XP : ScpXP, IVoiceEvent
 
     public void OnPlayingVoice(PlayingVoiceEventArgs ev)
     {
-        //GiveXP(ev.Player, 1);
+        GiveXP(ev.Player, 0.1f);
     }
 
     public void OnPlayingSound(PlayingSoundEventArgs ev)

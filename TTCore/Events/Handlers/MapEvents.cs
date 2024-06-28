@@ -9,6 +9,7 @@ namespace TTCore.Events.Handlers
         public void OnMapGenerated()
         {
             Log.Info("Map generated!");
+            
         }
 
 

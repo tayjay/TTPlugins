@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using MEC;
-using TTAdmin.Scripting.Custom;
-using TTAdmin.Web;
+using TTAdmin.Handlers;
+using TTAdmin.WebNew;
+using Utf8Json;
 
 namespace TTAdmin
 {
@@ -21,13 +23,27 @@ namespace TTAdmin
         public override string Author { get; } = "TayTay";
         public override Version Version { get; } = new Version(0, 1, 0);
         
-        private HttpServer HttpServer;
         
-        //private CoroutineHandle AdminPanelCoroutine;
-        //GameServerClient GameServerClient;
-        //ScriptLoader ScriptLoader;
+        public SubscriptionHandler SubscriptionHandler;
+        public EventsHandler EventsHandler;
         
-       
+        
+        public void OnWaitingForPlayers()
+        {
+            var payload = new { ev = "waiting_for_players", timestamp = DateTime.Now };
+            Timing.RunCoroutine(WSTick());
+        }
+
+        public IEnumerator<float> WSTick()
+        {
+            while (true)
+            {
+                yield return Timing.WaitForSeconds(1f);
+                var payload = new { data="tps", value=Server.Tps };
+                WebNew.WsServer.Server.BroadcastMessage(JsonSerializer.ToJsonString(payload));
+            }
+        }
+
 
         private TTAdmin()
         {
@@ -39,7 +55,7 @@ namespace TTAdmin
         public override void OnEnabled()
         {
             base.OnEnabled();
-            //Setup();
+            Setup();
             Log.Info("TTAdmin has been enabled!");
         }
         
@@ -56,32 +72,28 @@ namespace TTAdmin
 
         public void Setup()
         {
+            /*if (Config.ApiKey == "")
+            {
+                //Need to generate a new API key
+                Config.ApiKey = Guid.NewGuid().ToString();
+                ServerConfigSynchronizer.RefreshAllConfigs();
+                Log.Info("New API Key is: " + Config.ApiKey);
+            }*/
             
-            try
-            {
-                HttpServer = new HttpServer("http://localhost:8080/");
-                HttpServer.Start();
-            } catch (Exception e)
-            {
-                Log.Error(e);
-            }
-            Log.Info("TTAdmin has been setup!");
+            SubscriptionHandler = new SubscriptionHandler();
+            EventsHandler = new EventsHandler();
+            EventsHandler.Register();
+            
+            RestServer.Start();
+            WebNew.WsServer.Start();
         }
         
         public void Shutdown()
         {
-            HttpServer.Stop();
+            RestServer.Stop();
+            WebNew.WsServer.Stop();
         }
         
-        /*private IEnumerator<float> AdminPanel()
-        { 
-            GameServerClient = new GameServerClient("localhost:8080");
-            Timing.CallDelayed(1f, () =>
-            {
-                GameServerClient.ConnectAsync();
-            });
-            yield return Timing.WaitForSeconds(1f);
-        }*/
         
         
     }
