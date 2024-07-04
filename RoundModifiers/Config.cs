@@ -158,5 +158,7 @@ namespace RoundModifiers
         //ScpChat
         [Description("Whether SCPs can change the state of the ability. Default is true.")]
         public bool ScpChat_CanChangeState { get; set; } = true;
+        
+        public bool ScpBackup_LeaveOnDeath { get; set; } = true;
     }
 }

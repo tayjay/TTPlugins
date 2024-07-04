@@ -76,7 +76,7 @@ public class NavMeshBuilder : IRegistered
         
         foreach (Door door in Door.List)
         {
-            ///door.IsOpen = true;
+            //door.IsOpen = true;
             //NavMeshObstacle obstacle = door.GameObject.AddComponent<NavMeshObstacle>();
             //obstacle.carving = true;
             if(door.Rooms.Count==1) continue;

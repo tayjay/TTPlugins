@@ -14,6 +14,15 @@ public class RestServer
     private static List<IRequestHandler> handlers;
     private static bool running = true;
     
+    public static void RegisterHandler<T>() where T : IRequestHandler, new()
+    {
+        if(handlers == null)
+        {
+            handlers = new List<IRequestHandler>();
+        }
+        handlers.Add(new T());
+    }
+    
     public static void Start()
     {
         if (!TTAdmin.Instance.Config.RestEnabled)
@@ -22,7 +31,26 @@ public class RestServer
             return;
         }
         
+        RegisterHandler<GetPlayerCountHandler>();
+        RegisterHandler<ExecuteCommandHandler>();
+        RegisterHandler<GetTpsHandler>();
+        RegisterHandler<GetCASSIEWordsRequest>();
+        RegisterHandler<GetPlayerInfoRequest>();
+        RegisterHandler<GetAllPlayerInfoRequest>();
+        RegisterHandler<RoundActionRequest>();
+        RegisterHandler<GetFacilityRequest>();
+        RegisterHandler<GetRoomInfoRequest>();
+        RegisterHandler<GetRoundInfoRequest>();
+        RegisterHandler<LobbyActionRequest>();
+        RegisterHandler<Scp914Request>();
+        RegisterHandler<GetAIDataHandler>();
+        RegisterHandler<CASSIEActionRequest>();
+        RegisterHandler<WarheadRequestHandler>();
+        RegisterHandler<RespawnRequestHandler>();
         
+        
+        
+        /*
         handlers = new List<IRequestHandler>
         {
             new GetPlayerCountHandler(),
@@ -36,8 +64,10 @@ public class RestServer
             new GetRoomInfoRequest(),
             new GetRoundInfoRequest(),
             new LobbyActionRequest(),
-            new Scp914Request()
-        };
+            new Scp914Request(),
+            new GetAIDataHandler(),
+            new CASSIEActionRequest()
+        };*/
         
         var httpThread = new Thread(StartHttpServer);
         httpThread.Start();
@@ -70,7 +100,7 @@ public class RestServer
         if (context.Request.HttpMethod == "OPTIONS")
         {
             context.Response.AddHeader("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, API-Key");
-            context.Response.AddHeader("Access-Control-Allow-Methods", "GET, POST");
+            context.Response.AddHeader("Access-Control-Allow-Methods", "GET, POST, PATCH");
             context.Response.AddHeader("Access-Control-Max-Age", "1728000");
             context.Response.AddHeader("Access-Control-Allow-Origin", "*");
             context.Response.StatusCode = 200;
@@ -91,7 +121,7 @@ public class RestServer
         // Default response for unhandled requests
         new Response()
         {
-            StatusCode = HttpStatusCode.BadRequest,
+            StatusCode = HttpStatusCode.InternalServerError,
             ContentType = "text/plain",
             Message = "Invalid request"
         }.Send(context.Response);

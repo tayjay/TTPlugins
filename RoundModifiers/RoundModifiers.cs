@@ -131,6 +131,8 @@ namespace RoundModifiers
             //AddModifier<GhostHunting>();
             AddModifier<ScpChat>();
             AddModifier<LowPower>();
+            //AddModifier<ZombieSurvival>();
+            AddModifier<ScpBackup>();
             
             
             AddModifier<ComboImposter>();
@@ -231,6 +233,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 5, 0);
+        public override System.Version Version { get; } = new System.Version(0, 5, 1);
     }
 }

@@ -10,7 +10,8 @@ public class LowPower : Modifier
     {
         foreach (RoomLightController instance in RoomLightController.Instances)
         {
-            instance.NetworkOverrideColor = new Color(0.2f, 0.2f, 0.2f);
+            instance.NetworkOverrideColor =
+                new Color(0.1f, 0.1f, 0.1f, 0.1f);
         }
     }
     

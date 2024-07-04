@@ -1,4 +1,6 @@
-﻿using Exiled.Events.EventArgs.Player;
+﻿using Exiled.API.Features.Items;
+using Exiled.Events.EventArgs.Player;
+using InventorySystem.Items.Firearms.Attachments;
 using PlayerRoles;
 using RoundModifiers.API;
 
@@ -25,7 +27,7 @@ public class ComboPowerless : ComboModifier
         if (ev.Player.HasItem(ItemType.GunFSP9))
         {
             ev.Player.RemoveItem(item => item.Type == ItemType.GunFSP9);
-            ev.Player.AddItem(ItemType.GunAK);
+            (ev.Player.AddItem(ItemType.GunAK) as Firearm).AddAttachment(AttachmentName.Flashlight);
         }
     }
 

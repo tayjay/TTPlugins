@@ -22,24 +22,30 @@ public class GetRoomInfoRequest : RequestHandler
             };
             if(request.RoomName == null)
             {
+                
+                ErrorResponse.SendError(context.Response, HttpStatusCode.BadRequest, "Room name is required");
+                
+                /*
                 new Response()
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     Message = "Room name is required",
                     ContentType = "text/plain"
-                }.Send(context.Response);
+                }.Send(context.Response);*/
                 return;
             }
 
             Room room = Room.Get(r => r.Name == request.RoomName).First();
             if (room == null)
             {
-                new Response()
+                
+                ErrorResponse.SendError(context.Response, HttpStatusCode.NotFound, "Room not found");
+                /*new Response()
                 {
                     StatusCode = HttpStatusCode.NotFound,
                     Message = "Room not found",
                     ContentType = "text/plain"
-                }.Send(context.Response);
+                }.Send(context.Response);*/
                 return;
             }
             
@@ -47,12 +53,14 @@ public class GetRoomInfoRequest : RequestHandler
         }
         catch (System.Exception e)
         {
-            new Response()
+            
+            ErrorResponse.SendError(context.Response, HttpStatusCode.InternalServerError, "An error occurred while processing the request:" + e.Message);
+            /*new Response()
             {
                 StatusCode = HttpStatusCode.InternalServerError,
                 Message = "An error occurred while processing the request:" + e.Message,
                 ContentType = "text/plain"
-            }.Send(context.Response);
+            }.Send(context.Response);*/
         }
     }
 

@@ -38,21 +38,20 @@ public class GunGame : Modifier
     // Guns
     public ItemType[] Weapons => new[]
     {
-        ItemType.GunCOM18,
-        ItemType.GunFSP9,
-        ItemType.GunCrossvec,
-        ItemType.GunE11SR,
-        ItemType.GunAK,
-        ItemType.GunShotgun,
-        ItemType.GunRevolver,
-        ItemType.GunLogicer,
         ItemType.GunFRMG0,
+        ItemType.GunLogicer,
         ItemType.GunA7,
-        ItemType.GunCom45,
+        ItemType.GunE11SR,
+        ItemType.GunRevolver,
+        ItemType.GunShotgun,
+        ItemType.GunAK,
+        ItemType.GunCrossvec,
+        ItemType.GunFSP9,
+        ItemType.GunCOM18,
         ItemType.ParticleDisruptor,
+        ItemType.GunCom45,
         ItemType.Jailbird,
-        ItemType.GunCOM15,
-        ItemType.MicroHID
+        ItemType.MicroHID,
     };
 
     public ItemType[] CatchupItems => new[]

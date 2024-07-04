@@ -21,7 +21,7 @@ namespace TTAdmin
         
         public override string Name { get; } = "TTAdmin";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new Version(0, 1, 0);
+        public override Version Version { get; } = new Version(0, 1, 1);
         
         
         public SubscriptionHandler SubscriptionHandler;

@@ -1,10 +1,14 @@
-﻿using Exiled.API.Features;
+﻿using Exiled.API.Enums;
+using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using Exiled.Permissions.Commands.Permissions.Group;
 using HarmonyLib;
 using MapGeneration;
 using TTCore.API;
+using TTCore.Npcs.AI.Core.Management;
 using TTCore.Npcs.AI.Pathing;
 using TTCore.Utilities;
+using UnityEngine;
 
 namespace TTCore.Events.Handlers;
 
@@ -40,13 +44,58 @@ public class NpcEvents : IRegistered
             NpcUtilities.ZoneElevatorRooms.Add(room.Zone,[room]);
     }
 
+    public void OnHurt(HurtingEventArgs ev)
+    {
+        //stop Falling damage
+        if (ev.Player.TryGetAI(out AIPlayerProfile prof))
+        {
+            prof.WorldPlayer.Damage(ev.Attacker);
+
+            if (ev.DamageHandler.Type == DamageType.Falldown)
+            {
+                ev.IsAllowed = false;
+                ev.Amount = 0f;
+            } else if (ev.DamageHandler.Type == DamageType.Tesla)
+            {
+                ev.IsAllowed = false;
+                ev.Amount = 0;
+            }
+        }
+    }
+    
+    public void OnDying(DyingEventArgs ev)
+    {
+        //rotate on death?
+        if(ev.Player.TryGetAI(out AIPlayerProfile prof))
+            prof.ReferenceHub.transform.eulerAngles = new Vector3(0f, prof.ReferenceHub.transform.eulerAngles.y, 0f);
+    }
+
+    public void OnChangeRole(ChangingRoleEventArgs ev)
+    {
+        if(ev.Player.TryGetAI(out AIPlayerProfile prof))
+            prof.WorldPlayer.RoleChange(ev.NewRole);
+    }
+
+    public void OnRestart()
+    {
+        //Kick all NPCs, already done by EXILED
+    }
+
     public void Register()
     {
         Exiled.Events.Handlers.Map.Generated += OnGenerated;
+        Exiled.Events.Handlers.Player.Hurting += OnHurt;
+        Exiled.Events.Handlers.Player.Dying += OnDying;
+        Exiled.Events.Handlers.Player.ChangingRole += OnChangeRole;
+        Exiled.Events.Handlers.Server.RestartingRound += OnRestart;
     }
 
     public void Unregister()
     {
         Exiled.Events.Handlers.Map.Generated -= OnGenerated;
+        Exiled.Events.Handlers.Player.Hurting -= OnHurt;
+        Exiled.Events.Handlers.Player.Dying -= OnDying;
+        Exiled.Events.Handlers.Player.ChangingRole -= OnChangeRole;
+        Exiled.Events.Handlers.Server.RestartingRound -= OnRestart;
     }
 }

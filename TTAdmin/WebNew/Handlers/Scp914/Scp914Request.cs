@@ -7,7 +7,7 @@ using Utf8Json;
 
 namespace TTAdmin.WebNew.Handlers.Scp914;
 
-public class Scp914Request : BothRequestHandler
+public class Scp914Request : AllRequestHandler
 {
     public override string Path => "/scp914";
     public override void ProcessGetRequest(HttpListenerContext context)

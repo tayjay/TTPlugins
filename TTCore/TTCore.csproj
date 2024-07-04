@@ -171,6 +171,7 @@
         <Compile Include="Reflection\IOptional.cs" />
         <Compile Include="Reflection\OptionalPlugin.cs" />
         <Compile Include="Reflection\OptionalReference.cs" />
+        <Compile Include="Reflection\OptionalRoundModifiers.cs" />
         <Compile Include="Reflection\OptionalSCriPt.cs" />
         <Compile Include="Reflection\TTReflection.cs" />
         <Compile Include="Events\EventArgs\AccessFirearmBaseStatsEventArgs.cs" />

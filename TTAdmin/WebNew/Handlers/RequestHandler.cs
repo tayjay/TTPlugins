@@ -32,7 +32,15 @@ public abstract class RequestHandler : IRequestHandler
             InvalidApiKeyResponse.SendError(context.Response);
             return;
         }
-        ProcessRequest(context);
+        try
+        {
+            ProcessRequest(context);
+        } catch (Exception e)
+        {
+            Log.Error($"Error processing request: {e}");
+            new ErrorResponse(HttpStatusCode.InternalServerError, e.Message).Send(context.Response);
+        }
+        
     }
     
     public abstract void ProcessRequest(HttpListenerContext context);
@@ -41,7 +49,8 @@ public abstract class RequestHandler : IRequestHandler
     public enum MethodType
     {
         GET,
-        POST
+        POST,
+        PATCH
     }
 
     protected bool IsValidApiKey(HttpListenerRequest request)

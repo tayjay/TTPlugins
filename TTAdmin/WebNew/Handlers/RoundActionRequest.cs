@@ -36,12 +36,13 @@ public class RoundActionRequest : RequestHandler
                     Round.IsLocked = false;
                     break;
                 default:
-                    new Response()
+                    ErrorResponse.SendError(context.Response, HttpStatusCode.BadRequest, "Invalid action");
+                    /*new Response()
                     {
                         StatusCode = HttpStatusCode.BadRequest,
                         Message = "Invalid action",
                         ContentType = "text/plain"
-                    }.Send(context.Response);
+                    }.Send(context.Response);*/
                     return;
             }
             /*new Response()
@@ -54,12 +55,13 @@ public class RoundActionRequest : RequestHandler
         }
         catch (System.Exception e)
         {
-            new Response()
+            ErrorResponse.SendError(context.Response, HttpStatusCode.InternalServerError, "An error occurred while processing the request:" + e.Message);
+            /*new Response()
             {
                 StatusCode = HttpStatusCode.InternalServerError,
                 Message = "An error occurred while processing the request:" + e.Message,
                 ContentType = "text/plain"
-            }.Send(context.Response);
+            }.Send(context.Response);*/
         }
     }
     

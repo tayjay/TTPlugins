@@ -239,6 +239,7 @@
         <Compile Include="Modifiers\Scp249.cs" />
         <Compile Include="Modifiers\Scp507\Scp507.cs" />
         <Compile Include="Modifiers\Scp507\Scp507Role.cs" />
+        <Compile Include="Modifiers\ScpBackup.cs" />
         <Compile Include="Modifiers\ScpChat.cs" />
         <Compile Include="Modifiers\ScpShuffle.cs" />
         <Compile Include="Modifiers\SpectatorGame.cs" />
@@ -269,6 +270,7 @@
         <Compile Include="Modifiers\WeaponStats\TargetShotEffectStat.cs" />
         <Compile Include="Modifiers\WeaponStats\VampireStat.cs" />
         <Compile Include="Modifiers\WeaponStats\WeaponStats2.cs" />
+        <Compile Include="Modifiers\ZombieSurvival.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="RoundModifiers.cs" />
     </ItemGroup>

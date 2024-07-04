@@ -7,7 +7,7 @@ using TTAdmin.WebNew.DataTypes;
 
 namespace TTAdmin.WebNew.Handlers.Player;
 
-public class PlayerInventoryRequest : BothRequestHandler
+public class PlayerInventoryRequest : AllRequestHandler
 {
     public override string Path => "/player/inventory";
     public override void ProcessGetRequest(HttpListenerContext context)

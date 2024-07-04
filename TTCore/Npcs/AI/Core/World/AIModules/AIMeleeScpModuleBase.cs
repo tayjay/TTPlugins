@@ -2,6 +2,7 @@
 using Mirror;
 using PlayerRoles.PlayableScps;
 using PlayerRoles.Subroutines;
+using TTCore.Utilities;
 using UnityEngine;
 
 namespace TTCore.Npcs.AI.Core.World.AIModules;
@@ -50,13 +51,14 @@ public abstract class AIMeleeScpModuleBase<TRole, TAttacker> : AIRoleModuleBase 
 
         public override void OnEnabled() { }
 
+        
         public override void Tick()
         {
             try
             {
                 if (Parent.EnemyTarget == null || !Parent.HasEnemyTarget || !Roles.Contains(Parent.Role))
                     return;
-
+                //Log.Debug("Has Enemy Target: "+this.Parent.EnemyTarget?.GetPosition(this.Parent) ?? "null");
                 bool hasLOS = Parent.HasLOSOnEnemy(out Vector3 pos, out bool hasCollider);
 
                 if (hasLOS)
@@ -71,6 +73,7 @@ public abstract class AIMeleeScpModuleBase<TRole, TAttacker> : AIRoleModuleBase 
                 {
                     Pathfinder.OverrideWishDir = Vector3.zero;
                     Pathfinder.SetDestination(Parent.EnemyTarget.GetPosition(Parent));
+                    //Log.Debug("Set Destination to Enemy Target: "+Parent.EnemyTarget.GetPosition(Parent));
                 }
                 else
                     Attack();

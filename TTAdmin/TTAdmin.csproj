@@ -104,6 +104,7 @@
     <ItemGroup>
         <Compile Include="Admin\TTAdminCommandSender.cs" />
         <Compile Include="Config.cs" />
+        <Compile Include="Data\AIData.cs" />
         <Compile Include="Data\CommandData.cs" />
         <Compile Include="Data\DoorData.cs" />
         <Compile Include="Data\EffectData.cs" />
@@ -137,9 +138,11 @@
         <Compile Include="Data\GeneratorData.cs" />
         <Compile Include="Data\IData.cs" />
         <Compile Include="Data\InventoryData.cs" />
+        <Compile Include="Data\LczDecontaminationData.cs" />
         <Compile Include="Data\LiftData.cs" />
         <Compile Include="Data\PickupData.cs" />
         <Compile Include="Data\PlayerData.cs" />
+        <Compile Include="Data\RespawnData.cs" />
         <Compile Include="Data\RoomData.cs" />
         <Compile Include="Data\RoundData.cs" />
         <Compile Include="Data\Scp914Data.cs" />
@@ -148,7 +151,10 @@
         <Compile Include="Handlers\SubscriptionHandler.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="TTAdmin.cs" />
-        <Compile Include="WebNew\Handlers\BothRequestHandler.cs" />
+        <Compile Include="WebNew\Handlers\AllRequestHandler.cs" />
+        <Compile Include="WebNew\Handlers\CASSIEActionRequest.cs" />
+        <Compile Include="WebNew\Handlers\DecontaminationRequestHandler.cs" />
+        <Compile Include="WebNew\Handlers\GetAIDataHandler.cs" />
         <Compile Include="WebNew\Handlers\GetFacilityRequest.cs" />
         <Compile Include="WebNew\Handlers\GetItemsRequest.cs" />
         <Compile Include="WebNew\Handlers\GetRoomInfoRequest.cs" />
@@ -157,9 +163,11 @@
         <Compile Include="WebNew\Handlers\Player\GetAllPlayerInfoRequest.cs" />
         <Compile Include="WebNew\Handlers\Player\GetPlayerInfoRequest.cs" />
         <Compile Include="WebNew\Handlers\Player\PlayerInventoryRequest.cs" />
+        <Compile Include="WebNew\Handlers\RespawnRequestHandler.cs" />
         <Compile Include="WebNew\Handlers\Scp914\GetScp914DataRequest.cs" />
         <Compile Include="WebNew\Handlers\Scp914\PostScp914Request.cs" />
         <Compile Include="WebNew\Handlers\Scp914\Scp914Request.cs" />
+        <Compile Include="WebNew\Handlers\WarheadRequestHandler.cs" />
         <Compile Include="WebNew\Responses\ErrorResponse.cs" />
         <Compile Include="WebNew\Responses\InvalidApiKeyResponse.cs" />
         <Compile Include="WebNew\Responses\JsonResponse.cs" />

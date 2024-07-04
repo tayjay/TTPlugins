@@ -109,13 +109,15 @@ public class Flamingos : Modifier
                 ev.Player.ShowHitMarker();
             }
         }
-
         
-        
-        if(ev.Item is Jailbird jb)
+        Timing.CallDelayed(0.1f, () =>
         {
-            jb.TotalCharges -= 2;
-        }
+            if (ev.Item is Jailbird jb)
+            {
+                jb.Base.ServerReset();
+            }
+        });
+        
         
     }
 
@@ -250,14 +252,18 @@ public class Flamingos : Modifier
 
     public void OnEndingRound(EndingRoundEventArgs ev)
     {
-        if(Player.List.Count(p => p.IsAlive && p.Role!=RoleTypeId.Tutorial) == 0)
+        
+        if(Player.List.Count(p => Scp1507Role.Check(p)) > 0) //Stop round from ending if there are still flamingos
         {
-            ev.IsAllowed = true;
-            ev.LeadingTeam = LeadingTeam.Draw;
-        }
-        if(Player.List.Count(p => p.Role == RoleTypeId.Tutorial) > 0) //Stop round from ending if there are still flamingos
-        {
-            ev.IsAllowed = false;
+            if(Player.List.Count(p => p.IsAlive && !Scp1507Role.Check(p)) == 0)
+            {
+                ev.IsAllowed = true;
+                ev.LeadingTeam = LeadingTeam.Draw;
+            }
+            else
+            {
+                ev.IsAllowed = false;
+            }
         }
     }
 
@@ -271,7 +277,6 @@ public class Flamingos : Modifier
         ev.VoiceMessage = ev.VoiceMessage with { Channel = VoiceChatChannel.RoundSummary };
         foreach(Player p in Player.List.Where(p=>p.Role == RoleTypeId.Tutorial && p != ev.Player))
             p.ReferenceHub.connectionToClient.Send(ev.VoiceMessage);
-        
     }
     
     

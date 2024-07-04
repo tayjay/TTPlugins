@@ -69,7 +69,7 @@ public class AIModuleRunner : AIAddon
         public float RetargetTimer;
         public bool CanStealth = false;
         public bool CanWallhack = false;
-        public bool DeleteOnDeath = true;
+        public bool DeleteOnDeath = false;
 
         protected float AimOffset;
 
@@ -219,6 +219,7 @@ public class AIModuleRunner : AIAddon
 
         public bool CheckLOS(Vector3 pos, out bool hasCollider, bool canWallHack = false)
         {
+            //todo: Change to nonalloc
             RaycastHit[] hits = Physics.RaycastAll(pos, (CameraPosition - pos).normalized, Vector3.Distance(CameraPosition, pos), AIPlayer.MapLayerMask, QueryTriggerInteraction.Ignore);
 
             if (hits.Length <= 0)
@@ -302,7 +303,7 @@ public class AIModuleRunner : AIAddon
 
         public bool HasItem<T>(out T it, Predicate<T> filter) where T : Item
         {
-            foreach (ItemBase item in Inventory.UserInventory.Items.Values)
+            foreach (Item item in Core.Player.Items)
                 if (item is T t && (filter == null || filter.Invoke(t)))
                 {
                     it = t;
@@ -340,7 +341,7 @@ public class AIModuleRunner : AIAddon
         public List<T> GetAllItems<T>() where T : Item
         {
             List<T> list = [];
-            foreach (ItemBase item in Inventory.UserInventory.Items.Values)
+            foreach (Item item in Core.Player.Items)
                 if (item is T t)
                     list.Add(t);
             return list;

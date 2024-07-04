@@ -20,6 +20,9 @@ namespace TTAdmin
         [Description("Password for the certificate file.")]
         public string CertificatePassword { get; set; } = "";
         
+        [Description("Whether to allow any command to be ran using POST /command.")]
+        public bool AllowCommands { get; set; } = true;
+        
         [Description("Whether to enable the REST server.")]
         public bool RestEnabled { get; set; } = false;
         

@@ -8,7 +8,7 @@ public class ComboImposter : ComboModifier
     {
         AddModifier<Imposter>();
         AddModifier<ScpChat>();
-        AddModifier<Nicknames>();
+        //AddModifier<Nicknames>();
     }
     
     public override ModInfo ModInfo { get; } = new ModInfo()

@@ -52,51 +52,51 @@ public class AIPathfinder : AIFollowPath
             if (Parent.Room.Zone == zone)
                 return dest;
 
-            /*            switch (zone)
-                        {
-                            case FacilityZone.HeavyContainment:
-                                switch (Parent.Room.Zone)
-                                {
-                                    case FacilityZone.Entrance:
-                                        return dest;
-                                    case FacilityZone.LightContainment:
-                                        return LCZElevator();
-                                    case FacilityZone.Surface:
-                                        return SurfaceElevator();
-                                }
-                                break;
-                            case FacilityZone.Entrance:
-                                switch (Parent.Room.Zone)
-                                {
-                                    case FacilityZone.HeavyContainment:
-                                        return dest;
-                                    case FacilityZone.LightContainment:
-                                        return LCZElevator();
-                                    case FacilityZone.Surface:
-                                        return SurfaceElevator();
-                                }
-                                break;
-                            case FacilityZone.LightContainment:
-                                switch (Parent.Room.Zone)
-                                {
-                                    case FacilityZone.HeavyContainment: 
-                                    case FacilityZone.Entrance:
-                                        return HCZElevator();
-                                    case FacilityZone.Surface:
-                                        return SurfaceElevator();
-                                }
-                                break;
-                            case FacilityZone.Surface:
-                                switch (Parent.Room.Zone)
-                                {
-                                    case FacilityZone.HeavyContainment:
-                                    case FacilityZone.Entrance:
-                                        return EZElevator();
-                                    case FacilityZone.LightContainment:
-                                        return LCZElevator();
-                                }
-                                break;
-                        }*/
+            switch (zone)
+            {
+                case ZoneType.HeavyContainment:
+                    switch (Parent.Room.Zone)
+                    {
+                        case ZoneType.Entrance:
+                            return dest;
+                        case ZoneType.LightContainment:
+                            return LCZElevator();
+                        case ZoneType.Surface:
+                            return SurfaceElevator();
+                    }
+                    break;
+                case ZoneType.Entrance:
+                    switch (Parent.Room.Zone)
+                    {
+                        case ZoneType.HeavyContainment:
+                            return dest;
+                        case ZoneType.LightContainment:
+                            return LCZElevator();
+                        case ZoneType.Surface:
+                            return SurfaceElevator();
+                    }
+                    break;
+                case ZoneType.LightContainment:
+                    switch (Parent.Room.Zone)
+                    {
+                        case ZoneType.HeavyContainment: 
+                        case ZoneType.Entrance:
+                            return HCZElevator();
+                        case ZoneType.Surface:
+                            return SurfaceElevator();
+                    }
+                    break;
+                case ZoneType.Surface:
+                    switch (Parent.Room.Zone)
+                    {
+                        case ZoneType.HeavyContainment:
+                        case ZoneType.Entrance:
+                            return EZElevator();
+                        case ZoneType.LightContainment:
+                            return LCZElevator();
+                    }
+                    break;
+            }
 
             return dest;
         }

@@ -38,7 +38,7 @@ public class AIFollow : AIModuleBase
         {
             if (!Enabled || !HasTarget || Parent.GetDistance(Target) < FollowDistance)
                 return;
-
+            //Log.Debug("Following target! "+Target.Nickname);
             Pathfinder.LookAtWaypoint = Parent.HasLOS(Parent.FollowTarget, out _, out _);
 
             if (!Pathfinder.LookAtWaypoint)
@@ -49,7 +49,7 @@ public class AIFollow : AIModuleBase
                 Parent.MovementEngine.State = PlayerMovementState.Sprinting;
             else
                 Parent.MovementEngine.State = TargetFpc.CurrentMovementState;
-            
+            //Log.Debug("Still following target! "+Target.Nickname);
             if (TryGetDoor(out Door door, out bool inVision))
             {
                 if (!inVision && !door.IsOpen)
@@ -57,6 +57,8 @@ public class AIFollow : AIModuleBase
                 else if (Parent.TrySetDoor(door, true))
                     OnSetDoor(door);
             }
+            
+            
             
         }
 

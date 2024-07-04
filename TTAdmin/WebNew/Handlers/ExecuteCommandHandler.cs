@@ -16,6 +16,12 @@ public class ExecuteCommandHandler : RequestHandler
     private TTAdminCommandSender _serverConsoleSender = new TTAdminCommandSender();
     public override void ProcessRequest(HttpListenerContext context)
     {
+        if(!TTAdmin.Instance.Config.AllowCommands)
+        {
+            //new ErrorResponse(HttpStatusCode.Forbidden, "Generic commands are disabled").Send(context.Response);
+            ErrorResponse.Forbidden(context.Response, "Generic commands are disabled");
+            return;
+        }
         using (var reader = new StreamReader(context.Request.InputStream, context.Request.ContentEncoding))
         {
             string json = reader.ReadToEnd();
@@ -37,7 +43,8 @@ public class ExecuteCommandHandler : RequestHandler
                 }
                 else
                 {
-                    new ErrorResponse(HttpStatusCode.BadRequest, "Invalid command type").Send(context.Response);
+                    ErrorResponse.BadRequest(context.Response, "Invalid command type");
+                    //new ErrorResponse(HttpStatusCode.BadRequest, "Invalid command type").Send(context.Response);
                 }
                 
                 var response = new CommandResponse()

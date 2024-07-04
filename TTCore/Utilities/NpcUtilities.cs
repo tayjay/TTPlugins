@@ -41,7 +41,7 @@ public static class NpcUtilities
             { RoleTypeId.Scp173, 3 },
             { RoleTypeId.Scp106, 3 },
             { RoleTypeId.Scp939, 3 },
-            { RoleTypeId.Scp3114, 0 },
+            { RoleTypeId.Scp3114, 3 },
         };
 
         public static Quaternion SmoothDampQuaternion(this Quaternion current, Quaternion target, ref Vector3 currentVelocity, float smoothTime)
@@ -64,7 +64,7 @@ public static class NpcUtilities
         public static AIPlayerProfile CreateBasicAI(RoleTypeId role, Vector3 position, float enemyDistance = 50f, float followDistance = 10f, float startFollowDistance = 3f, float stopFollowDistance = 1f)
         {
             Log.Debug("Creating AI Player.");
-            AIPlayerProfile prof = new AIDataProfileBase("Bot").CreateAIPlayer();
+            AIPlayerProfile prof = new AIDataProfileBase("Bot").CreateAIPlayer(role);
             Log.Debug("Profile created.");
             
             Log.Debug("Setting Role.");
@@ -73,7 +73,8 @@ public static class NpcUtilities
             {
                 prof.DisplayNickname = "Bot " + prof.Player.Id;
                 prof.Player.RemoteAdminPermissions = PlayerPermissions.AFKImmunity;
-                
+                prof.Player.RankName = "NPC";
+                prof.Player.RankColor = "white";
             });
     
             prof.ReferenceHub.roleManager.ServerSetRole(role, RoleChangeReason.None, RoleSpawnFlags.None);
@@ -87,6 +88,7 @@ public static class NpcUtilities
             AIFirearmShoot s = prof.WorldPlayer.ModuleRunner.AddModule<AIFirearmStrafeShoot>();
             AIGrenadeStrafeThrow g = prof.WorldPlayer.ModuleRunner.AddModule<AIGrenadeStrafeThrow>();
             AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
+            AIItemPickup ip = prof.WorldPlayer.ModuleRunner.AddModule<AIItemPickup>();
             prof.WorldPlayer.ModuleRunner.AddModule<AIZombieModule>();
             prof.WorldPlayer.ModuleRunner.AddModule<AIScp049Module>();
             prof.WorldPlayer.ModuleRunner.AddModule<AIScp106Module>();

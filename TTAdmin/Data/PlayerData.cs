@@ -15,6 +15,7 @@ public class PlayerData
     public string Role { get; set; }
     public Vector3 Position { get; set; }
     public Quaternion Rotation { get; set; }
+    public Vector3 Scale { get; set; }
     public float Health { get; set; }
     public float MaxHealth { get; set; }
     public float Hume { get; set; }
@@ -43,11 +44,19 @@ public class PlayerData
         Role = player.Role.Type.ToString();
         Position = player.Position;
         Rotation = player.Rotation;
+        Scale = player.Scale;
         Health = player.Health;
         MaxHealth = player.MaxHealth;
         Hume = player.HumeShield;
         MaxHume = player.HumeShieldStat.MaxValue;
-        Room = player.CurrentRoom?.Name;
+        if (player.GameObject == null || player.CurrentRoom == null)
+        {
+            Room = null;
+        }
+        else
+        {
+            Room = player.CurrentRoom.Name;
+        }
         Inventory = new InventoryData(player);        
         CurrentItem = player.CurrentItem?.Type.ToString();
         Effects = EffectData.FromEffects(player.ReferenceHub.playerEffectsController.AllEffects);
