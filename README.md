@@ -14,6 +14,7 @@ Currently written for latest EXILED 8.X.X
     * Offers a set of specific modifications tailored for my personal server. Includes:
         * An 'unstuck' command to resolve SCP spawn location issues.
         * The ability to adjust SCP-3114 spawn probability.
+        * Adds configs to change SCP-049 respawning logic for old respawn limit, and changing ragdoll viability time.
 
 * **RoundModifiers**
     * Introduces a variety of gameplay modifiers that can be applied during rounds.
@@ -21,10 +22,12 @@ Currently written for latest EXILED 8.X.X
         * Players can vote on modifiers, or admins can directly assign them.
      
 * **TTAdmin**
-  * Server-side code for a web based SCP:SL server management system
-       * Non-functional
+  * A web based SCP:SL server management framework
+  * Adds a REST API for requests and Websocket for listening to EXILED events in realtime
          
 * **SCriPt**
    * A Lua to EXILED scripting framework (MoonSharp)
    * Moved to it's own [Repo](https://github.com/tayjay/SCriPt)
+   * Does not require TTCore to function
+   * Has an official [Pre-Release](https://github.com/tayjay/SCriPt/releases)
       
