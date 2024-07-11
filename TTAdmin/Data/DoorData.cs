@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Exiled.API.Features.Doors;
 using Interactables.Interobjects.DoorUtils;
 using UnityEngine;
@@ -16,6 +17,8 @@ public class DoorData
     public bool AllowsScp106 { get; set; }
     public List<string> Rooms { get; set; }
     
+    public int Id { get; set; }
+    
     
     public DoorData(Door door)
     {
@@ -31,6 +34,8 @@ public class DoorData
         {
             Rooms.Add(room.Name);
         }
+
+        Id = DoorsById.Where(pair => pair.Value == door).Select(pair => pair.Key).FirstOrDefault();
     }
     
     public static List<DoorData> ConvertList(List<Door> doors)
@@ -47,5 +52,21 @@ public class DoorData
     {
         Door door = Door.Get(name);
         return new DoorData(door);
+    }
+    
+    public static Dictionary<int,Door> DoorsById { get; set; }
+    
+    public static DoorData DataById(int id)
+    {
+        if(DoorsById.TryGetValue(id, out var door))
+            return new DoorData(door);
+        return null;
+    }
+    
+    public static Door DoorById(int id)
+    {
+        if(DoorsById.TryGetValue(id, out var byId))
+            return byId;
+        return null;
     }
 }

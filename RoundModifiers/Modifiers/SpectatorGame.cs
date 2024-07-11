@@ -34,6 +34,10 @@ public class SpectatorGame : Modifier
         
         ev.Players.Clear();
         ev.Players.AddRange(orderedPoints);
+        /*foreach (Player player in ev.Players)
+        {
+            
+        }*/
         spectatorPoints.Clear();
     }
 
@@ -41,7 +45,14 @@ public class SpectatorGame : Modifier
     {
         foreach (Player player in ev.Player.CurrentSpectatingPlayers)
         {
-            spectatorPoints[player]+=1;
+            if(player.Role.Team==Team.ClassD || player.Role.Team==Team.Scientists)
+                spectatorPoints[player]+=1;
+            else if(player.Role.Team==Team.ChaosInsurgency || player.Role.Team==Team.FoundationForces)
+                spectatorPoints[player]+=2;
+            else if(player.Role.Team==Team.SCPs && player.Role != RoleTypeId.Scp0492)
+                spectatorPoints[player]+=5;
+            else
+                spectatorPoints[player]+=1;
         }
         spectatorPoints[ev.Player] = 0;
     }

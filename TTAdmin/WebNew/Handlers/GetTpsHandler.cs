@@ -8,7 +8,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class GetTpsHandler : RequestHandler
 {
-    public override string Path => "/tps";
+    public override string Path => "/server/tps";
     public override MethodType Method => MethodType.GET;
     public override bool RequiresAuth => true;
 

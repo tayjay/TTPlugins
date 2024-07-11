@@ -38,8 +38,15 @@ namespace TTAdmin
         [Description("Size of the WebSocket buffer. Default is 1024.")]
         public int WsBufferSize { get; set; } = 1024;
         
-        [Description("API key for the WebSocket server. Delete the whole row to generate a new key.")]
-        public string ApiKey { get; set; } = Guid.NewGuid().ToString();
+        //[Description("API key for the WebSocket server. Delete the whole row to generate a new key."),Obsolete]
+        //public string ApiKey { get; set; } = Guid.NewGuid().ToString();
         
+        //public string ApiKeyPath { get; set; } = "/TTCore/TTAdmin/APIKey.json";
+        
+        [Description("Whether local admin console output should be subscribable via WebSocket. WIP")]
+        public bool EnableConsoleOutput { get; set; } = false;
+        
+        [Description("How many months before the API key is considered old, and recommend regenerating a new one. Default is 6.")]
+        public int ApiKeyWarningAge { get; set; } = 6;
     }
 }

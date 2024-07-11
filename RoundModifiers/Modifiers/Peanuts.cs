@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp173;
 using MEC;
 using PlayerRoles;
 using RoundModifiers.API;
@@ -23,11 +24,17 @@ public class Peanuts : Modifier
             {
                 ev.Player.MaxHealth *= 0.5f;
                 ev.Player.Health = ev.Player.MaxHealth;
-                ev.Player.ChangeSize(0.5f);
+                //ev.Player.ChangeSize(0.5f);
             });
         }
         
     }
+
+    public void OnUsingBreakneckSpeeds(UsingBreakneckSpeedsEventArgs ev)
+    {
+        ev.IsAllowed = false;
+    }
+    
     protected override void RegisterModifier()
     {
         Exiled.Events.Handlers.Player.ChangingRole += OnChangingRole;

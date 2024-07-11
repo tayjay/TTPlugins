@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Map;
@@ -16,7 +17,7 @@ namespace RoundModifiers.Modifiers
         public void OnRoundStart()
         {
             FakeDecon = false;
-            DamageMultiplier = RoundModifiers.Instance.Config.NoDecon_DamageMultiplierMin;
+            DamageMultiplier = DamageMultiplierMin;
         }
 
         public void OnRoundRestart()
@@ -45,7 +46,7 @@ namespace RoundModifiers.Modifiers
                     }
                 }
                 
-                if(DamageMultiplier < RoundModifiers.Instance.Config.NoDecon_DamageMultiplierMax)
+                if(DamageMultiplier < DamageMultiplierMax)
                     DamageMultiplier += 0.05f;
                 yield return Timing.WaitForSeconds(3f);
             }
@@ -78,5 +79,17 @@ namespace RoundModifiers.Modifiers
             Balance = -1,
             Category = Category.Facility
         };
+
+        public static Config NoDeconConfig => RoundModifiers.Instance.Config.NoDecon;
+        public static float DamageMultiplierMin => NoDeconConfig.DamageMultiplierMin;
+        public static float DamageMultiplierMax => NoDeconConfig.DamageMultiplierMax;
+
+        public class Config : ModConfig
+        {
+            [Description("The starting multiplier of damage dealt to players in light containment during the NoDecon modifier. Default is 1f.")]
+            public float DamageMultiplierMin { get; set; } = 1f;
+            [Description("The maximum multiplier of damage dealt to players in light containment during the NoDecon modifier. Default is 10f.")]
+            public float DamageMultiplierMax { get; set; } = 10f;
+        }
     }
 }

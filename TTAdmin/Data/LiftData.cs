@@ -5,6 +5,7 @@ namespace TTAdmin.Data;
 
 public class LiftData
 {
+    private Lift Lift { get; set; }
     public string Name { get; set; }
     public string Status { get; set; }
     public string Type { get; set; }
@@ -13,6 +14,7 @@ public class LiftData
     
     public LiftData(Lift lift)
     {
+        Lift = lift;
         Name = lift.Name;
         Status = lift.Status.ToString();
         Type = lift.Type.ToString();

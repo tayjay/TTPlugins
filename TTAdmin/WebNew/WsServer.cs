@@ -52,7 +52,10 @@ public class WsServer
             if(message.GetMessage()=="")
                 return;
             var messageObject = JsonSerializer.Deserialize<Dictionary<string, object>>(message.GetMessage());
-            
+            foreach(var item in messageObject)
+            {
+                Log.Info($"{item.Key} : {item.Value}");
+            }
             if (messageObject.TryGetValue("subscribe", out var subscribe))
             {
                 Log.Info(subscribe.ToString());

@@ -57,6 +57,6 @@ public abstract class RequestHandler : IRequestHandler
     {
         if(!RequiresAuth) return true;
         string apiKey = request.Headers["API-Key"];
-        return apiKey == TTAdmin.Instance.Config.ApiKey;
+        return apiKey == TTAdmin.Instance.ApiKey.KeyString;
     }
 }

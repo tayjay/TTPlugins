@@ -39,7 +39,8 @@ public class LevelUpCommand : ICommand
         switch (type)
         {
             case "xp":
-                levelUp.PlayerXP[player.NetId] += amount;
+                player.SessionVariables["levelup_xp"] = (float) player.SessionVariables["levelup_xp"] + amount;
+                //levelUp.PlayerXP[player.NetId] += amount;
                 response = $"Added {amount} XP to {player.Nickname}.";
                 return true;
             /*case "level":
@@ -52,8 +53,8 @@ public class LevelUpCommand : ICommand
         }
     }
 
-    public string Command { get; } = "levelup";
-    public string[] Aliases { get; } = { "lvl" };
+    public string Command { get; } = "levelupadmin";
+    public string[] Aliases { get; } = { "lvladmin" };
     public string Description { get; } = "Manage the LevelUp mod.";
     public bool SanitizeResponse => true;
 }

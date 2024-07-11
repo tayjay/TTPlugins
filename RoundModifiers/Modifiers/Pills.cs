@@ -50,7 +50,7 @@ public class Pills : Modifier
             candies.Add(CandyKindID.Purple);
             candies.Add(CandyKindID.Red);
             candies.Add(CandyKindID.Yellow);
-            if(pillCount[player.NetId] >= 1)
+            if(pillCount[player.NetId] >= 2)
             {
                 for(int i =0;i<pillCount[player.NetId];i++)
                 {

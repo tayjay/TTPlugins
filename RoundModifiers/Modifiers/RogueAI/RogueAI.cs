@@ -414,6 +414,10 @@ namespace RoundModifiers.Modifiers.RogueAI
             Balance = 0,
             Category = Category.Facility
         };
+
+        public class Config : ModConfig
+        {
             
+        }
     }
 }

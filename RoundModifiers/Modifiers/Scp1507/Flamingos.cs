@@ -67,6 +67,7 @@ public class Flamingos : Modifier
                     ragdoll.Owner.RoleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.Revived,RoleSpawnFlags.None);
                     Scp1507Role.AddRole(ragdoll.Owner);
                     ragdoll.Destroy();
+                    RespawnAttempts.Remove(ragdoll.Owner);
                 }
             }
         }
@@ -118,6 +119,30 @@ public class Flamingos : Modifier
             }
         });
         
+        foreach (Ragdoll ragdoll in Ragdoll.Get(Player.List.Where(p=>p.IsDead)))
+        {
+            if(ragdoll.Owner.IsAlive) continue;
+            if(ragdoll.Role != RoleTypeId.Tutorial) continue;
+            if (Vector3.Distance(ragdoll.Position, ev.Player.Position) < 3)
+            {
+                Log.Debug("Found ragdoll!");
+                if(!RespawnAttempts.ContainsKey(ragdoll.Owner))
+                {
+                    RespawnAttempts.Add(ragdoll.Owner, 0);
+                }
+                RespawnAttempts[ragdoll.Owner]++;
+
+                if (RespawnAttempts[ragdoll.Owner] < 8)
+                {
+                    ev.Player.ShowHUDHint("Attempting to respawn player...");
+                    continue;//Change to break to only do 1 flamingo at a time
+                }
+                ragdoll.Owner.RoleManager.ServerSetRole(RoleTypeId.Tutorial, RoleChangeReason.Revived,RoleSpawnFlags.None);
+                Scp1507Role.AddRole(ragdoll.Owner);
+                ragdoll.Destroy();
+                RespawnAttempts.Remove(ragdoll.Owner);
+            }
+        }
         
     }
 

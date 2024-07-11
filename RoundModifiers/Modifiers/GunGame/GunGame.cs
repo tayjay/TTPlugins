@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
@@ -33,7 +34,7 @@ public class GunGame : Modifier
     // Give them helpful items
     
     
-    public bool SequentialGuns => RoundModifiers.Instance.Config.GunGame_Sequential;
+    public bool SequentialGuns => GunGameConfig.Sequential;
     
     // Guns
     public ItemType[] Weapons => new[]
@@ -455,7 +456,7 @@ public class GunGame : Modifier
                     layout.Name = player.Nickname;
                     layout.Kills = PlayerKillItems[player].Count;
                     layout.CurrentWeapon = PlayerCurrentWeapon[player].ToString();
-                    if (RoundModifiers.Instance.Config.GunGame_Sequential)
+                    if (SequentialGuns)
                     {
                         if(PlayerKillItems[player].Count+1 >= Weapons.Length) 
                             layout.NextWeapon = "SCP-3114";
@@ -580,4 +581,12 @@ public class GunGame : Modifier
         Impact = ImpactLevel.Gamemode,
         Category = Category.Combat | Category.Gamemode | Category.HumanRole | Category.ScpRole | Category.HUD
     };
+
+    public static Config GunGameConfig => RoundModifiers.Instance.Config.GunGame;
+
+    public class Config : ModConfig
+    {
+        [Description("Should guns be given in a sequential order (true) or randomly (false)? Default is true.")]
+        public bool Sequential { get; set; } = true;
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
@@ -14,6 +15,7 @@ using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
 using PluginAPI.Events;
 using RoundModifiers.API;
+using RoundModifiers.Modifiers.Nicknames;
 using TTCore.HUDs;
 using UnityEngine;
 using VoiceChat;
@@ -24,67 +26,69 @@ namespace RoundModifiers.Modifiers
     {
         private RoomType[] scpSpawnRooms = new[] { RoomType.Hcz049, RoomType.Hcz939, RoomType.HczNuke };
         public Dictionary<RoleTypeId, string> ClassTitles { get; set; } = new Dictionary<RoleTypeId, string>
-    {
         {
-            RoleTypeId.ClassD, "D-"
-        },
-        {
-            RoleTypeId.Scientist, "Dr. "
-        },
-        {
-            RoleTypeId.FacilityGuard, "Security Officer "
-        },
-        {
-            RoleTypeId.NtfCaptain, "Captain "
-        },
-        {
-            RoleTypeId.NtfPrivate, "Private "
-        },
-        {
-            RoleTypeId.NtfSergeant, "Sergeant "
-        },
-        {
-            RoleTypeId.NtfSpecialist, "Field Agent "
-        },
-        {
-            RoleTypeId.ChaosConscript, "Agent of Chaos "
-        },
-        {
-            RoleTypeId.ChaosMarauder, "Agent of Chaos "
-        },
-        {
-            RoleTypeId.ChaosRepressor, "Agent of Chaos "
-        },
-        {
-            RoleTypeId.ChaosRifleman, "Agent of Chaos "
-        },
-        {
-            RoleTypeId.Scp049, "SCP-049"
-        },
-        {
-            RoleTypeId.Scp0492, "SCP-049-2"
-        },
-        {
-            RoleTypeId.Scp079, "SCP-079"
-        },
-        {
-            RoleTypeId.Scp096, "SCP-096"
-        },
-        {
-            RoleTypeId.Scp106, "SCP-106"
-        },
-        {
-            RoleTypeId.Scp173, "SCP-173"
-        },
-        {
-            RoleTypeId.Scp939, "SCP-939"
-        },
-        /*{
-            RoleTypeId.Scp3114, "SCP-3114"
-        }*/
-    };
+            {
+                RoleTypeId.ClassD, Nicknames.Nicknames.NicknamesConfig.ClassDPrefix
+            },
+            {
+                RoleTypeId.Scientist, Nicknames.Nicknames.NicknamesConfig.ScientistPrefix
+            },
+            {
+                RoleTypeId.FacilityGuard, Nicknames.Nicknames.NicknamesConfig.FacilityGuardPrefix
+            },
+            {
+                RoleTypeId.NtfCaptain, Nicknames.Nicknames.NicknamesConfig.NtfCaptainPrefix
+            },
+            {
+                RoleTypeId.NtfPrivate, Nicknames.Nicknames.NicknamesConfig.NtfPrivatePrefix
+            },
+            {
+                RoleTypeId.NtfSergeant, Nicknames.Nicknames.NicknamesConfig.NtfSergeantPrefix
+            },
+            {
+                RoleTypeId.NtfSpecialist, Nicknames.Nicknames.NicknamesConfig.NtfSpecialistPrefix
+            },
+            {
+                RoleTypeId.ChaosConscript, Nicknames.Nicknames.NicknamesConfig.ChaosConscriptPrefix
+            },
+            {
+                RoleTypeId.ChaosMarauder, Nicknames.Nicknames.NicknamesConfig.ChaosMarauderPrefix
+            },
+            {
+                RoleTypeId.ChaosRepressor, Nicknames.Nicknames.NicknamesConfig.ChaosRepressorPrefix
+            },
+            {
+                RoleTypeId.ChaosRifleman, Nicknames.Nicknames.NicknamesConfig.ChaosRiflemanPrefix
+            },
+            {
+                RoleTypeId.Scp049, Nicknames.Nicknames.NicknamesConfig.Scp049Prefix
+            },
+            {
+                RoleTypeId.Scp0492, Nicknames.Nicknames.NicknamesConfig.Scp0492Prefix
+            },
+            {
+                RoleTypeId.Scp079, Nicknames.Nicknames.NicknamesConfig.Scp079Prefix
+            },
+            {
+                RoleTypeId.Scp096, Nicknames.Nicknames.NicknamesConfig.Scp096Prefix
+            },
+            {
+                RoleTypeId.Scp106, Nicknames.Nicknames.NicknamesConfig.Scp106Prefix
+            },
+            {
+                RoleTypeId.Scp173, Nicknames.Nicknames.NicknamesConfig.Scp173Prefix
+            },
+            {
+                RoleTypeId.Scp939, Nicknames.Nicknames.NicknamesConfig.Scp939Prefix
+            },
+            {
+                RoleTypeId.Scp3114, Nicknames.Nicknames.NicknamesConfig.Scp3114Prefix
+            }
+        };
 
-        public string[] HumanNames => RoundModifiers.Instance.Config.Nicknames_HumanNames;
+        public string[] HumanNames => NicknameData.Nicknames;
+        
+        public NicknameData NicknameData => Nicknames.Nicknames.NicknameData;
     
     //public Dictionary<Player, bool> CanReveal { get; set; }
         
@@ -130,7 +134,7 @@ namespace RoundModifiers.Modifiers
                 {
                     Ragdoll.CreateAndSpawn(RoleTypeId.FacilityGuard, ClassTitles[RoleTypeId.FacilityGuard]+HumanNames[Random.Range(0, HumanNames.Length)], "ded", ev.Player.Position+Vector3.up, ev.Player.Rotation);
                     Pickup.CreateAndSpawn(ItemType.GunFSP9, ev.Player.Position+Vector3.up, ev.Player.Rotation);
-                    ev.Player.MaxHealth *= RoundModifiers.Instance.Config.BoneZone_Scp3114HealthScale;
+                    ev.Player.MaxHealth *= Scp3114HealthScale;
                     ev.Player.Health = ev.Player.MaxHealth;
                 });
             }
@@ -222,5 +226,14 @@ namespace RoundModifiers.Modifiers
             Balance = -3,
             Category = Category.ScpRole | Category.Health
         };
+        
+        public Config BoneZoneConfig => RoundModifiers.Instance.Config.BoneZone;
+        public float Scp3114HealthScale => BoneZoneConfig.Scp3114HealthScale;
+        
+        public class Config
+        {
+            [Description("How much health to give Scp-3114s during BoneZone. Default is 0.5f.")]
+            public float Scp3114HealthScale { get; set; } = 0.5f;
+        }
     }
 }

@@ -31,7 +31,8 @@ public class AIPathfinder : AIFollowPath
 
         public void SetDestination(Vector3 destination)
         {
-            TargetLocation = destination;
+            //TargetLocation = destination;
+            TargetLocation = AdjustDestination(destination);
         }
 
         public Vector3 AdjustDestination(Vector3 dest)
@@ -42,7 +43,14 @@ public class AIPathfinder : AIFollowPath
                 return dest;
 
             if (targetRoom.Zone != Parent.Room.Zone)
-                return ZoneSpecificAdjustment(dest, targetRoom.Zone);
+            {
+                Vector3 zoneAdjusted = ZoneSpecificAdjustment(dest, targetRoom.Zone);
+                if(GetRoomAtPosition(zoneAdjusted) != Parent.Room) // If the adjusted destination is not in the same room as the NPC
+                    return zoneAdjusted;
+                //todo Move to elevator in room
+                return zoneAdjusted;
+            }
+                
 
             return dest;
         }

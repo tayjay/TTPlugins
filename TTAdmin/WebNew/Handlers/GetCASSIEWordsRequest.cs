@@ -12,7 +12,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class GetCASSIEWordsRequest : RequestHandler
 {
-    public override string Path => "/cassie/words";
+    public override string Path => "/facility/cassie/words";
     public override MethodType Method => MethodType.GET;
     public override bool RequiresAuth => false;
     public override void ProcessRequest(HttpListenerContext context)

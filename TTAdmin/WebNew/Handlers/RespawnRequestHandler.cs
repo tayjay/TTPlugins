@@ -9,7 +9,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class RespawnRequestHandler : AllRequestHandler
 {
-    public override string Path { get; }
+    public override string Path { get; } = "/server/respawn";
     public override void ProcessGetRequest(HttpListenerContext context)
     {
         JsonResponse<RespawnData>.Send(context.Response, new RespawnData());

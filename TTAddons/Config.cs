@@ -50,5 +50,10 @@ namespace TTAddons
         
         [Description("Base player count for Scp079 experience scaling. Smaller numbers make the SCP weaker at higher player counts, bigger numbers make the SCP stronger at lower player counts. Default is 15.")]
         public int Scp079BasePlayerCount { get; set; } = 15;
+        
+        [Description("Disable auto-banning by the server. Only do so if you trust your players. Default is false.")]
+        public bool NoAutoBan { get; set; } = false;
+        [Description("Disable auto-kicking by the server. Only do so if you trust your players. Default is false.")]
+        public bool NoAutoKick { get; set; } = false;
     }
 }

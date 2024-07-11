@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using MEC;
+using TTAdmin.Admin;
 using TTAdmin.Handlers;
+using TTAdmin.Security;
 using TTAdmin.WebNew;
 using Utf8Json;
 
@@ -21,12 +24,14 @@ namespace TTAdmin
         
         public override string Name { get; } = "TTAdmin";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new Version(0, 1, 1);
+        public override Version Version { get; } = new Version(0, 2, 0);
         
         
         public SubscriptionHandler SubscriptionHandler;
         public EventsHandler EventsHandler;
+        //public WsConsoleOutput WsConsoleOutput;
         
+        protected internal APIKey ApiKey { get; private set; }
         
         public void OnWaitingForPlayers()
         {
@@ -86,12 +91,38 @@ namespace TTAdmin
             
             RestServer.Start();
             WebNew.WsServer.Start();
+            
+            ApiKey = APIKey.FromFile("TTCore/TTAdmin/APIKey.json");
+            //Check if ApiKey Created DateTime is more than a month ago
+            if (ApiKey.Created.AddMonths(Config.ApiKeyWarningAge) < DateTime.Now)
+            {
+                Log.Error("===========================================================");
+                Log.Error("API Key is old, we recommend generating a new one by deleting the file at ./TTCore/TTAdmin/APIKey.json");
+                Log.Error("===========================================================");
+            }
+
+            /*if (Config.EnableConsoleOutput)
+            {
+                WsConsoleOutput = new WsConsoleOutput();
+                WsConsoleOutput.Register();
+            }*/
         }
         
         public void Shutdown()
         {
             RestServer.Stop();
             WebNew.WsServer.Stop();
+            
+            EventsHandler.Unregister();
+            SubscriptionHandler.Subscriptions.Clear();
+            /*if (Config.EnableConsoleOutput)
+            {
+                WsConsoleOutput.Unregister();
+                WsConsoleOutput = null;
+            }*/
+            EventsHandler = null;
+            SubscriptionHandler = null;
+            
         }
         
         

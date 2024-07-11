@@ -310,6 +310,7 @@ public class WeaponStats2 : Modifier
         AllStats.Add(new ExtraDamageStat());
         AllStats.Add(new InstantReloadStat());
         AllStats.Add(new DangerStat());
+        AllStats.Add(new VampireStat());
         AllStats.Add(new PaintBallStat());
         
         WeighStats();

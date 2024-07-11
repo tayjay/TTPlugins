@@ -106,8 +106,8 @@ public class PlayerInventoryRequest : AllRequestHandler
     
     public class PostInventoryRequest
     {
-        public int Id { get; set; }
-        public string Action { get; set; }
+        public int Id { get; set; } = -1;
+        public string Action { get; set; } = "";
         public List<object> Items { get; set; } = null;
         public Dictionary<string, object> Ammo { get; set; } = null;
         

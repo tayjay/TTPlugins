@@ -29,35 +29,6 @@ namespace RoundModifiers.Modifiers
         {
             //DestroyRoom(Room.Get(RoomType.Lcz914));
         }
-        
-        //Only works on TC-01 and HCZ Test Room
-        public static void DestroyRoom(Room room)
-        {
-            room.transform.position = Vector3.zero;
-            foreach (var component in room.gameObject.GetComponentsInChildren<Component>())
-            {
-                try
-                {
-                    if (!component.name.Contains("914"))
-                    {
-                        Log.Debug($"Prevent from destroying: {component.name} {component.tag} {component.GetType().FullName}");
-                        continue;
-                    }
-                    Log.Debug($"Destroying component: {component.name} {component.tag} {component.GetType().FullName}");
-                    //NetworkServer.Destroy(component.gameObject);
-                    //Object.Destroy(component);
-                    //NetworkBehaviour.Destroy(component);
-                    component.transform.position = Vector3.zero;
-                    
-                    //Object.Destroy(component);
-                }
-                catch (Exception e)
-                {
-                    // ignored
-                    Log.Debug("Failed to destroy component: " + e);
-                }
-            }
-        }
 
         protected override void RegisterModifier()
         {

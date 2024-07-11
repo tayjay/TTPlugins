@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
@@ -18,8 +19,6 @@ public class ScpChat : Modifier
 {
     //false means they are talking like default in scp chat, true means they are talking in proximity chat.
     public Dictionary<Player, bool> ProximityChatting { get; set; }
-
-    public bool CanChangeState => RoundModifiers.Instance.Config.ScpChat_CanChangeState;
 
     public void OnVoiceChatting(VoiceChattingEventArgs ev)
     {
@@ -54,11 +53,13 @@ public class ScpChat : Modifier
 
             if (CanChangeState)
             {
+                ev.Player.ClearBroadcasts();
                 ev.Player.Broadcast(5, "<color=green>Proximity Chat Disabled. Press Left-Alt to enable.</color>");
                 ProximityChatting.Add(ev.Player, false);
             }
             else
             {
+                ev.Player.ClearBroadcasts();
                 ProximityChatting.Add(ev.Player, true);
                 ev.Player.Broadcast(5, "<color=green>Proximity Chat Enabled.</color>");
             }
@@ -128,4 +129,15 @@ public class ScpChat : Modifier
         Impact = ImpactLevel.MinorGameplay,
         Category = Category.Voice
     };
+
+
+    public static Config ScpChatConfig => RoundModifiers.Instance.Config.ScpChat;
+    public bool CanChangeState => ScpChatConfig.CanChangeState;
+
+
+    public class Config : ModConfig
+    {
+        [Description("Whether SCPs can change the state of the ability. Default is true.")]
+        public bool CanChangeState { get; set; } = true;
+    }
 }

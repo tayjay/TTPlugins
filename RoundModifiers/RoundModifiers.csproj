@@ -107,6 +107,7 @@
     <ItemGroup>
         <Compile Include="API\ComboModifier.cs" />
         <Compile Include="API\LuaModifiers.cs" />
+        <Compile Include="API\ModConfig.cs" />
         <Compile Include="API\ModInfo.cs" />
         <Compile Include="API\Modifier.cs" />
         <Compile Include="Commands\Client\RoleResetCommand.cs" />
@@ -145,13 +146,17 @@
         <Compile Include="Modifiers\LevelUp\Interfaces\IPocketDimensionEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IUpgradingPickupEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IVoiceEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\LevelUpConfig.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp0492XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp096XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp106XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp173XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp939XP.cs" />
         <Compile Include="Modifiers\LowPower.cs" />
+        <Compile Include="Modifiers\Nicknames\NicknameData.cs" />
+        <Compile Include="Modifiers\Nicknames\Nicknames.cs" />
         <Compile Include="Modifiers\NoJumping.cs" />
+        <Compile Include="Modifiers\NoSpectateSCPs.cs" />
         <Compile Include="Modifiers\Peanuts.cs" />
         <Compile Include="Modifiers\RogueAI\Abilities\BallsAbility.cs" />
         <Compile Include="Modifiers\Scp1507\Flamingos.cs" />
@@ -211,7 +216,6 @@
         <Compile Include="Modifiers\MoonGravity.cs" />
         <Compile Include="Modifiers\MultiBall.cs" />
         <Compile Include="Modifiers\MysteryBox.cs" />
-        <Compile Include="Modifiers\Nicknames.cs" />
         <Compile Include="Modifiers\NoCassie.cs" />
         <Compile Include="Modifiers\NoDecontamination.cs" />
         <Compile Include="Modifiers\NoKOS.cs" />

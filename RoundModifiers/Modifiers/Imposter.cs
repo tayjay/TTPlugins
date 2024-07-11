@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
@@ -19,7 +20,6 @@ namespace RoundModifiers.Modifiers
         private Dictionary<Player, ImposterInfo> Imposters = new Dictionary<Player, ImposterInfo>();
         
         CoroutineHandle _coroutine;
-        
         
         public void OnRoleChanged(ChangingRoleEventArgs ev)
         {
@@ -69,10 +69,17 @@ namespace RoundModifiers.Modifiers
         {
             while (true)
             {
-                foreach(ImposterInfo info in Imposters.Values)
+                try
                 {
-                    info.Update();
+                    foreach(ImposterInfo info in Imposters.Values)
+                    {
+                        info.Update();
+                    }
+                } catch (System.Exception e)
+                {
+                    Log.Error(e);
                 }
+                
                 yield return Timing.WaitForSeconds(1f);
             }
         }
@@ -125,7 +132,7 @@ namespace RoundModifiers.Modifiers
             }
             if (ev.Player.Role.Team == Team.SCPs && ev.Player.Role.Type != RoleTypeId.Scp079)
             {
-                Reveal(ev.Player,RoundModifiers.Instance.Config.Imposter_RevealTimeOnHurt);
+                Reveal(ev.Player,ImposterConfig.RevealTimeOnHurt);
                 /*if (Imposters[ev.Player.Id].IsHidden)
                 {
                     //increase the damage threshold check
@@ -285,6 +292,18 @@ namespace RoundModifiers.Modifiers
                     
                 }
             }
+        }
+        
+        public static Config ImposterConfig => RoundModifiers.Instance.Config.Imposter;
+        public static float RevealTimeOnHurt => ImposterConfig.RevealTimeOnHurt;
+        public static bool SkipJump => ImposterConfig.SkipJump;
+        
+        public class Config : ModConfig
+        {
+            [Description("The amount of time in seconds an SCP is revealed after being hurt. Default is 30f.")]
+            public float RevealTimeOnHurt { get; set; } = 30f;
+            [Description("Whether to skip the little jump when an SCP is revealed. True: No screen jump when hiding. False: Screen jump, possibly more reliable. Default is false.")]
+            public bool SkipJump { get; set; } = false;
         }
     }
 }

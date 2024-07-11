@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
 using Exiled.API.Features.Toys;
@@ -90,7 +91,7 @@ public class HealthBars : Modifier
             Player = player;
             /*PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Cylinder, Color.gray,player.Position+(Vector3.up*1), player.Rotation.eulerAngles, new Vector3(-0.2f, -0.05f, -0.05f), true);
             FullBar = Primitive.Create(settings);*/
-            PrimitiveSettings settings2 = new PrimitiveSettings(PrimitiveType.Cube, Color.red,player.Position+(Vector3.up*RoundModifiers.Instance.Config.HealthBars_Height), player.Rotation.eulerAngles, Vector3.one, true);
+            PrimitiveSettings settings2 = new PrimitiveSettings(PrimitiveType.Cube, Color.red,player.Position+(Vector3.up*Height), player.Rotation.eulerAngles, Vector3.one, true);
             HealthBar = Primitive.Create(settings2);
             
             //FullBar.Base.transform.SetParent(player.GameObject.transform);
@@ -147,8 +148,20 @@ public class HealthBars : Modifier
         public void UpdateHealth()
         {
             //Log.Debug($"{Player.Nickname} HP: {Health}/{MaxHealth}");
-            HealthBar.Scale = new Vector3((Health / MaxHealth)*-1*RoundModifiers.Instance.Config.HealthBars_Length, -0.05f, -0.05f);
+            HealthBar.Scale = new Vector3((Health / MaxHealth)*-1*Length, -0.05f, -0.05f);
             lastUpdate = Time.time;
         }
+    }
+    
+    public static Config HealthBarsConfig => RoundModifiers.Instance.Config.HealthBars;
+    public static float Length => HealthBarsConfig.Length;
+    public static float Height => HealthBarsConfig.Height;
+    
+    public class Config : ModConfig
+    {
+        [Description("The length of the health bars. Default is 1f.")]
+        public float Length { get; set; } = 1f;
+        [Description("The vertical offset of the health bars. Default is 1f.")]
+        public float Height { get; set; } = 1f;
     }
 }

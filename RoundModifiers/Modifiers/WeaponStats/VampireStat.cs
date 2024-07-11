@@ -7,7 +7,7 @@ namespace RoundModifiers.Modifiers.WeaponStats;
 public class VampireStat : Stat, IShooting
 {
     public override string Name => "Vampire";
-    public override int Rarity => 5;
+    public override int Rarity => 3;
     public override string Description => "This weapon will heal the owner for 10% of the damage dealt";
     public void OnShooting(ShootingEventArgs ev)
     {

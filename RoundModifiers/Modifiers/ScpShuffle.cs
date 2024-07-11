@@ -39,12 +39,13 @@ public class ScpShuffle : Modifier
     public IEnumerator<float> ChangeSCPs()
     {
         yield return Timing.WaitForSeconds(1f);
-        RoleTypeId[] scps = {RoleTypeId.Scp049,/*RoleTypeId.Scp0492,*/ RoleTypeId.Scp096, RoleTypeId.Scp106, RoleTypeId.Scp173, RoleTypeId.Scp939, RoleTypeId.Scp3114};
+        RoleTypeId[] scps = {RoleTypeId.Scp049,/*RoleTypeId.Scp0492,*/ RoleTypeId.Scp096, RoleTypeId.Scp106, RoleTypeId.Scp173, RoleTypeId.Scp939/*, RoleTypeId.Scp3114*/};
         foreach (var scp in Player.List.Where(p => p.Role.Team == Team.SCPs))
         {
             yield return Timing.WaitForOneFrame;
             if(scp.Role.Type==RoleTypeId.Scp079) continue;
             if(scp.Role.Type==RoleTypeId.Scp0492) continue; //Temp removing 049-2 from shuffle
+            if(scp.Role.Type==RoleTypeId.Scp3114) continue; //Temp removing 3114 from shuffle
             
             RoleTypeId newRole = scps.GetRandomValue(id => id != scp.Role.Type);
             float oldHealth = scp.Health;

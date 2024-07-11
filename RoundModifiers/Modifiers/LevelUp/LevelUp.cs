@@ -29,9 +29,9 @@ namespace RoundModifiers.Modifiers.LevelUp
     public class LevelUp : Modifier
     {
         //Store XP for players
-        public Dictionary<uint,float> PlayerXP { get; set; }
-        public Dictionary<uint, int> PlayerLevel { get; set; }
-        public Dictionary<uint, List<string>> PlayerBoostList { get; set; }
+        /*public Dictionary<uint,float> PlayerXP { get; set; }
+        public Dictionary<uint, int> PlayerLevel { get; set; }*/
+        //public Dictionary<uint, List<string>> PlayerBoostList { get; set; }
         
         //public Dictionary<string, List<XP>> XpByType { get; set; }
         //public Dictionary<string, List<Boost>> BoostsByType { get; set; }
@@ -48,9 +48,9 @@ namespace RoundModifiers.Modifiers.LevelUp
 
         public void Setup()
         {
-            PlayerXP = DictionaryPool<uint, float>.Pool.Get();
-            PlayerLevel = DictionaryPool<uint, int>.Pool.Get();
-            PlayerBoostList = DictionaryPool<uint, List<string>>.Pool.Get();
+            /*PlayerXP = DictionaryPool<uint, float>.Pool.Get();
+            PlayerLevel = DictionaryPool<uint, int>.Pool.Get();*/
+            //PlayerBoostList = DictionaryPool<uint, List<string>>.Pool.Get();
             
             _boosts = ListPool<Boost>.Pool.Get();
             _xp = ListPool<XP>.Pool.Get();
@@ -125,8 +125,8 @@ namespace RoundModifiers.Modifiers.LevelUp
         
         public void Shutdown()
         {
-            DictionaryPool<uint, float>.Pool.Return(PlayerXP);
-            DictionaryPool<uint, int>.Pool.Return(PlayerLevel);
+            /*DictionaryPool<uint, float>.Pool.Return(PlayerXP);
+            DictionaryPool<uint, int>.Pool.Return(PlayerLevel);*/
             ListPool<Boost>.Pool.Return(_boosts);
             ListPool<XP>.Pool.Return(_xp);
         }
@@ -334,7 +334,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             int tries = 0;
             while (tries++< 30)
             {
-                newBoost = GetBoostByLevel(PlayerLevel[player.NetId]);
+                newBoost = GetBoostByLevel((int)player.SessionVariables["levelup_level"]);
                 if (newBoost.AssignBoost(player))
                 {
                     //newBoost.ApplyBoost(player);
@@ -365,14 +365,15 @@ namespace RoundModifiers.Modifiers.LevelUp
                 player.ShowHUDHint("You have leveled up!\n" +
                                    "You got a new boost: "+newBoost.GetColouredName()+"\n"+
                                    newBoost.GetDescription(), 5f);
-                if (PlayerBoostList.ContainsKey(player.NetId) == false)
-                    PlayerBoostList[player.NetId] = ListPool<string>.Pool.Get();
-                PlayerBoostList[player.NetId].Add($"Level {PlayerLevel[player.NetId]}: {newBoost.GetName()}");
+                if (!player.SessionVariables.ContainsKey("levelup_boosts"))
+                    player.SessionVariables["levelup_boosts"] = ListPool<string>.Pool.Get();
+                ((List<string>)player.SessionVariables["levelup_boosts"]).Add($"Level {(int)player.SessionVariables["levelup_level"]}: {newBoost.GetName()}");
             }
             else
             {
                 player.ShowHUDHint("There was an error getting your boost. Please tell your local Taylar.", 5f);
-                PlayerXP[player.NetId] += XP.GetXPNeeded(PlayerLevel[player.NetId]-1);
+                player.SessionVariables["levelup_xp"] = (float) player.SessionVariables["levelup_xp"] + XP.GetXPNeeded((int)player.SessionVariables["levelup_level"]-1);
+                //PlayerXP[player.NetId] += XP.GetXPNeeded(PlayerLevel[player.NetId]-1);
             }
         }
         
@@ -587,8 +588,8 @@ namespace RoundModifiers.Modifiers.LevelUp
                         layout = hud.GetLayout<LevelUpHUDLayout>();
                     }
                     
-                    layout.XP = (float)Math.Round(PlayerXP[player.NetId],1);
-                    layout.Level = PlayerLevel[player.NetId];
+                    layout.XP = (float)Math.Round((float)player.SessionVariables["levelup_xp"],1);
+                    layout.Level = (int)player.SessionVariables["levelup_level"];
                     layout.XPNeeded = XP.GetXPNeeded(layout.Level);
                     layout.ActivePerks = string.Join("\n", _boosts.Where(b => b.HasBoost.ContainsKey(player.NetId)).Select(b => b.GetColouredName()));
                     
@@ -605,6 +606,12 @@ namespace RoundModifiers.Modifiers.LevelUp
         {
             //if(ev.Player.Role.Team == Team.SCPs) return; //Patches Zombie Coke
             if(ev.Player.Role.Team == Team.Dead) return; //Patches visual status effects as spectator
+            if(ev.Player.SessionVariables.ContainsKey("levelup_xp") == false)
+                ev.Player.SessionVariables.Add("levelup_xp", 0f);
+            if(ev.Player.SessionVariables.ContainsKey("levelup_level") == false)
+                ev.Player.SessionVariables.Add("levelup_level", (int)1);
+            if(!ev.Player.SessionVariables.ContainsKey("levelup_boosts"))
+                ev.Player.SessionVariables["levelup_boosts"] = ListPool<string>.Pool.Get();
             //Control player spawn
             MEC.Timing.CallDelayed(1f, () =>
             {
@@ -633,19 +640,22 @@ namespace RoundModifiers.Modifiers.LevelUp
         public void OnRoundStart()
         {
             TickHandle = MEC.Timing.RunCoroutine(Tick());
-            foreach (Player player in Player.List)
+            /*foreach (Player player in Player.List)
             {
-                PlayerXP[player.NetId] = 0;
-                PlayerLevel[player.NetId] = 1;
-            }
+                player.SessionVariables.Add("levelup_xp", 0f);
+                player.SessionVariables.Add("levelup_level", 1);
+                player.SessionVariables.Add("levelup_boosts",ListPool<string>.Pool.Get());
+            }*/
         }
         
         public void OnPlayerJoin(JoinedEventArgs ev)
         {
-            if(PlayerXP.ContainsKey(ev.Player.NetId) == false)
-                PlayerXP[ev.Player.NetId] = 0;
-            if(PlayerLevel.ContainsKey(ev.Player.NetId) == false)
-                PlayerLevel[ev.Player.NetId] = 1;
+            if(ev.Player.SessionVariables.ContainsKey("levelup_xp") == false)
+                ev.Player.SessionVariables.Add("levelup_xp", 0f);
+            if(ev.Player.SessionVariables.ContainsKey("levelup_level") == false)
+                ev.Player.SessionVariables.Add("levelup_level", 1);
+            if(!ev.Player.SessionVariables.ContainsKey("levelup_boosts"))
+                ev.Player.SessionVariables["levelup_boosts"] = ListPool<string>.Pool.Get();
         }
         
         public IEnumerator<float> Tick()
@@ -660,8 +670,8 @@ namespace RoundModifiers.Modifiers.LevelUp
         public void OnRoundRestart()
         {
             MEC.Timing.KillCoroutines("LevelUpTick");
-            PlayerXP.Clear();
-            PlayerLevel.Clear();
+            /*PlayerXP.Clear();
+            PlayerLevel.Clear();*/
         }
         
         
@@ -748,5 +758,10 @@ namespace RoundModifiers.Modifiers.LevelUp
             Balance = 0,
             Category = Category.Overhaul | Category.HUD
         };
+        
+        public static LevelUpConfig Config => RoundModifiers.Instance.Config.LevelUp;
+        
+        public static float BaseXP => Config.BaseXP;
+        public static float XPPerLevel => Config.XPPerLevel;
     }
 }

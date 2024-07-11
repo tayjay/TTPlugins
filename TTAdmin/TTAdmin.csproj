@@ -103,6 +103,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="Admin\TTAdminCommandSender.cs" />
+        <Compile Include="Admin\WsConsoleOutput.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Data\AIData.cs" />
         <Compile Include="Data\CommandData.cs" />
@@ -150,16 +151,17 @@
         <Compile Include="Handlers\EventsHandler.cs" />
         <Compile Include="Handlers\SubscriptionHandler.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="Security\APIKey.cs" />
         <Compile Include="TTAdmin.cs" />
         <Compile Include="WebNew\Handlers\AllRequestHandler.cs" />
         <Compile Include="WebNew\Handlers\CASSIEActionRequest.cs" />
         <Compile Include="WebNew\Handlers\DecontaminationRequestHandler.cs" />
-        <Compile Include="WebNew\Handlers\GetAIDataHandler.cs" />
         <Compile Include="WebNew\Handlers\GetFacilityRequest.cs" />
         <Compile Include="WebNew\Handlers\GetItemsRequest.cs" />
         <Compile Include="WebNew\Handlers\GetRoomInfoRequest.cs" />
         <Compile Include="WebNew\Handlers\GetRoundInfoRequest.cs" />
         <Compile Include="WebNew\Handlers\LobbyActionRequest.cs" />
+        <Compile Include="WebNew\Handlers\Player\GetAIDataHandler.cs" />
         <Compile Include="WebNew\Handlers\Player\GetAllPlayerInfoRequest.cs" />
         <Compile Include="WebNew\Handlers\Player\GetPlayerInfoRequest.cs" />
         <Compile Include="WebNew\Handlers\Player\PlayerInventoryRequest.cs" />

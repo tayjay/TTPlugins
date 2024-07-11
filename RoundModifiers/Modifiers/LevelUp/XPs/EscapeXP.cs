@@ -25,7 +25,7 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         public void OnEscaping(EscapingEventArgs ev)
         {
             float xp = Math.Max(100,
-                GetXPNeeded(RoundModifiers.Instance.GetModifier<LevelUp>().PlayerLevel[ev.Player.NetId])); //Give either 100xp, or enough to level up, whichever is more.
+                GetXPNeeded((int)ev.Player.SessionVariables["levelup_level"])); //Give either 100xp, or enough to level up, whichever is more.
             GiveXP(ev.Player, xp);
             HasEscaped.Add(ev.Player.NetId);
             if (ev.Player.IsCuffed)

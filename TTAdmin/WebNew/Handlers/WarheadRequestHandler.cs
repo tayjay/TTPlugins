@@ -7,7 +7,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class WarheadRequestHandler : AllRequestHandler
 {
-    public override string Path => "/warhead";
+    public override string Path => "/facility/warhead";
     public override void ProcessGetRequest(HttpListenerContext context)
     {
         JsonResponse<WarheadData>.Send(context.Response, new WarheadData());

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using MEC;
 using RoundModifiers.API;
 using UnityEngine;
@@ -12,10 +13,10 @@ namespace RoundModifiers.Modifiers
         private Dictionary<RoomLightController, Color> RoomColors;
         private float LastChange;
 
-        public float Speed => RoundModifiers.Instance.Config.Rainbow_Speed;
-        public float ColorChangeTime => RoundModifiers.Instance.Config.Rainbow_ColorChangeTime;
-        public float MinRGB => RoundModifiers.Instance.Config.Rainbow_MinRGB;
-        public float MaxRGB => RoundModifiers.Instance.Config.Rainbow_MaxRGB;
+        public float Speed => RainbowConfig.Speed;
+        public float ColorChangeTime => RainbowConfig.ColorChangeTime;
+        public float MinRGB => RainbowConfig.MinRGB;
+        public float MaxRGB => RainbowConfig.MaxRGB;
         
         public void OnRoundStart()
         {
@@ -86,10 +87,18 @@ namespace RoundModifiers.Modifiers
             Balance = 0,
             Category = Category.Visual | Category.Lights
         };
-        
-        /*public override string Name { get; } = "Rainbow";
-        public override string Description { get; } = "The lights are changing colors!";
-        public override string[] Aliases { get; } = {"rb"};
-        public override ImpactLevel Impact { get; } = ImpactLevel.Graphics;*/
+
+        public static Config RainbowConfig => RoundModifiers.Instance.Config.Rainbow;
+
+        public class Config : ModConfig
+        {
+            [Description("The speed of the rainbow effect. Default is 0.01f")]
+            public float Speed { get; set; } = 0.01f;
+            [Description("How long a color will stay before changing. Default is 3f.")]
+            public float ColorChangeTime { get; set; } = 3f;
+            [Description("The minimum and maximum RGB values for the rainbow effect. Default is 0.1f and 2f")]
+            public float MinRGB { get; set; } = 0.1f;
+            public float MaxRGB { get; set; } = 2f;
+        }
     }
 }

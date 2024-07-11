@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -20,9 +21,7 @@ public class ExtraLife : Modifier
     // For the first 5-10 minutes of the round, when a player dies they are revived as their original role a few seconds later. Giving enough time for doctor to resurrect them.
     // This will allow SCPs to rack up kills and not have the round end too quickly.
     // There is still a reason for the SCPs to be involved though, as they still need to stop the players from escaping.
-
-    public double MinimumRoundTime => RoundModifiers.Instance.Config.ExtraLife_MinimumRoundTime;
-    public float RespawnDelay => RoundModifiers.Instance.Config.ExtraLife_RespawnDelay;
+    
     public LeadingTeam EarlyWin { get; set; } = LeadingTeam.Draw;
     
     public int RespawnWave { get; set; } = 0;
@@ -194,4 +193,18 @@ public class ExtraLife : Modifier
         Balance = 1,
         Category = Category.OnDeath
     };
+
+    public Config ExtraLifeConfig => RoundModifiers.Instance.Config.ExtraLife;
+    
+    public float MinimumRoundTime => ExtraLifeConfig.ExtraLife_MinimumRoundTime;
+    public float RespawnDelay => ExtraLifeConfig.ExtraLife_RespawnDelay;
+    
+    public class Config
+    {
+        [Description("The minimum amount of time in seconds the ExtraLife modifier will ensure the game lasts. Default is 300f.")]
+        public float ExtraLife_MinimumRoundTime { get; set; } = 300f;
+        
+        [Description("The amount of time in seconds before a player is respawned after dying during the ExtraLife modifier. Need delay for 049 to rez players. Default is 24f.")]
+        public float ExtraLife_RespawnDelay { get; set; } = 24f;
+    }
 }

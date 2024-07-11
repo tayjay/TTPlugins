@@ -64,9 +64,9 @@ namespace RoundModifiers.Handlers
         {
             if (VotingEnabled())
             {
-                if (VotingPlayers.ContainsKey(player.Nickname))
+                if (VotingPlayers.ContainsKey(player.UserId))
                 {
-                    VotingPlayers.Remove(player.Nickname);
+                    VotingPlayers.Remove(player.UserId);
                     response = "Removed vote.";
                     return true;
                 }
@@ -99,12 +99,12 @@ namespace RoundModifiers.Handlers
                     return false;
                 }
                 //If the player has already voted, remove their vote to take a new one
-                if(VotingPlayers.ContainsKey(player.Nickname))
+                if(VotingPlayers.ContainsKey(player.UserId))
                 {
-                    VotingPlayers.Remove(player.Nickname);
+                    VotingPlayers.Remove(player.UserId);
                 }
 
-                VotingPlayers[player.Nickname] = modifier;
+                VotingPlayers[player.UserId] = modifier;
                 response= "Voted for modifier \""+modifier.Name+"\" this round.\n" +
                           "Current Votes: " + VotingPlayers.Count + "/" + Player.List.Count + " (" + Math.Round((double)VotingPlayers.Count/Player.List.Count*100,2) + "%)\n";
                 return true;
@@ -122,9 +122,9 @@ namespace RoundModifiers.Handlers
             {
                 string votes = "Current Votes: " + VotingPlayers.Count + "/" + Player.List.Count + " (" + Math.Round((double)VotingPlayers.Count/Player.List.Count*100,2) + "%)\n";
                 votes+= "You have voted for:\n";
-                if (VotingPlayers.ContainsKey(player.Nickname))
+                if (VotingPlayers.ContainsKey(player.UserId))
                 {
-                    votes+= VotingPlayers[player.Nickname].Name;
+                    votes+= VotingPlayers[player.UserId].Name;
                 }
                 return votes;
             }
@@ -166,32 +166,72 @@ namespace RoundModifiers.Handlers
             {
                 Log.Info("Player: " + mod.Key + " voted for: " + mod.Value.Name);
             }
-            
-            int votes = VotingPlayers.Count;
+
+
+
+            int votes = 0;
             int players = Player.List.Count;
-            if (votes > 0)
+
+            foreach (string userId in VotingPlayers.Keys.ToList())
             {
-                if (votes > players / 2)
+                Player player = Player.Get(userId);
+                if (player == null)
                 {
-                    //Majority vote. Guaranteed to be a winning modifier
-                    ModInfo winningMod = VotingPlayers.Values.GetRandomValue();
-                    AddRoundModifier(winningMod);
+                    VotingPlayers.Remove(userId);
                 }
                 else
                 {
-                    //No majority vote, but still have a chance to pick a winning modifier
-                    if(Random.Range(0f,1f) < ((float)votes/(float)players))
-                    {
-                        ModInfo winningMod = VotingPlayers.Values.GetRandomValue();
-                        AddRoundModifier(winningMod);
-                    }
+                    votes++;
                 }
             }
-            else
+
+            int count = Random.Range(0, 4);
+            while (count-- > 0)
             {
-                //No votes, no modifier
+                if (votes > 0)
+                {
+                    if (votes > players / 2)
+                    {
+                        //Majority vote. Guaranteed to be a winning modifier
+                        ModInfo winningMod = VotingPlayers.Values.GetRandomValue();
+                        if(CheckModifierValid(winningMod))
+                            AddRoundModifier(winningMod);
+                    }
+                    else
+                    {
+                        //No majority vote, but still have a chance to pick a winning modifier
+                        if(Random.Range(0f,1f) < ((float)votes/(float)players))
+                        {
+                            ModInfo winningMod = VotingPlayers.Values.GetRandomValue();
+                            if(CheckModifierValid(winningMod))
+                                AddRoundModifier(winningMod);
+                        }
+                    }
+                }
+                else
+                {
+                    //No votes, no modifier
+                }
+                //VotingPlayers.Clear();
+                foreach(var pair in VotingPlayers.ToList())
+                {
+                    if (pair.Value.Name == NoneInfo.Name)
+                    {
+                        VotingPlayers.Remove(pair.Key);
+                    }
+                    else if(ActiveModifiers.Contains(pair.Value))
+                    {
+                        VotingPlayers.Remove(pair.Key);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                    votes--;
+                }
             }
-            VotingPlayers.Clear();
+            
+            
 
         }
         
@@ -214,6 +254,19 @@ namespace RoundModifiers.Handlers
             {
                 AddRoundModifier(mod);
             }
+        }
+
+        public bool CheckModifierValid(ModInfo modifier)
+        {
+            foreach(ModInfo mod in ActiveModifiers)
+            {
+                if(mod.Category.HasFlag(modifier.Category))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
         
         public void RemoveRoundModifier(ModInfo modifier)
@@ -289,11 +342,11 @@ namespace RoundModifiers.Handlers
         
         public void OnPlayerLeave(LeftEventArgs ev)
         {
-            if (VotingPlayers.ContainsKey(ev.Player.Nickname))
+            /*if (VotingPlayers.ContainsKey(ev.Player.UserId))
             {
                 Log.Info("Clearing vote for leaving player " + ev.Player.Nickname);
-                VotingPlayers.Remove(ev.Player.Nickname);
-            }
+                VotingPlayers.Remove(ev.Player.UserId);
+            }*/
         }
 
         public IEnumerator<float> LobbyModView()
@@ -331,8 +384,21 @@ namespace RoundModifiers.Handlers
                 //todo: Add logic for when no voting will happen next round
                     modString +=
                         $"\n<size=50%>'.Vote' for next round: {VotingPlayers.Count}/{Player.List.Count} ({Math.Round((double)VotingPlayers.Count / Player.List.Count * 100, 2)}%)</size></size>";
-                
-                Broadcast.Singleton.RpcAddElement(modString, 10, Broadcast.BroadcastFlags.Normal);
+
+                foreach (Player player in Player.List)
+                {
+                    if(player.IsNPC) continue;
+                    string personalModString = modString;
+                    if (VotingPlayers.ContainsKey(player.UserId))
+                    {
+                        personalModString += $"\n<size=50%>You voted for: {VotingPlayers[player.UserId].FormattedName}</size>";
+                    } else
+                    {
+                        personalModString += $"\n<size=50%>You have not voted yet.</size>";
+                    }
+                    player.Broadcast(10, personalModString, Broadcast.BroadcastFlags.Normal, true);
+                }   
+                //Broadcast.Singleton.RpcAddElement(modString, 10, Broadcast.BroadcastFlags.Normal);
                 yield return Timing.WaitForSeconds(10f);
             }
         }

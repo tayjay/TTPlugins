@@ -15,7 +15,8 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         {
             if (CanGiveXP(player))
             {
-                LevelUpHandler.PlayerXP[player.NetId] += amount;
+                player.SessionVariables["levelup_xp"] = (float) player.SessionVariables["levelup_xp"] + amount;
+                //LevelUpHandler.PlayerXP[player.NetId] += amount;
                 TryLevelUp(player);
             }
         }
@@ -23,23 +24,27 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         protected static void TryLevelUp(Player player)
         {
             //if(player.IsScp) return;
-            float xp = LevelUpHandler.PlayerXP[player.NetId];
-            float level = LevelUpHandler.PlayerLevel[player.NetId];
+            float xp = (float) player.SessionVariables["levelup_xp"];
+            int level = (int) player.SessionVariables["levelup_level"];
+            /*float xp = LevelUpHandler.PlayerXP[player.NetId];
+            float level = LevelUpHandler.PlayerLevel[player.NetId];*/
             float xpNeeded = GetXPNeeded(level);
 
             while (xp >= GetXPNeeded(level))
             {
-                LevelUpHandler.PlayerXP[player.NetId] -= xpNeeded;
-                LevelUpHandler.PlayerLevel[player.NetId] += 1;
+                player.SessionVariables["levelup_xp"] = (float) player.SessionVariables["levelup_xp"] - xpNeeded;
+                player.SessionVariables["levelup_level"] = (int) player.SessionVariables["levelup_level"] + 1;
                 LevelUpHandler.OnLevelUp(player);
-                xp = LevelUpHandler.PlayerXP[player.NetId];
-                level = LevelUpHandler.PlayerLevel[player.NetId];
+                xp = (float) player.SessionVariables["levelup_xp"];
+                level = (int) player.SessionVariables["levelup_level"];
+                /*xp = LevelUpHandler.PlayerXP[player.NetId];
+                level = LevelUpHandler.PlayerLevel[player.NetId];*/
             }
         }
         
         public static float GetXPNeeded(float level)
         {
-            return RoundModifiers.Instance.Config.LevelUp_BaseXP + (RoundModifiers.Instance.Config.LevelUp_XPPerLevel * level);
+            return LevelUp.Config.BaseXP + (LevelUp.Config.XPPerLevel * level);
         }
 
         public virtual void Reset()

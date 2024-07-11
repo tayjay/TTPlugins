@@ -20,6 +20,8 @@ namespace TTCore
         [Description("Enable AI NPCs")]
         public bool EnableAi { get; set; } = true;
 
+        [Description("Should console output be written to a file for easier debugging?")]
+        public bool WriteConsoleOutputToFile { get; set; } = false;
         
     }
 }

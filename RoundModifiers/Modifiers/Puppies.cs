@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Exiled.API.Features;
 using Exiled.API.Features.Pools;
@@ -14,12 +15,7 @@ namespace RoundModifiers.Modifiers
 {
     public class Puppies : Modifier
     {
-        public float Size => RoundModifiers.Instance.Config.Puppies_SCPScale;
-        //public float HealthMultiplier => RoundModifiers.Instance.Config.Puppies_SCPHealthMultiplier;
-        public float HealthStart => RoundModifiers.Instance.Config.Puppies_Scp939HealthStart;
-        public float HumeStart => RoundModifiers.Instance.Config.Puppies_Scp939HumeStart;
-        public bool AffectScp079 => RoundModifiers.Instance.Config.Puppies_AffectScp079;
-        public bool AffectScp3114 => RoundModifiers.Instance.Config.Puppies_AffectScp3114;
+        
         public void OnChangingRole(ChangingRoleEventArgs ev)
         {
             
@@ -46,7 +42,7 @@ namespace RoundModifiers.Modifiers
 
         public void OnSavingVoice(SavingVoiceEventArgs ev)
         {
-            if(!RoundModifiers.Instance.Config.Puppies_ShareVoices) return;
+            if(!ShareVoices) return;
             if(!ev.IsAllowed) return;
 
             if (!AlreadySavedVoices.ContainsKey(ev.Stolen.Id))
@@ -93,7 +89,7 @@ namespace RoundModifiers.Modifiers
         public override ModInfo ModInfo { get; } = new ModInfo
         {
             Name = "Puppies",
-            FormattedName = "<color=red><size=85%>Puppies</size></color>",
+            FormattedName = "<color=red>Puppies</color>",
             Aliases = new []{"pup"},
             Description = "All SCPs are mini 939s",
             Impact = ImpactLevel.MajorGameplay,
@@ -101,5 +97,29 @@ namespace RoundModifiers.Modifiers
             Balance = -2,
             Category = Category.ScpRole | Category.Scale | Category.Health
         };
+        
+        public static Config PuppiesConfig => RoundModifiers.Instance.Config.Puppies;
+        public static float Size => PuppiesConfig.SCPScale;
+        public static float HealthStart => PuppiesConfig.Scp939HealthStart;
+        public static float HumeStart => PuppiesConfig.Scp939HumeStart;
+        public static bool AffectScp079 => PuppiesConfig.AffectScp079;
+        public static bool AffectScp3114 => PuppiesConfig.AffectScp3114;
+        public static bool ShareVoices => PuppiesConfig.ShareVoices;
+        
+        public class Config
+        {
+            [Description("The scale SCPs should spawn as during the Puppies modifier. Default is 0.5f.")]
+            public float SCPScale { get; set; } = 0.65f;
+            [Description("How much HP SCP939 should start with during the Puppies modifier. Default is 750f.")]
+            public float Scp939HealthStart { get; set; } = 750;
+            [Description("How much Hume SCP939 should start with during the Puppies modifier. Default is 100f.")]
+            public float Scp939HumeStart { get; set; } = 500f;
+            [Description("Whether SCP079 should be affected by the Puppies modifier. Default is true.")]
+            public bool AffectScp079 { get; set; } = true;
+            [Description("Whether SCP3114 should be affected by the Puppies modifier. Default is true.")]
+            public bool AffectScp3114 { get; set; } = true;
+            [Description("Whether SCPs should share voices during the Puppies modifier. Default is true.")]
+            public bool ShareVoices { get; set; } = false;
+        }
     }
 }

@@ -457,7 +457,7 @@ namespace TTAdmin.WebSocketServer;
         {
             return true;
             // Implement your API key validation logic here
-            return apiKey == TTAdmin.Instance.Config.ApiKey; // Example validation
+            return apiKey == TTAdmin.Instance.ApiKey.KeyString; // Example validation
         }
         
         # endregion

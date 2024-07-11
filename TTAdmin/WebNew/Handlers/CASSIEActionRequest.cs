@@ -6,7 +6,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class CASSIEActionRequest : AllRequestHandler
 {
-    public override string Path => "/cassie";
+    public override string Path => "/facility/cassie";
     public override void ProcessGetRequest(HttpListenerContext context)
     {
         ErrorResponse.SendError(context.Response, HttpStatusCode.MethodNotAllowed, "Method not allowed");

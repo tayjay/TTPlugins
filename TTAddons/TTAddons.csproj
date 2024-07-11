@@ -105,6 +105,7 @@
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\ClassDHandler.cs" />
         <Compile Include="Handlers\LightFixHandler.cs" />
+        <Compile Include="Handlers\NoBanHandler.cs" />
         <Compile Include="Handlers\Scp0492Handler.cs" />
         <Compile Include="Handlers\Scp079Handler.cs" />
         <Compile Include="Handlers\Scp3114Handler.cs" />

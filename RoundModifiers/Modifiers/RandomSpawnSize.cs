@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System.ComponentModel;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
@@ -11,10 +12,10 @@ namespace RoundModifiers.Modifiers
     public class RandomSpawnSize : Modifier
     {
         
-        public float SizeMin => RoundModifiers.Instance.Config.RandomSpawnSize_SizeMin;
-        public float SizeMax => RoundModifiers.Instance.Config.RandomSpawnSize_SizeMax;
-        public bool AffectPickups => RoundModifiers.Instance.Config.RandomSpawnSize_AffectPickups;
-        public bool UniformSize => RoundModifiers.Instance.Config.RandomSpawnSize_Uniform;
+        public float SizeMin => RandomSpawnSizeConfig.SizeMin;
+        public float SizeMax => RandomSpawnSizeConfig.SizeMax;
+        public bool AffectPickups => RandomSpawnSizeConfig.AffectPickups;
+        public bool UniformSize => RandomSpawnSizeConfig.Uniform;
         
         public void OnSpawned(SpawnedEventArgs ev)
         {
@@ -110,5 +111,18 @@ namespace RoundModifiers.Modifiers
             Balance = 0,
             Category = Category.Scale
         };
+
+        public static Config RandomSpawnSizeConfig => RoundModifiers.Instance.Config.RandomSpawnSize;
+
+        public class Config : ModConfig
+        {
+            [Description("The minimum and maximum size of spawned objects. Default is 0.5f and 1.2f")]
+            public float SizeMin { get; set; } = 0.5f;
+            public float SizeMax { get; set; } = 1.1f;
+            [Description("Should the RandomSpawnSize modifier affect pickups? Default is true.")]
+            public bool AffectPickups { get; set; } = true;
+            [Description("Should the RandomSpawnSize modifier scale uniformly? Default is false.")]
+            public bool Uniform { get; set; } = false;
+        }
     }
 }

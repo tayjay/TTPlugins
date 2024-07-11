@@ -21,13 +21,13 @@ public class LevelUpCommand : ICommand
             return false;
         }
 
-        if (!RoundModifiers.Instance.GetModifier<LevelUp>().PlayerLevel.ContainsKey(Player.Get(sender).NetId))
+        if (!Player.Get(sender).SessionVariables.ContainsKey("levelup_xp"))
         {
             response = "You are not in the LevelUp system.";
             return true;
         }
-        int level = RoundModifiers.Instance.GetModifier<LevelUp>().PlayerLevel[Player.Get(sender).NetId];
-        float xp = RoundModifiers.Instance.GetModifier<LevelUp>().PlayerXP[Player.Get(sender).NetId];
+        int level = (int)Player.Get(sender).SessionVariables["levelup_level"];
+        float xp = (float)Player.Get(sender).SessionVariables["levelup_xp"];
         float xpNeeded = XP.GetXPNeeded(level);
 
         response = $"Your current Level is {level} and your current XP is {xp}/{xpNeeded}";
@@ -39,7 +39,7 @@ public class LevelUpCommand : ICommand
                 response += "\n"+boost.GetName();
         }
         response += "\n\nBoost History: ";
-        foreach(string boost in RoundModifiers.Instance.GetModifier<LevelUp>().PlayerBoostList[Player.Get(sender).NetId])
+        foreach(string boost in (List<string>)Player.Get(sender).SessionVariables["levelup_boosts"])
         {
             response += "\n"+boost;
         }

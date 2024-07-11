@@ -18,12 +18,13 @@ public class GetRoundInfoRequest : RequestHandler
             JsonResponse<RoundData>.Send(context.Response, roundData);
         } catch (System.Exception e)
         {
-            new Response()
+            /*new Response()
             {
                 StatusCode = HttpStatusCode.InternalServerError,
                 Message = "An error occurred while processing the request: "+e.Message,
                 ContentType = "text/plain"
-            }.Send(context.Response);
+            }.Send(context.Response);*/
+            ErrorResponse.SendError(context.Response, HttpStatusCode.InternalServerError, "An error occurred while processing the request:" + e.Message);
         }
     }
 }

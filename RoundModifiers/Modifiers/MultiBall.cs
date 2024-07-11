@@ -1,4 +1,5 @@
-﻿using Exiled.API.Enums;
+﻿using System.ComponentModel;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
@@ -16,9 +17,7 @@ namespace RoundModifiers.Modifiers
     public class MultiBall : Modifier
     {
 
-        public float BallScale => RoundModifiers.Instance.Config.MultiBall_BallScale;
-        public float ExtraBallSpawnChance => RoundModifiers.Instance.Config.MultiBall_ExtraBallsChance;
-        public float LockerSpawnChance => RoundModifiers.Instance.Config.MultiBall_LockerSpawnChance;
+        
         
         public void OnFillingLocker(FillingLockerEventArgs ev)
         {
@@ -81,7 +80,7 @@ namespace RoundModifiers.Modifiers
             projectile.PhysicsModule.Rb.velocity = Vector3Utils.Random(5f,10f);
             projectile.Scale = Vector3.one * BallScale;
             //(projectile as Scp018Projectile).FuseTime = (Projectile.Get(ev.Projectile) as Scp018Projectile).FuseTime;
-            if(RoundModifiers.Instance.Config.MultiBall_Recursive)
+            if(Recursive)
                 projectile.GameObject.AddComponent<ProjectileCollisionHandler>().Init(owner, projectile.Base);
         }
 
@@ -110,5 +109,24 @@ namespace RoundModifiers.Modifiers
             Balance = 3,
             Category = Category.ScpItem
         };
+        
+        public static MultiBall.Config MultiBallConfig => RoundModifiers.Instance.Config.MultiBall;
+        public static float BallScale => MultiBallConfig.BallScale;
+        public static float ExtraBallSpawnChance => MultiBallConfig.ExtraBallsChance;
+        public static float LockerSpawnChance => MultiBallConfig.LockerSpawnChance;
+        public static bool Recursive => MultiBallConfig.Recursive;
+
+        public class Config
+        {
+            [Description("The scale of the MultiBall balls when thrown. Default is 3.")]
+            public float BallScale { get; set; } = 3;
+            [Description("The chance of a locker spawning SCP-018 instead of the original item. Default is 0.01. (0-1)f")]
+            public float LockerSpawnChance { get; set; } = 0.01f;
+        
+            [Description("The chance of an SCP-018 ball spawning extra balls when it bounces. Default is 0.01. (0-1)f")]
+            public float ExtraBallsChance { get; set; } = 0.01f;
+            [Description("Do the bonus balls from SCP-018 spawn more balls? Default is false.")]
+            public bool Recursive { get; set; } = false;
+        }
     }
 }

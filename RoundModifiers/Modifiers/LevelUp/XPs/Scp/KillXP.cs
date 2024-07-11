@@ -7,6 +7,8 @@ public class KillXP : ScpXP, IDiedEvent
 {
     public void OnDied(DiedEventArgs ev)
     {
+        if(ev.Attacker == null)
+            return;
         if(ev.Attacker.IsScp)
             GiveXP(ev.Attacker, 100);
     }

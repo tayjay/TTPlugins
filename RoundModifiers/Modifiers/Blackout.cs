@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -15,6 +16,7 @@ namespace RoundModifiers.Modifiers
 {
     public class Blackout : Modifier
     {
+        
         
         private CoroutineHandle _blackoutTick;
         
@@ -71,7 +73,7 @@ namespace RoundModifiers.Modifiers
                 Room room = Room.Random();
                 if (room == null) continue;
                 OverchargeRoom(room, 1f);
-                yield return Timing.WaitForSeconds(RoundModifiers.Instance.Config.Blackout_LightRollDuration);
+                yield return Timing.WaitForSeconds(LightRollDuration);
                 OverchargeRoom(room, float.MaxValue);
             }
         }
@@ -139,11 +141,15 @@ namespace RoundModifiers.Modifiers
             Balance = -2,
             Category = Category.Lights
         };
+        
+        public Config BlackoutConfig => RoundModifiers.Instance.Config.Blackout;
+        
+        public float LightRollDuration => BlackoutConfig.LightRollDuration;
 
-
-        /*public override string Name { get; } = "Blackout";
-        public override string Description { get; } = "The lights are out!";
-        public override string[] Aliases { get; } = {"bo"};
-        public override ImpactLevel Impact { get; } = ImpactLevel.MinorGameplay;*/
+        public class Config
+        {
+            [Description("The duration of each light roll. Default is 10.")]
+            public float LightRollDuration { get; set; } = 10f;
+        }
     }
 }

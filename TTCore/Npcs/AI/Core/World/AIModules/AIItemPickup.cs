@@ -20,7 +20,7 @@ public class AIItemPickup : AIModuleBase
     
     public override bool Condition()
     {
-        return GetNearPickups(Parent.Position).Any();
+        return Parent.Player.IsHuman && Parent.Player.Items.Count < 8 && GetNearPickups(Parent.Position).Any();
     }
     
     public IEnumerable<Pickup> GetNearPickups(Vector3 position, float toleration = 5f)

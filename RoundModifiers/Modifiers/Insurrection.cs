@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System.ComponentModel;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using Respawning;
@@ -54,5 +55,15 @@ namespace RoundModifiers.Modifiers
             Balance = 1,
             Category = Category.HumanRole
         };
+
+        public Config InsurrectionConfig => Config.InsurrectionConfig;
+        public float Tickets => InsurrectionConfig.Tickets;
+        
+        public class Config : ModConfig
+        {
+            public static Config InsurrectionConfig => RoundModifiers.Instance.Config.Insurrection;
+            [Description("The amount of tickets to grant to the Chaos Insurgency when a guard is replaced. Default is 10.")]
+            public float Tickets { get; set; } = 10;
+        }
     }
 }

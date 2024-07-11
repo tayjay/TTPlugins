@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Exiled.API.Features;
+using Exiled.API.Features.Doors;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Events.EventArgs.Server;
@@ -8,6 +10,7 @@ using MEC;
 using PluginAPI.Core.Attributes;
 using PluginAPI.Enums;
 using PluginAPI.Events;
+using TTAdmin.Data;
 using TTAdmin.Data.Events;
 using TTAdmin.WebNew;
 using TTCore.API;
@@ -133,6 +136,13 @@ public class EventsHandler : IRegistered
     {
         GeneratedEventData data = new GeneratedEventData();
         BroadcastEvent(data);
+
+
+        DoorData.DoorsById = new Dictionary<int, Door>();
+        foreach (Door door in Door.List)
+        {
+            DoorData.DoorsById.Add(DoorData.DoorsById.Count, door);
+        }
     }
     
     //Warhead

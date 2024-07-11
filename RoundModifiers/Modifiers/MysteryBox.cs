@@ -88,4 +88,10 @@ public class MysteryBox : Modifier
         Balance = 2,
         Category = Category.Utility
     };
+    
+    
+    public class Config : ModConfig
+    {
+        public float Range { get; set; } = 3f;
+    }
 }

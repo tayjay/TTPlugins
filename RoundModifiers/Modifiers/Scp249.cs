@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
@@ -14,6 +15,10 @@ namespace RoundModifiers.Modifiers
 {
     public class Scp249 : Modifier
     {
+        
+        
+        
+        
         private CoroutineHandle _doorMovementCoroutine;
         private CoroutineHandle _teleportCoroutine;
         
@@ -23,7 +28,8 @@ namespace RoundModifiers.Modifiers
         
         public int PlacingDoor { get; private set; }
 
-        public int DoorCount => RoundModifiers.Instance.Config.Scp249_DoorCount;
+        
+        
         public float LastPlaceTime { get; private set; }
         
         public Scp249()
@@ -76,15 +82,16 @@ namespace RoundModifiers.Modifiers
             yield return Timing.WaitForSeconds(1f);
             while (true)
             {
-                if(Time.time-LastPlaceTime > RoundModifiers.Instance.Config.Scp249_MoveInterval)
+                if(Time.time-LastPlaceTime > MoveInterval)
                 {
                     Doors[PlacingDoor] = GetRandomDoor();
                     DoorMarkers[PlacingDoor].Destroy();
                     PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Cube, new Color(10f,10f,10f, 0.15f),
                         Doors[PlacingDoor].Position + new Vector3(0,1.2f,0)-(Doors[PlacingDoor].Rotation*new Vector3(0,0,0.001f)),
                         Doors[PlacingDoor].Base.transform.eulerAngles*-1,
-                        new Vector3(-1.4f, -2.5f, -0.05f), true);
+                        new Vector3(1.4f, 2.5f, 0.05f), true, true);
                     DoorMarkers[PlacingDoor] = Primitive.Create(settings);
+                    DoorMarkers[PlacingDoor].Collidable = false;
                     DoorMarkers[PlacingDoor].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[PlacingDoor].AdminToyBase);
                     LastPlaceTime = Time.time;
                     Doors[PlacingDoor].IsOpen = true;
@@ -94,12 +101,12 @@ namespace RoundModifiers.Modifiers
                 
                 
                 
-                if(Time.time-LastPlaceTime > RoundModifiers.Instance.Config.Scp249_MoveInterval-1f)
+                if(Time.time-LastPlaceTime > MoveInterval-1f)
                 {
                     //Want to start fading the door that is changing to red to indicate it will be the next door to move
                     DoorMarkers[PlacingDoor].Color = Color.Lerp(DoorMarkers[PlacingDoor].Color, new Color(0f,0f,0f, 0f), 0.1f);
                     Doors[PlacingDoor].IsOpen = false;
-                } else if(Time.time-LastPlaceTime > RoundModifiers.Instance.Config.Scp249_MoveInterval-10f)
+                } else if(Time.time-LastPlaceTime > MoveInterval-10f)
                 {
                     //Want to start fading the door that is changing to red to indicate it will be the next door to move
                     DoorMarkers[PlacingDoor].Color = Color.Lerp(DoorMarkers[PlacingDoor].Color, new Color(10f,0f,0f, 0.15f), 0.01f);
@@ -130,7 +137,7 @@ namespace RoundModifiers.Modifiers
             yield return Timing.WaitForSeconds(1f);
             while (true)
             {
-                yield return Timing.WaitForSeconds(RoundModifiers.Instance.Config.Scp249_TeleportCheckInterval);
+                yield return Timing.WaitForSeconds(TeleportCheckInterval);
                 foreach (Player player in Player.List)
                 {
                     try
@@ -207,5 +214,20 @@ namespace RoundModifiers.Modifiers
             Balance = 1,
             Category = Category.Facility
         };
+        
+        public Config Scp249Config => RoundModifiers.Instance.Config.Scp249;
+        public int DoorCount => Scp249Config.DoorCount;
+        public float MoveInterval => Scp249Config.MoveInterval;
+        public float TeleportCheckInterval => Scp249Config.TeleportCheckInterval;
+        
+        public class Config
+        {
+            [Description("The amount of time in seconds between door movements during the Scp249 modifier. Default is 30f. Suggest lowering this with larget DoorCount values.")]
+            public float MoveInterval { get; set; } = 30f;
+            [Description("The amount of time in seconds between testing for telepoting a player. Default is 0.1f. Lower numbers will be more accurate but more resource intensive.")]
+            public float TeleportCheckInterval { get; set; } = 0.1f;
+            [Description("Number of doors to place during the Scp249 modifier. Default is 2. Must be 2 or greater.")]
+            public int DoorCount { get; set; } = 2;
+        }
     }
 }

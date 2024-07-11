@@ -13,6 +13,7 @@ using RoundModifiers.Modifiers;
 using RoundModifiers.Modifiers.GunGame;
 using RoundModifiers.Modifiers.Scp1507;
 using RoundModifiers.Modifiers.LevelUp;
+using RoundModifiers.Modifiers.Nicknames;
 using RoundModifiers.Modifiers.RogueAI;
 using RoundModifiers.Modifiers.Scp507;
 using RoundModifiers.Modifiers.WeaponStats;
@@ -46,6 +47,7 @@ namespace RoundModifiers
             RoundManager = new RoundManager();
             RoundManager.Register();
             CustomRole.RegisterRoles(false, null);
+            Log.Debug(Nicknames.NicknameData);
             //CustomEffects.RegisterEffect<WeaponStatsEffect>();
             OptionalSCriPt optionalSCriPt = new OptionalSCriPt();
             if(optionalSCriPt.IsPresent)
@@ -133,7 +135,9 @@ namespace RoundModifiers
             AddModifier<LowPower>();
             //AddModifier<ZombieSurvival>();
             AddModifier<ScpBackup>();
-            
+            AddModifier<NoSpectateSCPs>();
+            //AddModifier<Fun>();
+            AddModifier<ZombieSurvival>();
             
             AddModifier<ComboImposter>();
             
@@ -233,6 +237,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 5, 1);
+        public override System.Version Version { get; } = new System.Version(0, 6, 0);
     }
 }

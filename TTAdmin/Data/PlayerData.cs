@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
 using MapGeneration;
+using RelativePositioning;
 using UnityEngine;
 
 namespace TTAdmin.Data;
@@ -15,6 +16,7 @@ public class PlayerData
     public string Role { get; set; }
     public Vector3 Position { get; set; }
     public Quaternion Rotation { get; set; }
+    public RelativePosition RelativePosition { get; set; }
     public Vector3 Scale { get; set; }
     public float Health { get; set; }
     public float MaxHealth { get; set; }
@@ -44,6 +46,7 @@ public class PlayerData
         Role = player.Role.Type.ToString();
         Position = player.Position;
         Rotation = player.Rotation;
+        RelativePosition = player.RelativePosition;
         Scale = player.Scale;
         Health = player.Health;
         MaxHealth = player.MaxHealth;

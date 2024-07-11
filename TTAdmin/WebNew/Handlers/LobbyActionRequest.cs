@@ -8,7 +8,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class LobbyActionRequest : RequestHandler
 {
-    public override string Path => "/lobby";
+    public override string Path => "/server/lobby";
     public override MethodType Method => MethodType.POST;
     public override bool RequiresAuth => true;
     public override void ProcessRequest(HttpListenerContext context)
@@ -27,12 +27,13 @@ public class LobbyActionRequest : RequestHandler
                     Round.IsLobbyLocked = false;
                     break;
                 default:
-                    new Response()
+                    /*new Response()
                     {
                         StatusCode = HttpStatusCode.BadRequest,
                         Message = "Invalid action",
                         ContentType = "text/plain"
-                    }.Send(context.Response);
+                    }.Send(context.Response);*/
+                    ErrorResponse.BadRequest(context.Response, "Invalid action");
                     return;
             }
 
@@ -45,12 +46,13 @@ public class LobbyActionRequest : RequestHandler
         }
         catch (System.Exception e)
         {
-            new Response()
+            /*new Response()
             {
                 StatusCode = HttpStatusCode.InternalServerError,
                 Message = "An error occurred while processing the request:" + e.Message,
                 ContentType = "text/plain"
-            }.Send(context.Response);
+            }.Send(context.Response);*/
+            ErrorResponse.SendError(context.Response, HttpStatusCode.InternalServerError, "An error occurred while processing the request:" + e.Message);
         }
     }
     

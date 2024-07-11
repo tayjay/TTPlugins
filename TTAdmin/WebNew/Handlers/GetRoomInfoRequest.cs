@@ -9,7 +9,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class GetRoomInfoRequest : RequestHandler
 {
-    public override string Path => "/room";
+    public override string Path => "/facility/room";
     public override MethodType Method => MethodType.GET;
     public override bool RequiresAuth => true;
     public override void ProcessRequest(HttpListenerContext context)

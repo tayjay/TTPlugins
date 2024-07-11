@@ -21,6 +21,8 @@ namespace TTAddons
         public Scp0492Handler Scp0492Handler { get; private set; }
         public Scp079Handler Scp079Handler { get; private set; }
         
+        public NoBanHandler NoBanHandler { get; private set; }
+        
 
         private TTAddons()
         {
@@ -48,6 +50,7 @@ namespace TTAddons
             //LightFixHandler = new LightFixHandler();
             Scp0492Handler = new Scp0492Handler();
             Scp079Handler = new Scp079Handler();
+            NoBanHandler = new NoBanHandler();
             
             
             //Register objects
@@ -62,6 +65,7 @@ namespace TTAddons
             Scp3114Handler.Register();
             Scp0492Handler.Register();
             Scp079Handler.Register();
+            NoBanHandler.Register();
             
         }
         
@@ -80,6 +84,7 @@ namespace TTAddons
             Scp3114Handler.Unregister();
             Scp0492Handler.Unregister();
             Scp079Handler.Unregister();
+            NoBanHandler.Unregister();
             
             //Dispose objects
             Unstuck = null;
@@ -89,6 +94,7 @@ namespace TTAddons
             //LightFixHandler = null;
             Scp0492Handler = null;
             Scp079Handler = null;
+            NoBanHandler = null;
         }
         
         public override void OnDisabled()
@@ -108,7 +114,7 @@ namespace TTAddons
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTAddons";
-        public override System.Version Version { get; } = new System.Version(0, 5, 0);
+        public override System.Version Version { get; } = new System.Version(0, 6, 0);
 
     }
 }

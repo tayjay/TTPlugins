@@ -56,7 +56,7 @@ public class GunGameHUDLayout : HUDLayout
                $"<size=75%>{(DisplayingHint == null ? " " : DisplayingHint.Text)}</size>\n" +
                "\n<size=65%>" +
                $"<align=left>Current Weapon: {CurrentWeapon}</align>\n";
-        if (RoundModifiers.Instance.Config.GunGame_Sequential)
+        if (GunGame.GunGameConfig.Sequential)
         {
             hud += $"\n<align=right>NextWeapon: {NextWeapon}</align>";
         }

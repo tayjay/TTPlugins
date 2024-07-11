@@ -9,6 +9,7 @@ using TTCore.HUDs;
 using TTCore.Npcs;
 using TTCore.Npcs.AI.Pathing;
 using TTCore.Reflection;
+using TTCore.Utilities;
 using UnityEngine;
 
 namespace TTCore
@@ -26,6 +27,7 @@ namespace TTCore
         //public NavMeshBuilder NavMeshBuilder { get; private set; }
         public VoiceHandler VoiceHandler { get; private set; }
         public NpcEvents NpcEvents { get; private set; }
+        public FileConsoleOutput FileConsoleOutput { get; private set; }
 
         private TTCore()
         {
@@ -72,6 +74,12 @@ namespace TTCore
 
         private void Setup()
         {
+            if (Config.WriteConsoleOutputToFile)
+            {
+                FileConsoleOutput = new FileConsoleOutput();
+                FileConsoleOutput.Register();
+            }
+            
             _harmony.PatchAll();
             HUD.Register();
             PlayerSizeManager = new PlayerSizeManager();
@@ -100,19 +108,24 @@ namespace TTCore
                 CustomEffects.Unregister();
             //NavMeshBuilder.Unregister();
             NpcEvents.Unregister();
+            
             NpcEvents = null;
             PlayerSizeManager = null;
             NpcManager = null;
             //NavMeshBuilder = null;
             
             VoiceHandler = null;
-            
-            
+
+            if (Config.WriteConsoleOutputToFile)
+            {
+                FileConsoleOutput.Unregister();
+                FileConsoleOutput = null;
+            }
         }
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 5, 1);
+        public override System.Version Version { get; } = new System.Version(0, 6, 0);
         
     }
 }

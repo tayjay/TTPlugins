@@ -216,12 +216,15 @@
         <Compile Include="TTConfig.cs" />
         <Compile Include="TTCore.cs" />
         <Compile Include="Utilities\AudioUtils.cs" />
+        <Compile Include="Utilities\FileConsoleOutput.cs" />
         <Compile Include="Utilities\NpcUtilities.cs" />
         <Compile Include="Utilities\Reflection.cs" />
+        <Compile Include="Utilities\RoomUtils.cs" />
         <Compile Include="Utilities\TransformUtils.cs" />
         <Compile Include="Utilities\Vector3Utils.cs" />
         <Compile Include="Utilities\WeightedItem.cs" />
         <Compile Include="Utilities\WeightedRandomSelector.cs" />
+        <Compile Include="Voice\TTVoiceTransceiver.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="App.config" />

@@ -4,11 +4,11 @@ using TTAdmin.Data;
 using TTAdmin.WebNew.DataTypes;
 using TTCore.Npcs.AI.Core.Management;
 
-namespace TTAdmin.WebNew.Handlers;
+namespace TTAdmin.WebNew.Handlers.Player;
 
 public class GetAIDataHandler : RequestHandler
 {
-    public override string Path => "/aidata";
+    public override string Path => "/player/ai";
     public override MethodType Method => MethodType.GET;
     public override bool RequiresAuth => true;
     public override void ProcessRequest(HttpListenerContext context)
