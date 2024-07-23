@@ -6,7 +6,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class GetRoundInfoRequest : RequestHandler
 {
-    public override string Path => "/round";
+    public override string Path => "/server/round";
     public override MethodType Method => MethodType.GET;
     public override bool RequiresAuth => true;
     public override void ProcessRequest(HttpListenerContext context)

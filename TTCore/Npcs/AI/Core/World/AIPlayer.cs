@@ -3,6 +3,7 @@ using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using TTCore.Npcs.AI.Core.Management;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace TTCore.Npcs.AI.Core.World;
 public delegate void OnAIPlayerDamage(Player attacker);
@@ -39,11 +40,24 @@ public class AIPlayer : MonoBehaviour
 
     public AIMovementEngine MovementEngine;
     public AIModuleRunner ModuleRunner;
+    public NavMeshAgent NavMeshAgent;
 
     private void Awake()
     {
         MovementEngine = gameObject.AddComponent<AIMovementEngine>();
         ModuleRunner = gameObject.AddComponent<AIModuleRunner>();
+        NavMeshAgent = gameObject.AddComponent<NavMeshAgent>();
+        NavMeshAgent.agentTypeID = 1;
+        NavMeshAgent.radius = MovementEngine.CharCont.radius;
+        NavMeshAgent.height = MovementEngine.CharCont.height;
+        NavMeshAgent.speed = MovementEngine.CurrentSpeed;
+        NavMeshAgent.acceleration = 40f;
+        NavMeshAgent.angularSpeed = 120f;
+        NavMeshAgent.autoBraking = false;
+        NavMeshAgent.autoRepath = true;
+        NavMeshAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        NavMeshAgent.baseOffset = 1;
+        NavMeshAgent.stoppingDistance = 2f;
     }
 
     public void Damage(Player attacker) => OnDamage?.Invoke(attacker);

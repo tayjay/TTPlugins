@@ -67,7 +67,7 @@ public class NicknameData
         {
             NicknameData nicknameData = new NicknameData();
             string data = JsonSerializer.ToJsonString<NicknameData>(nicknameData);
-            File.WriteAllText("TTCore/RoundModifiers/Nicknames.json", data);
+            File.WriteAllText("TTCore/RoundModifiers/Nicknames.json", JsonSerializer.PrettyPrint(data));
             return nicknameData;
         }
         else

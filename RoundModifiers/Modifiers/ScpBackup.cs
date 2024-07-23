@@ -51,7 +51,7 @@ public class ScpBackup : Modifier
                 spawnPosition = scpPlayers.GetRandomValue().Position+ Vector3.up;
             }
 
-            NpcUtilities.CreateBasicAI(GetBackupRole(), spawnPosition);
+            NpcUtilities.CreateZombieAI(spawnPosition);
         });
     }
     
@@ -74,7 +74,7 @@ public class ScpBackup : Modifier
                 {
                     spawnPosition = scpPlayers.GetRandomValue().Position+ Vector3.up;
                 }
-                NpcUtilities.CreateBasicAI(GetBackupRole(), spawnPosition);
+                NpcUtilities.CreateZombieAI(spawnPosition);
             }
             if(ExponentialRespawns)
                 RespawnWave++;
@@ -154,6 +154,7 @@ public class ScpBackup : Modifier
         Description = "Scp team gets some backup!",
         Impact = ImpactLevel.MinorGameplay,
         MustPreload = false,
+        Hidden = true
     };
     
     public static Config ScpBackupConfig => RoundModifiers.Instance.Config.ScpBackup;

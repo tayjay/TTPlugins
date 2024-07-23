@@ -15,7 +15,8 @@ public class TargetableItem(Pickup item) : TargetableBase
 
     public override bool CanFollow(AIModuleRunner module) =>
         !module.IsDisarmed(out _)
-        && module.WithinDistance(this, module.ItemDistance);
+        && module.WithinDistance(this, module.ItemDistance)
+        && module.Player.IsHuman;
 
     public override bool CanTarget(AIModuleRunner module, out bool cannotAttack)
     {

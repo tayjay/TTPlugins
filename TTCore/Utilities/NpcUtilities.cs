@@ -89,6 +89,7 @@ public static class NpcUtilities
             AIGrenadeStrafeThrow g = prof.WorldPlayer.ModuleRunner.AddModule<AIGrenadeStrafeThrow>();
             AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
             AIItemPickup ip = prof.WorldPlayer.ModuleRunner.AddModule<AIItemPickup>();
+            ip.Enabled = false;
             prof.WorldPlayer.ModuleRunner.AddModule<AIZombieModule>();
             prof.WorldPlayer.ModuleRunner.AddModule<AIScp049Module>();
             prof.WorldPlayer.ModuleRunner.AddModule<AIScp106Module>();
@@ -100,8 +101,48 @@ public static class NpcUtilities
             Log.Debug("Behavior Enabled.");
             i.SearchRadiusEnemy = 70f;
             i.SearchRadiusFollow = 20f;
+            
             Log.Debug("Created AI Player.");
                 
+            
+            Log.Debug("Returning Profile");
+            return prof;
+        }
+
+        public static AIPlayerProfile CreateZombieAI(Vector3 position)
+        {
+            Log.Debug("Creating AI Zombie.");
+            AIPlayerProfile prof = new AIDataProfileBase("Bot").CreateAIPlayer(RoleTypeId.Scp0492);
+            Log.Debug("Profile created.");
+            
+            Log.Debug("Setting Role.");
+
+            Timing.CallDelayed(1f, () =>
+            {
+                prof.DisplayNickname = "Zombie " + prof.Player.Id;
+                prof.Player.RemoteAdminPermissions = PlayerPermissions.AFKImmunity;
+                prof.Player.RankName = "NPC";
+                prof.Player.RankColor = "white";
+            });
+    
+            prof.ReferenceHub.roleManager.ServerSetRole(RoleTypeId.Scp0492, RoleChangeReason.None, RoleSpawnFlags.None);
+            prof.Position = position;
+            Log.Debug("Role set.");
+            AIScanner i = prof.WorldPlayer.ModuleRunner.AddModule<AIScanner>();
+            AIPathfinder p = prof.WorldPlayer.ModuleRunner.AddModule<AIPathfinder>();
+            AIFollow f = prof.WorldPlayer.ModuleRunner.AddModule<AIFollow>();
+            AIWander w = prof.WorldPlayer.ModuleRunner.AddModule<AIWander>();
+            AIChaseEnemy ce = prof.WorldPlayer.ModuleRunner.AddModule<AIChaseEnemy>();
+            
+            prof.WorldPlayer.ModuleRunner.AddModule<AIZombieModule>();
+            Log.Debug("Modules added.");
+
+            prof.WorldPlayer.ModuleRunner.AddModule<AIBehaviorBase>();
+            Log.Debug("Behavior Enabled.");
+            i.SearchRadiusEnemy = 70f;
+            i.SearchRadiusFollow = 20f;
+            
+            Log.Debug("Created AI Zombie.");
             
             Log.Debug("Returning Profile");
             return prof;

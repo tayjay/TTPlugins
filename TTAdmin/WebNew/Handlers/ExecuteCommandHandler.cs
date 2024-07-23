@@ -10,7 +10,7 @@ namespace TTAdmin.WebNew.Handlers;
 
 public class ExecuteCommandHandler : RequestHandler
 {
-    public override string Path => "/command";
+    public override string Path => "/server/command";
     public override MethodType Method => MethodType.POST;
     public override bool RequiresAuth => true;
     private TTAdminCommandSender _serverConsoleSender = new TTAdminCommandSender();

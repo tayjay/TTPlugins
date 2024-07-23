@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
+using Exiled.CustomRoles.API;
 using MapGeneration;
 using RelativePositioning;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class PlayerData
     public uint NetId { get; set; }
     public string SteamId { get; set; }
     public string Role { get; set; }
+    public List<string> CustomRoles { get; set; }
     public Vector3 Position { get; set; }
     public Quaternion Rotation { get; set; }
     public RelativePosition RelativePosition { get; set; }
@@ -44,6 +46,11 @@ public class PlayerData
         Ip = player.IPAddress;
         SteamId = player.UserId;
         Role = player.Role.Type.ToString();
+        CustomRoles = new List<string>();
+        foreach (var customRole in player.GetCustomRoles())
+        {
+            CustomRoles.Add(customRole.Name);
+        }
         Position = player.Position;
         Rotation = player.Rotation;
         RelativePosition = player.RelativePosition;

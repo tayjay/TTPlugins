@@ -45,9 +45,7 @@ namespace TTCore
             OptionalSCriPt optionalSCriPt = new OptionalSCriPt();
             if (optionalSCriPt.IsPresent)
             {
-                OptionalReference optionalReference = optionalSCriPt.SetupConnector(this);
-                optionalReference.CallMethod("AddGlobal", typeof(Custom), "TTCustom");
-                
+                optionalSCriPt.AddGlobal(typeof(Custom), "TTCustom");
             }
             else
             {
@@ -79,7 +77,6 @@ namespace TTCore
                 FileConsoleOutput = new FileConsoleOutput();
                 FileConsoleOutput.Register();
             }
-            
             _harmony.PatchAll();
             HUD.Register();
             PlayerSizeManager = new PlayerSizeManager();
@@ -125,7 +122,7 @@ namespace TTCore
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 6, 0);
+        public override System.Version Version { get; } = new System.Version(0, 6, 1);
         
     }
 }

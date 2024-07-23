@@ -43,8 +43,8 @@ public class ZombieSurvival : Modifier
     CoroutineHandle _speedBoostHandle;
     CoroutineHandle _nukeTimerHandle;
     
-    //private byte slowdownFactor { get; set; }
-    private byte playerSpeedBoost { get; set; }
+    private float zombieSpeed { get; set; }
+    //private byte playerSpeedBoost { get; set; }
     
     
     public void OnRoundStart()
@@ -52,7 +52,7 @@ public class ZombieSurvival : Modifier
         //Start with 1 zombie
         _zombieSpawnHandle = Timing.RunCoroutine(ZombieSpawnCoroutine());
         _zombieMoveHandle = Timing.RunCoroutine(ZombieMoveCoroutine());
-        _speedBoostHandle = Timing.RunCoroutine(CheckSpeedBoost());
+        //_speedBoostHandle = Timing.RunCoroutine(CheckSpeedBoost());
 
         _nukeTimerHandle = Timing.CallDelayed(ZombieSurvivalConfig.AutoNukeTime, () =>
         {
@@ -96,10 +96,10 @@ public class ZombieSurvival : Modifier
                         break;
                 }
 
-                if (spawnCount <= ZombieSurvivalConfig.MaxZombies)
+                if (spawnCount <= ZombieSurvivalConfig.TotalZombies)
                 {
                     Room room = GetValidRoom(targetType);
-                    NpcUtilities.CreateBasicAI(RoleTypeId.Scp0492, room.Position+Vector3.up);
+                    NpcUtilities.CreateZombieAI(room.Position+Vector3.up);
                 }
                     
             } catch
@@ -109,7 +109,7 @@ public class ZombieSurvival : Modifier
             spawnCount++;
             if(spawnCount%3==0)
             {
-                //slowdownFactor = (byte)(slowdownFactor - ZombieSurvivalConfig.SlowdownDecrease);
+                /*//slowdownFactor = (byte)(slowdownFactor - ZombieSurvivalConfig.SlowdownDecrease);
                 playerSpeedBoost = (byte)(playerSpeedBoost - ZombieSurvivalConfig.PlayerSpeedBoostDecrease);
                 if(playerSpeedBoost<0) playerSpeedBoost = 0;
                 foreach(Player human in Player.List.Where(p=>p.IsHuman))
@@ -117,15 +117,15 @@ public class ZombieSurvival : Modifier
                     if(human.Role is FpcRole role)
                     {
                         /*role.WalkingSpeed += 1f;
-                        role.SprintingSpeed += 1f;*/
+                        role.SprintingSpeed += 1f;#1#
                         
-                        human.ChangeEffectIntensity<MovementBoost>((byte)(playerSpeedBoost));
+                        //human.ChangeEffectIntensity<MovementBoost>((byte)(playerSpeedBoost));
                         if (!human.IsNPC)
                         {
                             //human.ShowHUDHint("You feel stronger...", 3f);
                         }
                     }
-                }
+                }*/
             }
             yield return Timing.WaitForSeconds(ZombieSurvivalConfig.ZombieSpawnInterval);
         }
@@ -222,7 +222,7 @@ public class ZombieSurvival : Modifier
             {
                 /*role.WalkingSpeed = 3;
                 role.SprintingSpeed = 3;*/
-                ev.Player.EnableEffect<MovementBoost>(playerSpeedBoost);
+                //ev.Player.EnableEffect<MovementBoost>(playerSpeedBoost);
             }
         }
     }
@@ -238,13 +238,13 @@ public class ZombieSurvival : Modifier
         if(ev.Attacker.IsScp) return;
         if (ev.Player.IsScp) return;
         ev.Player.EnableEffect<Slowness>((byte)35,duration:1f,addDurationIfActive:true);
-        ev.Player.DisableEffect<MovementBoost>();
+        //ev.Player.DisableEffect<MovementBoost>();
         ev.Amount = 0;
         ev.IsAllowed = false;
         
     }
 
-    public IEnumerator<float> CheckSpeedBoost()
+    /*public IEnumerator<float> CheckSpeedBoost()
     {
         while (!Round.IsEnded)
         {
@@ -258,7 +258,7 @@ public class ZombieSurvival : Modifier
 
             yield return Timing.WaitForSeconds(1f);
         }
-    }
+    }*/
 
     public void OnRespawningTeam(RespawningTeamEventArgs ev)
     {
@@ -379,7 +379,7 @@ public class ZombieSurvival : Modifier
         Exiled.Events.Handlers.Map.Decontaminating += OnDecon;
         
         //slowdownFactor = ZombieSurvivalConfig.StartingSlowdown;
-        playerSpeedBoost = (byte)(ZombieSurvivalConfig.PlayerStartingSpeedBoost);
+        zombieSpeed = ZombieSurvivalConfig.ZombieStartingSpeed;
     }
 
     protected override void UnregisterModifier()
@@ -413,7 +413,8 @@ public class ZombieSurvival : Modifier
         Impact = ImpactLevel.Gamemode,
         MustPreload = false,
         Balance = 0,
-        Category = Category.Gamemode|Category.ScpRole|Category.HumanRole|Category.Npc
+        Category = Category.Gamemode|Category.ScpRole|Category.HumanRole|Category.Npc,
+        Hidden = true
     };
 
     public static Config ZombieSurvivalConfig => RoundModifiers.Instance.Config.ZombieSurvival;
@@ -423,14 +424,14 @@ public class ZombieSurvival : Modifier
         public byte StartingSlowdown { get; set; } = 80;
         [Description("The amount to decrease the slowdown factor by every 3 zombies spawned")]
         public byte SlowdownDecrease { get; set; } = 5;*/
-        [Description("The starting speed boost for players")]
-        public byte PlayerStartingSpeedBoost { get; set; } = 25;
+        [Description("The starting speed for zombie")]
+        public float ZombieStartingSpeed { get; set; } = 3f;
         [Description("The amount to decrease the speed boost by every few zombies spawned")]
-        public byte PlayerSpeedBoostDecrease { get; set; } = 5;
+        public float ZombieSpeedIncrease { get; set; } = 2f;
         [Description("The interval in seconds between zombie spawns")]
         public float ZombieSpawnInterval { get; set; } = 10f;
         [Description("The maximum amount of zombies that can be spawned")]
-        public int MaxZombies { get; set; } = 15;
+        public int TotalZombies { get; set; } = 5;
         [Description("How long after a zombie dies should it spawn back in the facility?")]
         public float ZombieRespawnTime { get; set; } = 5f;
         [Description("The interval in seconds between zombie moves")]

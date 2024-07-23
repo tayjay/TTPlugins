@@ -19,7 +19,7 @@ public class AISpawner : SpawnerBase
 
     protected readonly List<AIPlayer> NPCs = [];
 
-    public override bool SetSpawnee(string[] value, out string feedback)
+    public override bool SetSpawnee(string[] value, out string feedback) // [limit] [role] [items...]
     {
         if (!value.TryGet(0, out string arg1) || !int.TryParse(arg1, out int i) || i <= 0)
         {

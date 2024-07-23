@@ -5,6 +5,7 @@ using Exiled.API.Features.Pickups;
 using Exiled.Permissions.Extensions;
 using InventorySystem.Items.Firearms.Modules;
 using PlayerRoles.Ragdolls;
+using TTCore.Utilities;
 using UnityEngine;
 
 namespace TTCore.Extensions

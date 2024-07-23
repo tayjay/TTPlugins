@@ -9,7 +9,7 @@ public class GetPlayerCountHandler : RequestHandler
 {
     private static int playerCount => Server.PlayerCount; // Example player count
     
-    public override string Path => "/playercount";
+    public override string Path => "/player/count";
     public override MethodType Method => MethodType.GET;
     public override bool RequiresAuth => false;
 

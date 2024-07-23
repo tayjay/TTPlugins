@@ -5,6 +5,7 @@ using RoundModifiers.Modifiers;
 using RoundModifiers.Modifiers.GunGame;
 using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.Nicknames;
+using RoundModifiers.Modifiers.WeaponStats;
 
 namespace RoundModifiers
 {
@@ -212,6 +213,10 @@ namespace RoundModifiers
         public Nicknames.Config Nicknames { get; set; } = new Nicknames.Config();
         [Description("=====Insurrection=====")]
         public Insurrection.Config Insurrection { get; set; } = new Insurrection.Config();
+        
+        [Description("=====WeaponStats=====")]
+        public WeaponStats2.Config WeaponStats { get; set; } = new WeaponStats2.Config();
+        
         [Description("=====ZombieSurvival=====")]
         public ZombieSurvival.Config ZombieSurvival { get; set; } = new ZombieSurvival.Config();
 

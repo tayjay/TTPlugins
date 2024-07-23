@@ -18,6 +18,7 @@ public class RoomData
     //public List<LiftData> Lifts { get; set; }
     public Vector3 Position { get; set; }
     public Quaternion Rotation { get; set; }
+    public Color LightColor { get; set; }
     
     
     
@@ -32,6 +33,7 @@ public class RoomData
         Rotation = room.Transform.rotation;
         Position = room.Transform.position;
         RoomShape = room.RoomShape.ToString();
+        LightColor = room.Color;
     }
     
     public static List<RoomData> ConvertList(List<Room> rooms)

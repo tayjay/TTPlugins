@@ -38,6 +38,7 @@ public class NavMeshManager
         lightZoneSurface.collectObjects = CollectObjects.All;
         lightZoneSurface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
         lightZoneSurface.voxelSize = 0.05f;
+        lightZoneSurface.agentTypeID = 1;
 
         lightZoneSurface.BuildNavMesh();
     }

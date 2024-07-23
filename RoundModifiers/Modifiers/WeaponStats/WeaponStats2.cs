@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using CustomPlayerEffects;
 using Exiled.API.Enums;
@@ -48,7 +49,7 @@ public class WeaponStats2 : Modifier
     
     public void OnInspectFirearm(InspectFirearmEventArgs ev)
     {
-        
+        if(!WeaponStatsConfig.EnableInspectInfo) return;
         
         if(WeaponStats.TryGetValue(ev.Serial, out var stat) && stat is IInspecting inspecting)
         {
@@ -101,6 +102,8 @@ public class WeaponStats2 : Modifier
 
     public void OnChangedItem(ChangedItemEventArgs ev)
     {
+        if(!WeaponStatsConfig.EnableChangeInfo) return;
+        Log.Debug("Changed Item in WeaponStats"); //todo: Check here for possible bug with respawn timer
         if (ev.Item is Firearm oldFirearm)
         {
             if(WeaponStats.TryGetValue(oldFirearm.Serial, out var stat) && stat is IAdding adding)
@@ -228,6 +231,7 @@ public class WeaponStats2 : Modifier
     static CoroutineHandle _tickHandle;
     public IEnumerator<float> Tick()
     {
+        if(!WeaponStatsConfig.EnablePickupInfo) yield break;
         yield return Timing.WaitForSeconds(1f);
         while (true)
         {
@@ -353,4 +357,18 @@ public class WeaponStats2 : Modifier
         Balance = 3,
         Category = Category.Weapon|Category.Overhaul
     };
+
+    public static Config WeaponStatsConfig => RoundModifiers.Instance.Config.WeaponStats;
+    
+    public class Config : ModConfig
+    {
+        [Description("Should a hint with the weapon stats be shown when looking at the weapon pickup?")]
+        public bool EnablePickupInfo { get; set; } = false;
+        
+        [Description("Should a hint with the weapon stats be shown when inspecting the weapon?")]
+        public bool EnableInspectInfo { get; set; } = true;
+        
+        [Description("Should a hint with the weapon stats be shown when changing to the weapon?")]
+        public bool EnableChangeInfo { get; set; } = true;
+    }
 }

@@ -52,8 +52,7 @@ namespace RoundModifiers
             OptionalSCriPt optionalSCriPt = new OptionalSCriPt();
             if(optionalSCriPt.IsPresent)
             {
-                OptionalReference connector = optionalSCriPt.SetupConnector(this);
-                connector.CallMethod("AddGlobal", typeof(LuaModifiers), "RoundModifiers");
+                optionalSCriPt.AddGlobal(typeof(LuaModifiers), "RoundModifiers");
             }
             
             /*if(OptionalPlugin.GetPlugin("SCriPt", out OptionalPlugin SCriPtConnection))
@@ -237,6 +236,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 6, 0);
+        public override System.Version Version { get; } = new System.Version(0, 6, 1);
     }
 }

@@ -16,8 +16,6 @@ namespace TTAddons.Handlers
             
         }
         
-        //todo: Change the selection method
-        
         public void OnRoundStart()
         {
             if(Server.PlayerCount<TTAddons.Instance.Config.Scp3114MinPlayers) return;
