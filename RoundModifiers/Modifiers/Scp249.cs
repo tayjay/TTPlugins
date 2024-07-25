@@ -50,8 +50,9 @@ namespace RoundModifiers.Modifiers
                 PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Cube, new Color(10f,10f,10f, 0.15f),
                     Doors[i].Position + new Vector3(0,1.2f,0)-(Doors[i].Rotation*new Vector3(0,0,0.001f)),
                     Doors[i].Base.transform.eulerAngles*-1,
-                new Vector3(-1.4f, -2.5f, -0.005f), true);
+                new Vector3(1.4f, 2.5f, 0.005f), true);
                 DoorMarkers[i] = Primitive.Create(settings);
+                DoorMarkers[i].Collidable = false;
                 DoorMarkers[i].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[i].AdminToyBase);
                 Log.Info("Door in "+Doors[i].Room.Type);
             }
@@ -146,11 +147,13 @@ namespace RoundModifiers.Modifiers
                         {
                             if (Vector3.Distance(player.Position, Doors[i].Position + Vector3.up) < 0.65f)
                             {
+                                //Stop player from teleporting again if they just did
+                                if(player.SessionVariables.ContainsKey("Scp249_LastTeleport") && Time.time - (float)player.SessionVariables["Scp249_LastTeleport"] < 3f) continue;
                                 Log.Info("Attempting to teleport " + player.Nickname);
                                 Door targetDoor = Doors[(i+1) % (Doors.Length)];
-                                player.Teleport(targetDoor.Position + Vector3.up +
-                                                (targetDoor.Rotation * Vector3.forward)); //Teleport to the next door
+                                player.Teleport(targetDoor.Position + Vector3.up);//+ (targetDoor.Rotation * Vector3.forward)); //Teleport to the next door
                                 player.Rotation = targetDoor.Rotation;
+                                player.SessionVariables["Scp249_LastTeleport"] = Time.time;
                                 break;
                             }
                         }
