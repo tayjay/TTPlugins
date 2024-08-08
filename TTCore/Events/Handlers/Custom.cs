@@ -25,6 +25,8 @@ public static class Custom
     
     public static Event<PickupCollisionEventArgs> PickupCollision { get; set; } = new Event<PickupCollisionEventArgs>();
     
+    public static Event Scp079BeginOvercharge { get; set; } = new Event();
+    
     public static void OnAdminToyCollision(AdminToyCollisionEventArgs ev)
     {
         AdminToyCollision.InvokeSafely(ev);
@@ -68,5 +70,10 @@ public static class Custom
     public static void OnPickupCollision(PickupCollisionEventArgs ev)
     {
         PickupCollision.InvokeSafely(ev);
+    }
+    
+    public static void OnScp079BeginOvercharge()
+    {
+        Scp079BeginOvercharge.InvokeSafely();
     }
 }

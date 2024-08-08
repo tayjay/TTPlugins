@@ -116,6 +116,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="API\IRegistered.cs" />
+        <Compile Include="API\RoomPosition.cs" />
         <Compile Include="API\SpawnerBase.cs" />
         <Compile Include="API\SpawnerManager.cs" />
         <Compile Include="Commands\RemoteAdmin\DiagnosticsCommand.cs" />
@@ -168,6 +169,7 @@
         <Compile Include="Npcs\AI\Pathing\NavMeshManager.cs" />
         <Compile Include="Npcs\AI\Pathing\Path.cs" />
         <Compile Include="Npcs\AI\Pathing\PathManager.cs" />
+        <Compile Include="Patches\OverchargePatch.cs" />
         <Compile Include="Reflection\IOptional.cs" />
         <Compile Include="Reflection\OptionalPlugin.cs" />
         <Compile Include="Reflection\OptionalReference.cs" />

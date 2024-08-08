@@ -55,5 +55,7 @@ namespace TTAddons
         public bool NoAutoBan { get; set; } = false;
         [Description("Disable auto-kicking by the server. Only do so if you trust your players. Default is false.")]
         public bool NoAutoKick { get; set; } = false;
+        [Description("Allow players to use the .scp and .human commands to choose their role. Default is true.")]
+        public bool AllowRoleCommands { get; set; } = true;
     }
 }

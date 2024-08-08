@@ -1,4 +1,6 @@
-﻿using PlayerRoles;
+﻿using System.Collections.Generic;
+using System.Linq;
+using PlayerRoles;
 
 namespace RoundModifiers.Modifiers.LevelUp.HUD
 {
@@ -9,6 +11,8 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
         public float XPNeeded { get; set; }
         public string ActivePerks { get; set; }
         
+        public string LastPerk { get; set; }
+        
         
         public LevelUpHUDLayout(TTCore.HUDs.HUD hud, float refreshRate = 1) : base(hud, refreshRate)
         {
@@ -16,6 +20,7 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
             XP = 0;
             XPNeeded = 0;
             ActivePerks = "";
+            LastPerk = "None";
         }
 
         public override bool ShouldDisplay()
@@ -41,7 +46,11 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
                     color = "orange";
                     break;
                 case RoleTypeId.FacilityGuard:
+                    color = "#808080";
+                    break;
                 case RoleTypeId.NtfCaptain:
+                    color = "#00008B";
+                    break;
                 case RoleTypeId.NtfPrivate:
                 case RoleTypeId.NtfSergeant:
                 case RoleTypeId.NtfSpecialist:
@@ -73,9 +82,10 @@ namespace RoundModifiers.Modifiers.LevelUp.HUD
                     hud += $"<color=#333333>█</color>";
             }
             
-            hud += "</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
+            hud += "</size>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
                    $"<size=75%>{(DisplayingHint == null ? " " : DisplayingHint.Text)}</size>\n" +
                    "\n<size=65%>" +
+                   $"\n<align=left>Last Perk: {LastPerk}</align>\n" +
                    $"<align=right>Active Perks: \n{ActivePerks}</align>\n" +
                    "\n\n\n\n\n\n\n\n\n\n\n\n\n</size></color>";
 

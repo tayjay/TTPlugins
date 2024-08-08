@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System;
+using Exiled.API.Features;
 
 namespace RoundModifiers.Modifiers.LevelUp.Boosts.Scp;
 
@@ -18,7 +19,9 @@ public class HealBoost : Boost
     {
         float healAmount = 100 + (100*(int)Tier);
         if(player.Health + healAmount > player.MaxHealth*1.5f) return false; //Don't extra overheal
-        player.Heal(100 + (100*(int)Tier), true);
+        float overheal = player.Health + healAmount - player.MaxHealth;
+        if(Tier >=Tier.Rare && (overheal>0)) player.HumeShield += overheal/2;
+        player.Heal(healAmount, false);
         return true;
     }
 

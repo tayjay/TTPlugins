@@ -578,6 +578,7 @@ public class GunGame : Modifier
         Description = "Players start with a weak weapon and have to kill other players to get stronger weapons.",
         MustPreload = true,
         Balance = 0,
+        Hidden = true,
         Impact = ImpactLevel.Gamemode,
         Category = Category.Combat | Category.Gamemode | Category.HumanRole | Category.ScpRole | Category.HUD
     };

@@ -5,6 +5,7 @@ using RoundModifiers.Modifiers;
 using RoundModifiers.Modifiers.GunGame;
 using RoundModifiers.Modifiers.LevelUp;
 using RoundModifiers.Modifiers.Nicknames;
+using RoundModifiers.Modifiers.RogueAI;
 using RoundModifiers.Modifiers.WeaponStats;
 
 namespace RoundModifiers
@@ -209,6 +210,8 @@ namespace RoundModifiers
         public RandomSpawnSize.Config RandomSpawnSize { get; set; } = new RandomSpawnSize.Config();
         [Description("=====Rainbow=====")]
         public Rainbow.Config Rainbow { get; set; } = new Rainbow.Config();
+        [Description("=====RogueAI=====")]
+        public RogueAI.Config RogueAI { get; set; } = new RogueAI.Config();
         [Description("=====Nicknames=====")]
         public Nicknames.Config Nicknames { get; set; } = new Nicknames.Config();
         [Description("=====Insurrection=====")]

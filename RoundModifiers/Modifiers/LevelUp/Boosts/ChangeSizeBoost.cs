@@ -9,7 +9,7 @@ public class ChangeSizeBoost : Boost
 {
     public float NewScale { get; set; }
     
-    public ChangeSizeBoost(float newScale = 0.5f) : base(Tier.Rare)
+    public ChangeSizeBoost(float newScale = 0.5f, Tier rarity = Tier.Epic) : base(rarity)
     {
         NewScale = newScale;
     }
@@ -22,7 +22,7 @@ public class ChangeSizeBoost : Boost
 
     public override bool ApplyBoost(Player player)
     {
-        HasBoost[player.NetId] = true;
+        //HasBoost[player.NetId] = true;
         //player.ChangeSize(NewScale);
         player.Scale = player.Scale * NewScale;
         return true;

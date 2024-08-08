@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Extensions;
@@ -7,15 +9,20 @@ using Exiled.API.Features.Doors;
 using Exiled.API.Features.Pools;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Scp079;
+using Exiled.Events.EventArgs.Warhead;
 using MEC;
 using PlayerRoles;
 using PlayerRoles.PlayableScps.Scp079.Cameras;
 using RoundModifiers.API;
 using RoundModifiers.Modifiers.RogueAI.Abilities;
+using TTCore.Events.Handlers;
 using TTCore.Extensions;
+using TTCore.HUDs;
 using TTCore.Utilities;
 using UnityEngine;
 using Camera = Exiled.API.Features.Camera;
+using Random = UnityEngine.Random;
 
 namespace RoundModifiers.Modifiers.RogueAI
 {
@@ -36,7 +43,7 @@ namespace RoundModifiers.Modifiers.RogueAI
          */
         
         public int AggressionLevel = 0;
-        public int MaxAggressionLevel = 10;
+        public int MaxAggressionLevel => RogueAIConfig.MaxAggressionPerGenerator*(Generator.Get(g=>g.IsEngaged).Count()+1);
         public int CurrentTick = 0;
         public List<Ability> Abilities;
         public List<WeightedItem<Ability>> WeightedAbilities;
@@ -50,6 +57,23 @@ namespace RoundModifiers.Modifiers.RogueAI
         public RogueAI()
         {
             
+        }
+
+        public void OnOvercharge()
+        {
+            Log.Info("AI has been recontained.");
+            AggressionLevel = 0;
+            Timing.KillCoroutines(AITickHandle);
+            Cassie.Message(".g7",true,false,false);
+        }
+
+        public void ActivatingNuke(StartingEventArgs ev)
+        {
+            if (AggressionLevel < 7) return;
+            if (CurrentSide != Side.Scp) return;
+            if (ev.IsAuto) return;
+            ev.IsAllowed = false;
+            ev.Player.ShowHUDHint("Something prevents the nuke from activating", 5f);
         }
         
         public void OnRoundStart()
@@ -69,7 +93,7 @@ namespace RoundModifiers.Modifiers.RogueAI
             while (true)
             {
                 CurrentTick++;
-                if (CurrentTick % 60 == 0)
+                if (CurrentTick % RogueAIConfig.LevelUpTime == 0)
                 {
                     //Log.Info("Changing aggression level.");
                     if(AggressionLevel < MaxAggressionLevel)
@@ -258,34 +282,34 @@ namespace RoundModifiers.Modifiers.RogueAI
             {
                 //Chaos Roles
                 case RoleTypeId.ClassD:
-                    return (Side.ChaosInsurgency, 1);
+                    return (Side.ChaosInsurgency, RogueAIConfig.RolePoints["ClassD"]);
                 case RoleTypeId.ChaosConscript:
                 case RoleTypeId.ChaosMarauder:
                 case RoleTypeId.ChaosRepressor:
                 case RoleTypeId.ChaosRifleman:
-                    return (Side.ChaosInsurgency, 2);
+                    return (Side.ChaosInsurgency, RogueAIConfig.RolePoints["Chaos"]);
                 //Scp Roles
                 case RoleTypeId.Scp0492:
-                    return (Side.Scp, 1);
+                    return (Side.Scp, RogueAIConfig.RolePoints["ScpZombie"]);
                 case RoleTypeId.Scp079:
                 case RoleTypeId.Scp3114:
-                    return (Side.Scp, 2);
+                    return (Side.Scp, RogueAIConfig.RolePoints["ScpLow"]);
                 case RoleTypeId.Scp096:
                 case RoleTypeId.Scp049:
                 case RoleTypeId.Scp106:
                 case RoleTypeId.Scp173:
                 case RoleTypeId.Scp939:
-                    return (Side.Scp, 3);
+                    return (Side.Scp, RogueAIConfig.RolePoints["ScpHigh"]);
                 //Foundation Roles
                 case RoleTypeId.Scientist:
-                    return (Side.Mtf, 1);
+                    return (Side.Mtf, RogueAIConfig.RolePoints["Scientist"]);
                 case RoleTypeId.FacilityGuard:
                 case RoleTypeId.NtfSpecialist:
                 case RoleTypeId.NtfPrivate:
                 case RoleTypeId.NtfSergeant:
-                    return (Side.Mtf, 2);
+                    return (Side.Mtf, RogueAIConfig.RolePoints["Foundation"]);
                 case RoleTypeId.NtfCaptain:
-                    return (Side.Mtf, 3);
+                    return (Side.Mtf, RogueAIConfig.RolePoints["NtfCaptain"]);
                 //Other
                 default:
                     return (Side.None, 0);
@@ -294,7 +318,7 @@ namespace RoundModifiers.Modifiers.RogueAI
 
         public void TryOpenDoor(InteractingDoorEventArgs ev)
         {
-            if (AggressionLevel < 2) return;
+            if (AggressionLevel < 5) return;
             if (ev.Player.Role.Side == CurrentSide)
             {
                 //Log.Info("Player trying to open a door.");
@@ -316,9 +340,9 @@ namespace RoundModifiers.Modifiers.RogueAI
                 
                 if (Random.Range(0, 100) < AggressionLevel)
                 {
-                    MEC.Timing.CallDelayed(1f, () =>
+                    MEC.Timing.CallDelayed(Math.Max(1f, Random.Range(0,3)), () =>
                     {
-                        ev.Door.IsOpen = isOpen;//Revert to what it was before after 1 second
+                        ev.Door.IsOpen = isOpen;//Revert to what it was before after a delay
                     });
                 }
             }
@@ -329,6 +353,8 @@ namespace RoundModifiers.Modifiers.RogueAI
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
             Exiled.Events.Handlers.Player.InteractingDoor += TryOpenDoor;
+            Custom.Scp079BeginOvercharge += OnOvercharge;
+            Exiled.Events.Handlers.Warhead.Starting += ActivatingNuke;
 
             Abilities = ListPool<Ability>.Pool.Get();
             Abilities.Add(new LockDoorAbility());
@@ -366,7 +392,7 @@ namespace RoundModifiers.Modifiers.RogueAI
             
             WeightedAbilities.Add(new WeightedItem<Ability>(new LockDoorAbility(), 3));
             WeightedAbilities.Add(new WeightedItem<Ability>(new LockdownRoomAbility(), 2));
-            WeightedAbilities.Add(new WeightedItem<Ability>(new TouchRandomDoorAbility(), 5));
+            WeightedAbilities.Add(new WeightedItem<Ability>(new TouchRandomDoorAbility(), 7));
             WeightedAbilities.Add(new WeightedItem<Ability>(new TeslaGateAbility(), 2));
             WeightedAbilities.Add(new WeightedItem<Ability>(new ChangeLightAbility(), 4));
             WeightedAbilities.Add(new WeightedItem<Ability>(new Scp914Ability(), 4));
@@ -389,6 +415,8 @@ namespace RoundModifiers.Modifiers.RogueAI
         {
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
             Exiled.Events.Handlers.Player.InteractingDoor -= TryOpenDoor;
+            Custom.Scp079BeginOvercharge -= OnOvercharge;
+            Exiled.Events.Handlers.Warhead.Starting -= ActivatingNuke;
             
             CurrentAbility?.End();
             CurrentAbility = null;
@@ -415,9 +443,27 @@ namespace RoundModifiers.Modifiers.RogueAI
             Category = Category.Facility
         };
 
-        public class Config : ModConfig
+        public static Config RogueAIConfig => RoundModifiers.Instance.Config.RogueAI;
+        
+        
+        public class Config
         {
+            [Description("The maximum aggression level the AI can reach. Default is 15.")]
+            public int MaxAggressionPerGenerator { get; set; } = 5;
+            [Description("The time it takes for the AI to level up. Default is 60 seconds.")]
+            public int LevelUpTime { get; set; } = 60;
             
+            public Dictionary<string,int> RolePoints  { get; set; } = new Dictionary<string, int>()
+            {
+                {"ClassD", 1},
+                {"Chaos", 2},
+                {"ScpZombie",1},
+                {"ScpLow",2},
+                {"ScpHigh", 3},
+                {"Scientist", 1},
+                {"Foundation", 2},
+                {"NtfCaptain", 3},
+            };
         }
     }
 }

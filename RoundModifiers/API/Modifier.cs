@@ -61,6 +61,7 @@ namespace RoundModifiers.API
         Overhaul, // Massive change to the game, but not a full gamemode
         Scp914, // Changes the behaviour of SCP-914
         Combo, // A combination of multiple modifiers
-        Npc,
+        Npc, // Spawns NPCs
+        Effect, // Adds effects to players
     }
 }

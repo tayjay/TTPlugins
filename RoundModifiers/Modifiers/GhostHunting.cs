@@ -29,6 +29,8 @@ public class GhostHunting : Modifier
                 newList.Add(Team.FoundationForces);
             }
         }
+        ev.TeamRespawnQueue.Clear();
+        ev.TeamRespawnQueue.AddRange(newList);
     }
     
     public void OnRoundStart()

@@ -101,12 +101,17 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\Client\HumanCommand.cs" />
+        <Compile Include="Commands\Client\ScpCommand.cs" />
         <Compile Include="Commands\Client\UnstuckCommand.cs" />
+        <Compile Include="Commands\Client\VoiceCommand.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\ClassDHandler.cs" />
         <Compile Include="Handlers\LarryLagHandler.cs" />
         <Compile Include="Handlers\LightFixHandler.cs" />
         <Compile Include="Handlers\NoBanHandler.cs" />
+        <Compile Include="Handlers\RoleSelectorHandler.cs" />
+        <Compile Include="Handlers\SavedVoicesHandler.cs" />
         <Compile Include="Handlers\Scp0492Handler.cs" />
         <Compile Include="Handlers\Scp079Handler.cs" />
         <Compile Include="Handlers\Scp3114Handler.cs" />

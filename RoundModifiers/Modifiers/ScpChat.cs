@@ -9,6 +9,7 @@ using PlayerRoles;
 using PlayerRoles.FirstPersonControl;
 using PlayerRoles.Voice;
 using RoundModifiers.API;
+using TTCore.HUDs;
 using UnityEngine;
 using VoiceChat;
 using VoiceChat.Networking;
@@ -24,22 +25,26 @@ public class ScpChat : Modifier
     {
         if(ev.VoiceMessage.Channel!=VoiceChatChannel.ScpChat) return;
         if (ev.Player.Role == RoleTypeId.Scp079) return;
-        if(!ProximityChatting[ev.Player]) return;
+        if (!ProximityChatting[ev.Player])
+        {
+            ev.Player.ShowHUDHint("<color=red>Proximity Chat Disabled. Press Left-Alt to enable.</color>");
+            return;
+        }
         if(!Round.InProgress) return;
         //ev.VoiceModule.CurrentChannel = VoiceChatChannel.Proximity;
-        
+        ev.Player.ShowHUDHint("<color=green>Proximity Chat Enabled. Press Left-Alt to disable.</color>");
+        VoiceMessage message = ev.VoiceMessage with
+        {
+            Channel = VoiceChatChannel.Proximity
+        };
+        ev.VoiceModule.CurrentChannel = VoiceChatChannel.Proximity;
         foreach (Player player in Player.List.Where(
                      player => player.Role.Team != Team.SCPs))
         {
-            VoiceMessage message = ev.VoiceMessage with
-            {
-                Channel = VoiceChatChannel.Proximity
-            };
             if(player.Role == RoleTypeId.Spectator && ev.Player.CurrentSpectatingPlayers.Contains(player)) continue;
             if(player.ReferenceHub.roleManager.CurrentRole is not IVoiceRole voiceRole) continue;
             if(voiceRole.VoiceModule.ValidateReceive(message.Speaker, VoiceChatChannel.Proximity) == VoiceChatChannel.None) continue;
             if(Vector3.Distance(message.Speaker.transform.position, player.Position) > 20f) continue;
-            ev.VoiceModule.CurrentChannel = VoiceChatChannel.Proximity;
             player.Connection.Send(message);
         }
         ev.VoiceModule.CurrentChannel = VoiceChatChannel.ScpChat;

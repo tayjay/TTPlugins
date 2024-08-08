@@ -23,6 +23,9 @@ namespace TTAddons
         public Scp079Handler Scp079Handler { get; private set; }
         
         public NoBanHandler NoBanHandler { get; private set; }
+        public SavedVoicesHandler SavedVoicesHandler { get; private set; }
+        
+        public RoleSelectorHandler RoleSelectorHandler { get; private set; }
         
 
         private TTAddons()
@@ -52,6 +55,8 @@ namespace TTAddons
             Scp0492Handler = new Scp0492Handler();
             Scp079Handler = new Scp079Handler();
             NoBanHandler = new NoBanHandler();
+            SavedVoicesHandler = new SavedVoicesHandler();
+            RoleSelectorHandler = new RoleSelectorHandler();
             
             
             //Register objects
@@ -67,6 +72,8 @@ namespace TTAddons
             Scp0492Handler.Register();
             Scp079Handler.Register();
             NoBanHandler.Register();
+            SavedVoicesHandler.Register();
+            RoleSelectorHandler.Register();
             
         }
         
@@ -86,6 +93,8 @@ namespace TTAddons
             Scp0492Handler.Unregister();
             Scp079Handler.Unregister();
             NoBanHandler.Unregister();
+            SavedVoicesHandler.Unregister();
+            RoleSelectorHandler.Unregister();
             
             //Dispose objects
             Unstuck = null;
@@ -96,6 +105,8 @@ namespace TTAddons
             Scp0492Handler = null;
             Scp079Handler = null;
             NoBanHandler = null;
+            SavedVoicesHandler = null;
+            RoleSelectorHandler = null;
         }
         
         public override void OnDisabled()
@@ -115,7 +126,7 @@ namespace TTAddons
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTAddons";
-        public override System.Version Version { get; } = new System.Version(0, 6, 1);
+        public override System.Version Version { get; } = new System.Version(0, 6, 3);
 
     }
 }

@@ -40,6 +40,8 @@ namespace RoundModifiers.Modifiers.LevelUp
         public List<XP> _xp { get; set; }
         
         public CoroutineHandle TickHandle { get; set; }
+        
+        public Dictionary<Player, string> LastBoost { get; set; } = DictionaryPool<Player, string>.Pool.Get();
 
         public LevelUp()
         {
@@ -69,6 +71,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             _xp.Add(new HandcuffXP());
             _xp.Add(new UsedItemXP());
             _xp.Add(new NearScpXP());
+            _xp.Add(new RespawnXP());
             //SCP XPs
             _xp.Add(new KillXP());
             _xp.Add(new Scp049XP());
@@ -114,6 +117,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             //_boosts.Add(new UpgradeWeaponBoost(Tier.Common));
             //_boosts.Add(new UpgradeWeaponBoost(Tier.Uncommon));
             _boosts.Add(new ChangeSizeBoost());
+            _boosts.Add(new ChangeSizeBoost(0.8f,Tier.Rare));
             //SCP Boosts
             _boosts.Add(new HealBoost(Tier.Common));
             _boosts.Add(new HealBoost(Tier.Uncommon));
@@ -129,6 +133,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             DictionaryPool<uint, int>.Pool.Return(PlayerLevel);*/
             ListPool<Boost>.Pool.Return(_boosts);
             ListPool<XP>.Pool.Return(_xp);
+            DictionaryPool<Player, string>.Pool.Return(LastBoost);
         }
         
         /*public void RegisterXP<T>(T xp) where T : XP
@@ -339,6 +344,7 @@ namespace RoundModifiers.Modifiers.LevelUp
                 {
                     //newBoost.ApplyBoost(player);
                     Log.Debug("Player "+player.Nickname+" got boost "+newBoost.GetName());
+                    
                     break;
                 }
                 else
@@ -365,6 +371,7 @@ namespace RoundModifiers.Modifiers.LevelUp
                 player.ShowHUDHint("You have leveled up!\n" +
                                    "You got a new boost: "+newBoost.GetColouredName()+"\n"+
                                    newBoost.GetDescription(), 5f);
+                LastBoost[player] = newBoost.GetColouredName();
                 if (!player.SessionVariables.ContainsKey("levelup_boosts"))
                     player.SessionVariables["levelup_boosts"] = ListPool<string>.Pool.Get();
                 ((List<string>)player.SessionVariables["levelup_boosts"]).Add($"Level {(int)player.SessionVariables["levelup_level"]}: {newBoost.GetName()}");
@@ -592,7 +599,7 @@ namespace RoundModifiers.Modifiers.LevelUp
                     layout.Level = (int)player.SessionVariables["levelup_level"];
                     layout.XPNeeded = XP.GetXPNeeded(layout.Level);
                     layout.ActivePerks = string.Join("\n", _boosts.Where(b => b.HasBoost.ContainsKey(player.NetId)).Select(b => b.GetColouredName()));
-                    
+                    layout.LastPerk = LastBoost.TryGetValue(player, out var value) ? value : "None";
                 } catch (System.Exception e)
                 {
                     Log.Error("Error in LevelUpHandler HUD Update: "+e);
@@ -624,6 +631,11 @@ namespace RoundModifiers.Modifiers.LevelUp
                     }
 
                 }
+            });
+            Timing.CallDelayed(2f, () =>
+            {
+                foreach(XP xp in _xp.Where(x=>x is ISpawnedEvent))
+                    ((ISpawnedEvent) xp).OnSpawned(ev);
             });
 
         }
@@ -756,7 +768,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             Impact = ImpactLevel.MajorGameplay,
             MustPreload = false,
             Balance = 0,
-            Category = Category.Overhaul | Category.HUD
+            Category = Category.Overhaul | Category.HUD | Category.Effect
         };
         
         public static LevelUpConfig Config => RoundModifiers.Instance.Config.LevelUp;

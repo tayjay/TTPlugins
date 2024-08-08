@@ -133,6 +133,8 @@
         <Compile Include="Modifiers\Bouncy.cs" />
         <Compile Include="Modifiers\ComboImposter.cs" />
         <Compile Include="Modifiers\ComboPowerless.cs" />
+        <Compile Include="Modifiers\DangerZone.cs" />
+        <Compile Include="Modifiers\Debug.cs" />
         <Compile Include="Modifiers\DoNotLook.cs" />
         <Compile Include="Modifiers\Escape.cs" />
         <Compile Include="Modifiers\ExplosiveRagdolls.cs" />
@@ -144,9 +146,11 @@
         <Compile Include="Modifiers\LevelUp\Interfaces\IConsumeEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IEnragingEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IPocketDimensionEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\ISpawnedEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IUpgradingPickupEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IVoiceEvent.cs" />
         <Compile Include="Modifiers\LevelUp\LevelUpConfig.cs" />
+        <Compile Include="Modifiers\LevelUp\XPs\RespawnXP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp0492XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp096XP.cs" />
         <Compile Include="Modifiers\LevelUp\XPs\Scp\Scp106XP.cs" />
@@ -158,6 +162,7 @@
         <Compile Include="Modifiers\NoJumping.cs" />
         <Compile Include="Modifiers\NoSpectateSCPs.cs" />
         <Compile Include="Modifiers\Peanuts.cs" />
+        <Compile Include="Modifiers\Pogo.cs" />
         <Compile Include="Modifiers\RogueAI\Abilities\BallsAbility.cs" />
         <Compile Include="Modifiers\Scp1507\Flamingos.cs" />
         <Compile Include="Modifiers\Scp1507\Scp1507Role.cs" />

@@ -18,6 +18,7 @@ public class ComboImposter : ComboModifier
         FormattedName = "Combo Imposter",
         Description = "Combines the effects of the Imposter, ScpChat, and Nicknames modifiers.",
         MustPreload = false,
+        Hidden = true,
         Balance = -4,
         Impact = ImpactLevel.MajorGameplay,
         Category = Category.Combo
