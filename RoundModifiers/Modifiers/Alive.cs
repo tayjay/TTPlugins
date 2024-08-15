@@ -12,6 +12,7 @@ using TTCore.Npcs.AI.Behaviours;
 using TTCore.Utilities;
 using UnityEngine;
 using UnityEngine.AI;
+using Room = Exiled.API.Features.Room;
 
 namespace RoundModifiers.Modifiers
 {

@@ -142,10 +142,13 @@
         <Compile Include="Modifiers\GhostHunting.cs" />
         <Compile Include="Modifiers\GunGame\GunGame.cs" />
         <Compile Include="Modifiers\GunGame\GunGameHUDLayout.cs" />
+        <Compile Include="Modifiers\LevelUp\Boosts\Scp\BlackoutBoost.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IBlinkEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IConsumeEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IEnragingEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IKeybindAbility.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IPocketDimensionEvent.cs" />
+        <Compile Include="Modifiers\LevelUp\Interfaces\IRoomEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\ISpawnedEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IUpgradingPickupEvent.cs" />
         <Compile Include="Modifiers\LevelUp\Interfaces\IVoiceEvent.cs" />
@@ -161,6 +164,7 @@
         <Compile Include="Modifiers\Nicknames\Nicknames.cs" />
         <Compile Include="Modifiers\NoJumping.cs" />
         <Compile Include="Modifiers\NoSpectateSCPs.cs" />
+        <Compile Include="Modifiers\PayToWin.cs" />
         <Compile Include="Modifiers\Peanuts.cs" />
         <Compile Include="Modifiers\Pogo.cs" />
         <Compile Include="Modifiers\RogueAI\Abilities\BallsAbility.cs" />

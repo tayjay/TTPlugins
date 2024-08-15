@@ -21,7 +21,7 @@ public class LevelUpCommand : ICommand
         //Usage: levelup <xp/level> <player> <amount>
         if (arguments.Count < 3)
         {
-            response = "Usage: levelup xp <player> <amount>";
+            response = "Usage: levelupadmin xp <player> <amount>";
             return false;
         }
 

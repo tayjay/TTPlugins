@@ -8,6 +8,7 @@ namespace TTAdmin.Handlers;
 public class SubscriptionHandler
 {
     public Dictionary<Client,List<string>> Subscriptions = new Dictionary<Client, List<string>>();
+    public List<Client> LogSubscriptions = new List<Client>();
     
     public void Subscribe(Client client, string subscription)
     {
@@ -112,6 +113,34 @@ public class SubscriptionHandler
     public List<Client> GetClientsWithSubscription(EventData eventData)
     {
         return GetClientsWithSubscription(eventData.EventName);
+    }
+    
+    // Log Subscripts
+    
+    public void SubscribeLog(Client client)
+    {
+        if (!LogSubscriptions.Contains(client))
+        {
+            LogSubscriptions.Add(client);
+        }
+    }
+    
+    public void UnsubscribeLog(Client client)
+    {
+        if (LogSubscriptions.Contains(client))
+        {
+            LogSubscriptions.Remove(client);
+        }
+    }
+    
+    public bool HasLogSubscription(Client client)
+    {
+        return LogSubscriptions.Contains(client);
+    }
+    
+    public List<Client> GetClientsWithLogSubscription()
+    {
+        return LogSubscriptions;
     }
     
 }

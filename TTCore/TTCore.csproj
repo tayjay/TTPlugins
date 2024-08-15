@@ -130,7 +130,12 @@
         <Compile Include="Components\AttachObjectToPlayerHandler.cs" />
         <Compile Include="Components\PickupCollisionHandler.cs" />
         <Compile Include="Components\ProjectileCollisionHandler.cs" />
+        <Compile Include="Components\RoomTriggerHandler.cs" />
+        <Compile Include="Events\EventArgs\EnterRoomEventArgs.cs" />
+        <Compile Include="Events\EventArgs\ExitRoomEventArgs.cs" />
+        <Compile Include="Events\EventArgs\StayRoomEventArgs.cs" />
         <Compile Include="Events\Handlers\NpcEvents.cs" />
+        <Compile Include="Events\Handlers\RoomTrigger.cs" />
         <Compile Include="Npcs\AI\Core\Management\AIDataProfileBase.cs" />
         <Compile Include="Npcs\AI\Core\Management\AIPlayerManager.cs" />
         <Compile Include="Npcs\AI\Core\Management\AIPlayerProfile.cs" />

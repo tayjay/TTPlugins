@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using Exiled.API.Features;
+using MEC;
 using TTAdmin.WebNew.Handlers;
 using Utf8Json;
 using Server = TTAdmin.WebSocketServer.Server;
@@ -33,16 +34,32 @@ public class WsServer
         Server.OnClientConnected += (sender, client) =>
         {
             Log.Info($"Client connected: {client.GetClient().GetGuid()}");
+            if(client.GetClient().GetPath()!="/events" && client.GetClient().GetPath()!="/console")
+            {
+                Server.SendMessage(client.GetClient(), JsonSerializer.ToJsonString(new Dictionary<string, object>
+                {
+                    {"message", "Invalid path. Valid paths are /events and /console"}
+                }));
+                return; 
+            }
+                
             Server.SendMessage(client.GetClient(), JsonSerializer.ToJsonString(new Dictionary<string, object>
             {
                 {"message", "Welcome to the TTAdmin websocket server"}
             }));
+            if (client.GetClient().GetPath() == "/console")
+            {
+                TTAdmin.Instance.SubscriptionHandler.SubscribeLog(client.GetClient());
+            }
         };
         
         Server.OnClientDisconnected += (sender, client) =>
         {
             Log.Info($"Client disconnected: {client.GetClient().GetGuid()}");
-            TTAdmin.Instance.SubscriptionHandler.ClearSubscriptions(client.GetClient());
+            if(client.GetClient().GetPath()=="/console")
+                TTAdmin.Instance.SubscriptionHandler.UnsubscribeLog(client.GetClient());
+            if(client.GetClient().GetPath()=="/events")
+                TTAdmin.Instance.SubscriptionHandler.ClearSubscriptions(client.GetClient());
         };
         
         Server.OnMessageReceived += (sender, message) =>
@@ -56,24 +73,27 @@ public class WsServer
             {
                 Log.Info($"{item.Key} : {item.Value}");
             }
-            if (messageObject.TryGetValue("subscribe", out var subscribe))
+
+            if (message.GetClient().GetPath() == "/events")
             {
-                Log.Info(subscribe.ToString());
-                if(subscribe is List<object> list)
-                    TTAdmin.Instance.SubscriptionHandler.Subscribe(message.GetClient(),list);
+                if (messageObject.TryGetValue("subscribe", out var subscribe))
+                {
+                    Log.Info(subscribe.ToString());
+                    if(subscribe is List<object> list)
+                        TTAdmin.Instance.SubscriptionHandler.Subscribe(message.GetClient(),list);
+                }
+                if(messageObject.TryGetValue("unsubscribe", out var unsubscribe))
+                {
+                    Log.Info(unsubscribe.ToString());
+                    if(unsubscribe is List<object> list)
+                        TTAdmin.Instance.SubscriptionHandler.Unsubscribe(message.GetClient(),list);
+                }
             }
-            if(messageObject.TryGetValue("unsubscribe", out var unsubscribe))
-            {
-                Log.Info(unsubscribe.ToString());
-                if(unsubscribe is List<object> list)
-                    TTAdmin.Instance.SubscriptionHandler.Unsubscribe(message.GetClient(),list);
-            }
-            
         };
         
         Server.OnSendMessage += (sender, message) =>
         {
-            Log.Info($"Message sent: {message.GetMessage()}");
+            //Log.Info($"Message sent: {message.GetMessage()}");
         };
         
     }

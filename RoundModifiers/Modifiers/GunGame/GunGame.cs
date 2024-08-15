@@ -21,6 +21,7 @@ using TTCore.Utilities;
 using UnityEngine;
 using Utils.NonAllocLINQ;
 using Firearm = Exiled.API.Features.Items.Firearm;
+using Room = Exiled.API.Features.Room;
 
 namespace RoundModifiers.Modifiers.GunGame;
 

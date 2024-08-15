@@ -12,12 +12,17 @@ public class HealBoost : Boost
     public override bool AssignBoost(Player player)
     {
         if(!player.IsScp) return false;
+        if(HasBoost.TryGetValue(player.NetId, out bool hasBoost) && hasBoost) return false;
         return ApplyBoost(player);
     }
 
     public override bool ApplyBoost(Player player)
     {
-        float healAmount = 100 + (100*(int)Tier);
+        if (Tier > Tier.Rare)
+        {
+            HasBoost.Add(player.NetId, true);
+        }
+        float healAmount = 100 + (50*(int)Tier);
         if(player.Health + healAmount > player.MaxHealth*1.5f) return false; //Don't extra overheal
         float overheal = player.Health + healAmount - player.MaxHealth;
         if(Tier >=Tier.Rare && (overheal>0)) player.HumeShield += overheal/2;

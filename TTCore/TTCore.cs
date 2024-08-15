@@ -3,6 +3,7 @@ using Exiled.API.Enums;
 using Exiled.API.Features;
 using HarmonyLib;
 using PlayerRoles.FirstPersonControl;
+using TTCore.Components;
 using TTCore.Events.Handlers;
 using TTCore.Handlers;
 using TTCore.HUDs;
@@ -92,6 +93,8 @@ namespace TTCore
             
             //NavMeshBuilder.Register();
             
+            RoomTriggerHandler.Register();
+            
 
         }
 
@@ -105,6 +108,8 @@ namespace TTCore
                 CustomEffects.Unregister();
             //NavMeshBuilder.Unregister();
             NpcEvents.Unregister();
+            
+            RoomTriggerHandler.Unregister();
             
             NpcEvents = null;
             PlayerSizeManager = null;
@@ -122,7 +127,7 @@ namespace TTCore
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 6, 3);
+        public override System.Version Version { get; } = new System.Version(0, 6, 4);
         
     }
 }

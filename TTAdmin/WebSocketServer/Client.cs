@@ -26,6 +26,8 @@ namespace TTAdmin.WebSocketServer;
         /// <summary>If the server has sent a ping to the client and is waiting for a pong</summary>
         private bool _bIsWaitingForPong;
 
+        private string _path; // "GET /path HTTP/1.1"
+
         #endregion
 
         #region Class Events
@@ -33,13 +35,14 @@ namespace TTAdmin.WebSocketServer;
         /// <summary>Create a new object for a connected client</summary>
         /// <param name="Server">The server object instance that the client is connected to</param>
         /// <param name="Socket">The socket of the connected client</param>
-        public Client(Server Server, Socket Socket)
+        public Client(Server Server, Socket Socket, string Path)
         {
             this._server = Server;
             this._socket = Socket;
             this._guid = Helpers.CreateGuid("client");
+            this._path = Path;
 
-            // Start to detect incomming messages 
+            // Start to detect incoming messages 
             GetSocket().BeginReceive(new byte[] { 0 }, 0, 0, SocketFlags.None, messageCallback, null);
         }
 
@@ -73,6 +76,11 @@ namespace TTAdmin.WebSocketServer;
         public bool GetIsWaitingForPong()
         {
             return _bIsWaitingForPong;
+        }
+        
+        public string GetPath()
+        {
+            return _path.Split('?')[0];
         }
 
         #endregion

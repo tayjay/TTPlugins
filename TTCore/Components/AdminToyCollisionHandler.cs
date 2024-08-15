@@ -1,9 +1,12 @@
 ﻿using System;
 using AdminToys;
+using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.API.Features.Toys;
+using TTCore.Events.EventArgs;
+using TTCore.Events.Handlers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +16,10 @@ public class AdminToyCollisionHandler : MonoBehaviour
 {
     private bool initialized;
 
-    
+    private void Awake()
+    {
+        
+    }
 
     /// <summary>Gets the projectile itself.</summary>
     public AdminToyBase Toy { get; private set; }
@@ -27,71 +33,52 @@ public class AdminToyCollisionHandler : MonoBehaviour
     {
         this.Toy = toy;
         this.initialized = true;
-    }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        Log.Info("Collision detected");
-        try
+        if (AdminToy.Get(toy).ToyType==AdminToyType.PrimitiveObject)
         {
-            if (!this.initialized)
+            Primitive primitive = AdminToy.Get(toy) as Primitive;
+            switch (primitive.Type)
             {
-                Log.Info("Not initialized");
-                return;
+                case PrimitiveType.Capsule:
+                    CapsuleCollider capsule = gameObject.AddComponent<CapsuleCollider>();
+                    capsule.isTrigger = true;
+                    capsule.height = primitive.Scale.y;
+                    capsule.radius = primitive.Scale.x;
+                    break;
+                case PrimitiveType.Cube:
+                    BoxCollider cube = gameObject.AddComponent<BoxCollider>();
+                    cube.isTrigger = true;
+                    cube.size = primitive.Scale;
+                    break;
+                case PrimitiveType.Sphere:
+                    SphereCollider sphere = gameObject.AddComponent<SphereCollider>();
+                    sphere.isTrigger = true;
+                    sphere.radius = primitive.Scale.x;
+                    break;
+                default:
+                    BoxCollider def = gameObject.AddComponent<BoxCollider>();
+                    def.isTrigger = true;
+                    def.size = primitive.Scale;
+                    break;
             }
-            if ((UnityEngine.Object) this.Toy == (UnityEngine.Object) null)
-                Log.Info("Toy is null!");
-            if (collision == null)
-                Log.Info("wat");
-            if ((UnityEngine.Object) collision.gameObject == (UnityEngine.Object) null)
-                Log.Info("pepehm");
-            if (collision.gameObject.TryGetComponent<AdminToyBase>(out AdminToyBase _))
-            {
-                Log.Info("Collision with another toy");
-                return;
-            }
-            //todo: Perform trigger code here. Create Event here
-            Log.Info("Collision with "+collision.gameObject.name);
-            if(collision.gameObject.TryGetComponent<ReferenceHub>( out ReferenceHub rh))
-                Log.Info("Collision with player "+rh.nicknameSync._firstNickname);
         }
-        catch (Exception ex)
-        {
-            Log.Info("Error: " + ex);
-        }
-        Log.Info("CollisionEnter end");
+        
+       //BoxCollider collider = gameObject.AddComponent<BoxCollider>();
+       // collider.isTrigger = true;
+        //collider.size = Toy.Scale;
     }
     
-    private void OnCollisionStay(Collision other)
-    {
-        Log.Info("Collision stay");
-    }
-
-    private void OnCollisionExit(Collision other)
-    {
-        Log.Info("Collision exit");
-    }
-
-    private void OnDestroy()
-    {
-        //Log.Info("Destroyed");
-    }
-    
-    private void OnDisable()
-    {
-        //Log.Info("Disabled");
-    }
 
     private void OnTriggerEnter(Collider other)
     {
-        Log.Info("Trigger enter");
-        Log.Info("Collision with "+other.gameObject.name);
-        if(other.gameObject.TryGetComponent<ReferenceHub>( out ReferenceHub rh))
+        //Log.Info("Trigger enter");
+        //Log.Info("Collision with "+other.gameObject.name);
+        if (other.gameObject.TryGetComponent<ReferenceHub>(out ReferenceHub rh))
+        {
             Log.Info("Collision with player "+rh.nicknameSync._firstNickname);
+            
+        }
+        Custom.OnAdminToyCollision(new AdminToyCollisionEventArgs(Toy, other.gameObject));
     }
-
-    private void OnEnable()
-    {
-        //Log.Info("Enabled");
-    }
+    
 }

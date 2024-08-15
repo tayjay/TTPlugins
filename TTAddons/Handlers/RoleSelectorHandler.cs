@@ -21,8 +21,14 @@ namespace TTAddons.Handlers
                 {
                     Player player = Player.Get(playerId);
                     if(player == null) continue;
-                    if (player.Role.Side == Side.Scp) continue; // Don't reset SCPs
-                    loader.ModifyTickets(player.ReferenceHub, _tickets[playerId]+2);
+                    if (player.Role.Side == Side.Scp)
+                    {
+                        loader.ModifyTickets(player.ReferenceHub, 0);
+                    }
+                    else
+                    {
+                        loader.ModifyTickets(player.ReferenceHub, _tickets[playerId]+2);
+                    }
                 }
             }
             _tickets.Clear();

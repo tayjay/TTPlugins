@@ -24,12 +24,12 @@ namespace TTAdmin
         
         public override string Name { get; } = "TTAdmin";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new Version(0, 3, 0);
+        public override Version Version { get; } = new Version(0, 4, 0);
         
         
         public SubscriptionHandler SubscriptionHandler;
         public EventsHandler EventsHandler;
-        //public WsConsoleOutput WsConsoleOutput;
+        public WsConsoleOutput WsConsoleOutput;
         
         protected internal APIKey ApiKey { get; private set; }
         
@@ -97,15 +97,15 @@ namespace TTAdmin
             if (ApiKey.Created.AddMonths(Config.ApiKeyWarningAge) < DateTime.Now)
             {
                 Log.Error("===========================================================");
-                Log.Error("API Key is old, we recommend generating a new one by deleting the file at ./TTCore/TTAdmin/APIKey.json");
+                Log.Error("API Key is old, recommend generating a new one by deleting the file at ./TTCore/TTAdmin/APIKey.json");
                 Log.Error("===========================================================");
             }
 
-            /*if (Config.EnableConsoleOutput)
+            if (Config.EnableConsoleOutput)
             {
                 WsConsoleOutput = new WsConsoleOutput();
                 WsConsoleOutput.Register();
-            }*/
+            }
         }
         
         public void Shutdown()
@@ -115,11 +115,11 @@ namespace TTAdmin
             
             EventsHandler.Unregister();
             SubscriptionHandler.Subscriptions.Clear();
-            /*if (Config.EnableConsoleOutput)
+            if (Config.EnableConsoleOutput)
             {
                 WsConsoleOutput.Unregister();
                 WsConsoleOutput = null;
-            }*/
+            }
             EventsHandler = null;
             SubscriptionHandler = null;
             

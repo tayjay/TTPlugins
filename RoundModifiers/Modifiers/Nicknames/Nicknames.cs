@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using Exiled.API.Extensions;
+using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
 using RoundModifiers.API;
@@ -83,10 +85,33 @@ public class Nicknames : Modifier
             
         if (ev.NewRole == RoleTypeId.ClassD)
         {
-            newName += Random.Range((int)1000, (int)9999);
+            int num = Random.Range(1, 9999);
+            string extended = "";
+            if(num < 10)
+            {
+                extended = "000" + num;
+            } else if(num < 100)
+            {
+                extended = "00" + num;
+            } else if(num < 1000)
+            {
+                extended = "0" + num;
+            } else
+            {
+                extended = num.ToString();
+            }
+            newName += extended;
         } else //if (ev.NewRole.IsHuman() || ev.NewRole==RoleTypeId.Scp0492)
         {
-            newName += HumanNames[Random.Range(0, HumanNames.Length)];
+            if (NicknamesConfig.UseCurrentPlayerNames)
+            {
+                newName += Player.List.GetRandomValue().Nickname;
+            }
+            else
+            {
+                newName += HumanNames[Random.Range(0, HumanNames.Length)];
+            }
+            
         }
         /*else if(ev.NewRole.IsAlive())
         {
@@ -169,6 +194,8 @@ public class Nicknames : Modifier
             "Quentin", "Ruth", "Spencer", "Tiffany", "Uma", "Vincent", "Wallace", "Xena", "Yvette", "Zion",
             "Taylar", "Ely", "Jason", "Kevin", "Chance", "Vivian"
         };*/
+        [Description("Whether to use the names of players in the game instead of the list of names.")]
+        public bool UseCurrentPlayerNames { get; set; } = false;
         [Description("The prefix to add to each class' nickname.")]
         public string ClassDPrefix { get; set; } = "D-";
         public string ScientistPrefix { get; set; } = "Dr. ";

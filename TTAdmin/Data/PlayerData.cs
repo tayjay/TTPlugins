@@ -2,6 +2,7 @@
 using Exiled.API.Features;
 using Exiled.CustomRoles.API;
 using MapGeneration;
+using PlayerRoles.RoleAssign;
 using RelativePositioning;
 using UnityEngine;
 
@@ -37,6 +38,8 @@ public class PlayerData
     public string DisplayNickname { get; set; }
     
     public Dictionary<string, object> SessionVariables { get; set; }
+    
+    public int ScpTickets { get; set; }
 
     public PlayerData(Player player)
     {
@@ -76,6 +79,10 @@ public class PlayerData
         KeycardBypass = player.IsBypassModeEnabled;
         DisplayNickname = player.DisplayNickname;
         SessionVariables = player.SessionVariables;
+        using(ScpTicketsLoader loader = new ScpTicketsLoader())
+        {
+            ScpTickets = loader.GetTickets(player.ReferenceHub, 10);
+        }
     }
     
     public static List<PlayerData> ConvertList(IEnumerable<Player> players)

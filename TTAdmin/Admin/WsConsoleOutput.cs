@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MEC;
+using PluginAPI.Core;
 using TTAdmin.WebNew;
 using TTCore.API;
 using UnityEngine;
@@ -14,6 +15,7 @@ public class WsConsoleOutput : IOutput
     public static string[] BlacklistedStrings = new[]
     {
         "[TTAdmin]",
+        "ServerOutput.HeartbeatEntry",
     };
     
     
@@ -21,15 +23,16 @@ public class WsConsoleOutput : IOutput
     {
         if (BlacklistedStrings.Any(text.Contains))
             return;
-        
+        if (TTAdmin.Instance.SubscriptionHandler.GetClientsWithLogSubscription().Count == 0) return;
         Timing.CallDelayed(Timing.WaitForOneFrame, () =>
         {
             string response = JsonSerializer.ToJsonString(new ConsoleOutputData()
             {
                 Text = text
             });
-            TTAdmin.Instance.SubscriptionHandler.GetClientsWithSubscription("console").ForEach(client =>
+            TTAdmin.Instance.SubscriptionHandler.GetClientsWithLogSubscription().ForEach(client =>
             {
+                //Log.Debug("Sending log to client...");
                 WsServer.Server.SendMessage(client, response);
             });
         });
@@ -70,6 +73,7 @@ public class WsConsoleOutput : IOutput
             yield return Timing.WaitForOneFrame;
         }
         ServerConsole.ConsoleOutputs.Add(this);
+        Log.Debug("Connected logs to websocket server!");
     }
     
     public class ConsoleOutputData

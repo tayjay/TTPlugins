@@ -22,9 +22,16 @@ public class ChangeSizeBoost : Boost
 
     public override bool ApplyBoost(Player player)
     {
-        //HasBoost[player.NetId] = true;
+        HasBoost[player.NetId] = true;
         //player.ChangeSize(NewScale);
         player.Scale = player.Scale * NewScale;
+        player.MaxHealth *= NewScale;
+        player.Health *= NewScale;
+        if (NewScale >= 1)
+        {
+            player.Position += Vector3.up;
+        }
+        
         return true;
     }
 

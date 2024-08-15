@@ -106,10 +106,32 @@ namespace RoundModifiers.Modifiers
             
             if (ev.NewRole == RoleTypeId.ClassD)
             {
-                newName += Random.Range((int)1000, (int)9999);
+                int num = Random.Range(1, 9999);
+                string extended = "";
+                if(num < 10)
+                {
+                    extended = "000" + num;
+                } else if(num < 100)
+                {
+                    extended = "00" + num;
+                } else if(num < 1000)
+                {
+                    extended = "0" + num;
+                } else
+                {
+                    extended = num.ToString();
+                }
+                newName += extended;
             } else if (ev.NewRole.IsHuman())
             {
-                newName += HumanNames[Random.Range(0, HumanNames.Length)];
+                if (Nicknames.Nicknames.NicknamesConfig.UseCurrentPlayerNames)
+                {
+                    newName += Player.List.GetRandomValue().Nickname;
+                }
+                else
+                {
+                    newName += HumanNames[Random.Range(0, HumanNames.Length)];
+                }
             }
             ev.Player.DisplayNickname = newName;
             ev.Player.ShowHUDHint("Your name is " + ev.Player.DisplayNickname, 10f);

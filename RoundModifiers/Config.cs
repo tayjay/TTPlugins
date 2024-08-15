@@ -206,6 +206,8 @@ namespace RoundModifiers
         public MysteryBox.Config MysteryBox { get; set; } = new MysteryBox.Config();
         [Description("=====GunGame=====")]
         public GunGame.Config GunGame { get; set; } = new GunGame.Config();
+        [Description("=====PayToWin=====")]
+        public PayToWin.Config PayToWin { get; set; } = new PayToWin.Config();
         [Description("=====RandomSpawnSize=====")]
         public RandomSpawnSize.Config RandomSpawnSize { get; set; } = new RandomSpawnSize.Config();
         [Description("=====Rainbow=====")]

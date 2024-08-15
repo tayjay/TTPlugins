@@ -105,23 +105,14 @@ namespace RoundModifiers
             //AddModifier(new Medic());
             AddModifier(new BoneZone());
             AddModifier(new NoCassie());
-            //AddModifier(new Fun());
-            //AddModifier(new BodyBlock());
-            //AddModifier(new Alive());
             AddModifier(new MysteryBox());
             AddModifier(new HealthBars());
-            //AddModifier(new MoonGravity());
-            //AddModifier(new WeaponStats());
-            //AddModifier(new AntiCamping());
             AddModifier(new Pills());
             AddModifier(new Paper());
             AddModifier(new Keyless());
             AddModifier(new ExplosiveRagdolls());
             AddModifier(new WeaponStats2());
-            //AddModifier(new Nicknames());
-            //AddModifier(new Bouncy());
             AddModifier<Scp507>();
-            //AddModifier<NoJumping>();
             AddModifier<ScpShuffle>();
             AddModifier<Peanuts>();
             AddModifier<DoNotLook>();
@@ -133,13 +124,10 @@ namespace RoundModifiers
             AddModifier<ScpChat>();
             AddModifier<LowPower>();
             //AddModifier<ZombieSurvival>();
-            AddModifier<ScpBackup>();
-            //AddModifier<NoSpectateSCPs>();
-            //AddModifier<Fun>();
-            AddModifier<ZombieSurvival>();
+            //AddModifier<ScpBackup>();
+            //AddModifier<ZombieSurvival>();
             //AddModifier<Debug>();
-            //AddModifier<Pogo>();
-            //<DangerZone>();
+            AddModifier<PayToWin>();
             
             AddModifier<ComboImposter>();
             
@@ -239,6 +227,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 6, 3);
+        public override System.Version Version { get; } = new System.Version(0, 6, 4);
     }
 }

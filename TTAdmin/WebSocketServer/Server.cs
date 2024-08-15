@@ -338,7 +338,7 @@ namespace TTAdmin.WebSocketServer;
 
                 // Create a new client object and add 
                 // it to the list of connected clients
-                Client client = new Client(this, clientSocket);
+                Client client = new Client(this, clientSocket, requestPath);
                 _clients.Add(client);
 
                 // Call the event when a client has connected to the listen server 

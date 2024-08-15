@@ -22,6 +22,8 @@ using RoundModifiers.Modifiers.LevelUp.HUD;
 using RoundModifiers.Modifiers.LevelUp.Interfaces;
 using RoundModifiers.Modifiers.LevelUp.XPs;
 using RoundModifiers.Modifiers.LevelUp.XPs.Scp;
+using TTCore.Events.EventArgs;
+using TTCore.Events.Handlers;
 using TTCore.HUDs;
 
 namespace RoundModifiers.Modifiers.LevelUp
@@ -118,6 +120,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             //_boosts.Add(new UpgradeWeaponBoost(Tier.Uncommon));
             _boosts.Add(new ChangeSizeBoost());
             _boosts.Add(new ChangeSizeBoost(0.8f,Tier.Rare));
+            _boosts.Add(new ChangeSizeBoost(1.2f,Tier.Rare));
             //SCP Boosts
             _boosts.Add(new HealBoost(Tier.Common));
             _boosts.Add(new HealBoost(Tier.Uncommon));
@@ -125,6 +128,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             _boosts.Add(new HealBoost(Tier.Epic));
             _boosts.Add(new HealBoost(Tier.Legendary));
             _boosts.Add(new AppearHumanBoost());
+            _boosts.Add(new BlackoutBoost());
         }
         
         public void Shutdown()
@@ -257,6 +261,33 @@ namespace RoundModifiers.Modifiers.LevelUp
                 if(boost is IEscapingPocketDimensionEvent)
                     ((IEscapingPocketDimensionEvent) boost).OnEscapingPocketDimension(ev);
             }
+        }
+
+        public void OnEnterRoom(EnterRoomEventArgs ev)
+        {
+            foreach(XP xp in _xp.Where(x=>x is IRoomEvent))
+                ((IRoomEvent) xp).OnEnterRoom(ev);
+            
+            foreach(Boost boost in _boosts.Where(x=>x is IRoomEvent))
+                ((IRoomEvent) boost).OnEnterRoom(ev);
+        }
+        
+        public void OnExitRoom(ExitRoomEventArgs ev)
+        {
+            foreach(XP xp in _xp.Where(x=>x is IRoomEvent))
+                ((IRoomEvent) xp).OnExitRoom(ev);
+            
+            foreach(Boost boost in _boosts.Where(x=>x is IRoomEvent))
+                ((IRoomEvent) boost).OnExitRoom(ev);
+        }
+
+        public void OnPressKeybind(TogglingNoClipEventArgs ev)
+        {
+            foreach(XP xp in _xp.Where(x=>x is IKeybindAbility))
+                ((IKeybindAbility) xp).OnPressKeybind(ev);
+            
+            foreach(Boost boost in _boosts.Where(x=>x is IKeybindAbility))
+                ((IKeybindAbility) boost).OnPressKeybind(ev);
         }
         
         
@@ -706,6 +737,9 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Scp914.UpgradingPlayer += OnScp914UpgradingPlayer;
             Exiled.Events.Handlers.Scp914.UpgradingPickup += OnScp914UpgradingPickup;
             Exiled.Events.Handlers.Player.ChangingRole += OnRevive;
+            Exiled.Events.Handlers.Player.TogglingNoClip += OnPressKeybind;
+            RoomTrigger.EnterRoom += OnEnterRoom;
+            RoomTrigger.ExitRoom += OnExitRoom;
             
             //SCP
             Exiled.Events.Handlers.Player.EnteringPocketDimension += OnEnteringPocketDimension;
@@ -738,9 +772,13 @@ namespace RoundModifiers.Modifiers.LevelUp
             Exiled.Events.Handlers.Scp914.UpgradingPlayer -= OnScp914UpgradingPlayer;
             Exiled.Events.Handlers.Scp914.UpgradingPickup -= OnScp914UpgradingPickup;
             Exiled.Events.Handlers.Player.ChangingRole -= OnRevive;
+            Exiled.Events.Handlers.Player.TogglingNoClip -= OnPressKeybind;
             MEC.Timing.KillCoroutines(TickHandle);
             /*Traverse.Create(Exiled.Events.Handlers.Player.Escaping).Field("InnerEvent").GetValue<CustomEventHandler>()
                 .GetInvocationList();*/
+            RoomTrigger.EnterRoom -= OnEnterRoom;
+            RoomTrigger.ExitRoom -= OnExitRoom;
+            
             
             //SCP
             Exiled.Events.Handlers.Player.EnteringPocketDimension -= OnEnteringPocketDimension;

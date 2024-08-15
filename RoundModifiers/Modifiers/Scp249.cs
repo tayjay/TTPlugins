@@ -3,9 +3,14 @@ using System.ComponentModel;
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
+using Exiled.API.Features.Pickups;
+using Exiled.API.Features.Pickups.Projectiles;
+using Exiled.API.Features.Pools;
+using Exiled.API.Features.Roles;
 using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
 using MEC;
+using PlayerRoles.FirstPersonControl;
 using RoundModifiers.API;
 using TTCore.Components;
 using TTCore.Events.EventArgs;
@@ -16,11 +21,10 @@ namespace RoundModifiers.Modifiers
     public class Scp249 : Modifier
     {
         
-        
-        
-        
         private CoroutineHandle _doorMovementCoroutine;
         private CoroutineHandle _teleportCoroutine;
+        
+        public Dictionary<GameObject, float> LastTeleportTime { get; private set; }
         
         public Door[] Doors { get; private set; }
         
@@ -58,7 +62,7 @@ namespace RoundModifiers.Modifiers
             }
             LastPlaceTime = Time.time;
             _doorMovementCoroutine = Timing.RunCoroutine(MoveDoors());
-            _teleportCoroutine = Timing.RunCoroutine(TeleportPlayers());
+            //_teleportCoroutine = Timing.RunCoroutine(TeleportPlayers());
         }
 
         public void Stop()
@@ -119,15 +123,44 @@ namespace RoundModifiers.Modifiers
 
         public void OnCollideDoor(AdminToyCollisionEventArgs ev)
         {
-            if(ev.Player==null) return;
-            Log.Info("Hit on "+ev.Player?.Nickname);
+            /*if(ev.Player==null)
+            {
+                
+                return;
+            }*/
+            if (ev.GameObject == null) return;
+            if(LastTeleportTime.TryGetValue(ev.GameObject, out float time) && Time.time - time < 3f) return;
+            //Log.Info("Hit on "+ev.Player?.Nickname);
             for (int i = 0; i < DoorCount; i++)
             {
                 if(ev.AdminToy == DoorMarkers[i].AdminToyBase)
                 {
-                    Log.Info("Teleporting player");
                     Door targetDoor = Doors[(i + 1) % DoorCount];
-                    ev.Player?.Teleport(targetDoor.Position+Vector3.up+(targetDoor.Rotation*Vector3.forward));
+                    if (ev.Player != null)
+                    {
+                        //Player has touched a door
+                        Log.Info("Teleporting player");
+                        ev.Player?.Teleport(targetDoor.Position+Vector3.up);
+                        /*if (ev.Player.Role is FpcRole role) todo: Rotation appears to be controlled by client, see if there is a way to sync it back to the client
+                        {
+                            role.FirstPersonController.FpcModule.MouseLook.LookAtDirection(targetDoor.Rotation.eulerAngles, 360);
+                        }*/
+                    } else if (Pickup.Get(ev.GameObject) != null)
+                    {
+                        Log.Info("Pickup touched door");
+                        Pickup pickup = Pickup.Get(ev.GameObject);
+                        pickup.Position = targetDoor.Position + Vector3.up;
+                        //Pickup has touched a door
+                        
+                    } else if(Projectile.Get(ev.GameObject) != null)
+                    {
+                        Log.Info("Projectile touched door");
+                        Pickup projectile = Projectile.Get(ev.GameObject);
+                        projectile.Position = targetDoor.Position + Vector3.up;
+                        //Projectile has touched a door
+                    }
+                    LastTeleportTime[ev.GameObject] = Time.time;
+                    
                     return;
                 }
             }
@@ -196,14 +229,18 @@ namespace RoundModifiers.Modifiers
         protected override void RegisterModifier()
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
-            //TTCore.Events.Handlers.Custom.AdminToyCollision += OnCollideDoor;
+            TTCore.Events.Handlers.Custom.AdminToyCollision += OnCollideDoor;
+
+            LastTeleportTime = DictionaryPool<GameObject, float>.Pool.Get();
         }
 
         protected override void UnregisterModifier()
         {
             Stop();
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
-            //TTCore.Events.Handlers.Custom.AdminToyCollision -= OnCollideDoor;
+            TTCore.Events.Handlers.Custom.AdminToyCollision -= OnCollideDoor;
+            
+            DictionaryPool<GameObject, float>.Pool.Return(LastTeleportTime);
         }
 
         public override ModInfo ModInfo { get; } = new ModInfo()

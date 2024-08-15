@@ -20,7 +20,7 @@ public class NpcEvents : IRegistered
             return;
         NavMeshManager.InitializeMap();
 
-        foreach (Room room in Room.List)
+        foreach (Exiled.API.Features.Room room in Exiled.API.Features.Room.List)
         {
             switch (room.Identifier.Name)
             {
@@ -36,7 +36,7 @@ public class NpcEvents : IRegistered
         }
     }
 
-    static void Add(Room room)
+    static void Add(Exiled.API.Features.Room room)
     {
         if(NpcUtilities.ZoneElevatorRooms.ContainsKey(room.Zone))
             NpcUtilities.ZoneElevatorRooms[room.Zone].AddItem(room);
