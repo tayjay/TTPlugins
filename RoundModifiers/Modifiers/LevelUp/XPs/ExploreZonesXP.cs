@@ -9,7 +9,7 @@ using TTCore.Events.EventArgs;
 
 namespace RoundModifiers.Modifiers.LevelUp.XPs
 {
-    public class ExploreZonesXP : XP, IRoomEvent
+    public class ExploreZonesXP : XP, IGameTickEvent
     {
         private Dictionary<uint,List<ZoneType>> _zones { get; set; }
         
@@ -19,11 +19,11 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         }
         
         
-        /*public void OnGameTick()
+        public void OnGameTick()
         {
             foreach(Player player in Player.List)
             {
-                if (/*player.Role.Team == Team.SCPs || #1#player.Role.Team == Team.Dead) continue;
+                if (/*player.Role.Team == Team.SCPs || */player.Role.Team == Team.Dead) continue;
                 if (!_zones.ContainsKey(player.NetId))
                     _zones[player.NetId] = ListPool<ZoneType>.Pool.Get();
 
@@ -33,9 +33,9 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
                     GiveXP(player, 50);
                 }
             }
-        }*/
+        }
         
-        public void OnEnterRoom(EnterRoomEventArgs ev)
+        /*public void OnEnterRoom(EnterRoomEventArgs ev)
         {
             if (ev.Player.Role.Team == Team.Dead) return;
             if (!_zones.ContainsKey(ev.Player.NetId))
@@ -51,7 +51,7 @@ namespace RoundModifiers.Modifiers.LevelUp.XPs
         public void OnExitRoom(ExitRoomEventArgs ev)
         {
             
-        }
+        }*/
 
         public override void Reset()
         {

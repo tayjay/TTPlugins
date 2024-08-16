@@ -93,7 +93,7 @@ namespace TTCore
             
             //NavMeshBuilder.Register();
             
-            RoomTriggerHandler.Register();
+            //RoomTriggerHandler.Register();
             
 
         }
@@ -109,7 +109,7 @@ namespace TTCore
             //NavMeshBuilder.Unregister();
             NpcEvents.Unregister();
             
-            RoomTriggerHandler.Unregister();
+            //RoomTriggerHandler.Unregister();
             
             NpcEvents = null;
             PlayerSizeManager = null;
@@ -127,7 +127,7 @@ namespace TTCore
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTCore";
-        public override System.Version Version { get; } = new System.Version(0, 6, 4);
+        public override System.Version Version { get; } = new System.Version(0, 6, 5);
         
     }
 }
