@@ -180,6 +180,8 @@ namespace RoundModifiers
         public Puppies.Config Puppies { get; set; } = new Puppies.Config();
         [Description("=====MultiBall=====")]
         public MultiBall.Config MultiBall { get; set; } = new MultiBall.Config();
+        [Description("=====BigWorld=====")]
+        public BigWorld.Config BigWorld { get; set; } = new BigWorld.Config();
         [Description("=====Blackout=====")]
         public Blackout.Config Blackout { get; set; } = new Blackout.Config();
         [Description("=====Scp249=====")]

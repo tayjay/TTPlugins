@@ -57,5 +57,8 @@ namespace TTAddons
         public bool NoAutoKick { get; set; } = false;
         [Description("Allow players to use the .scp and .human commands to choose their role. Default is true.")]
         public bool AllowRoleCommands { get; set; } = true;
+        
+        [Description("Time to allow players to join a respawn wave. Default is 5f seconds.")]
+        public float LateRespawnTime { get; set; } = 5f;
     }
 }

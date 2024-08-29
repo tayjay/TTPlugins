@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Exiled.API.Enums;
 using Exiled.API.Features;
@@ -9,6 +10,8 @@ using Exiled.API.Features.Pools;
 using Exiled.API.Features.Roles;
 using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
+using Exiled.Events.EventArgs.Map;
+using Exiled.Events.EventArgs.Warhead;
 using MEC;
 using PlayerRoles.FirstPersonControl;
 using RoundModifiers.API;
@@ -20,6 +23,8 @@ namespace RoundModifiers.Modifiers
 {
     public class Scp249 : Modifier
     {
+        //todo: Add check to remove door from light after decontamination
+        //todo: see if there's anything to be done with transparency of the door not working right
         
         private CoroutineHandle _doorMovementCoroutine;
         private CoroutineHandle _teleportCoroutine;
@@ -87,35 +92,52 @@ namespace RoundModifiers.Modifiers
             yield return Timing.WaitForSeconds(1f);
             while (true)
             {
-                if(Time.time-LastPlaceTime > MoveInterval)
+                try
                 {
-                    Doors[PlacingDoor] = GetRandomDoor();
-                    DoorMarkers[PlacingDoor].Destroy();
-                    PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Cube, new Color(10f,10f,10f, 0.15f),
-                        Doors[PlacingDoor].Position + new Vector3(0,1.2f,0)-(Doors[PlacingDoor].Rotation*new Vector3(0,0,0.001f)),
-                        Doors[PlacingDoor].Base.transform.eulerAngles*-1,
-                        new Vector3(1.4f, 2.5f, 0.05f), true, true);
-                    DoorMarkers[PlacingDoor] = Primitive.Create(settings);
-                    DoorMarkers[PlacingDoor].Collidable = false;
-                    DoorMarkers[PlacingDoor].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[PlacingDoor].AdminToyBase);
-                    LastPlaceTime = Time.time;
-                    Doors[PlacingDoor].IsOpen = true;
-                    Log.Info("New door in "+Doors[PlacingDoor].Room.Type);
-                    PlacingDoor = (PlacingDoor + 1) % DoorCount;
+                    if(Time.time-LastPlaceTime > MoveInterval)
+                    {
+                        Door newDoor = GetRandomDoor();
+                        if (newDoor != null)
+                        {
+                            Doors[PlacingDoor] = newDoor;
+                            DoorMarkers[PlacingDoor].Destroy();
+                            PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Cube, new Color(10f,10f,10f, 0.15f),
+                                Doors[PlacingDoor].Position + new Vector3(0,1.2f,0)-(Doors[PlacingDoor].Rotation*new Vector3(0,0,0.001f)),
+                                Doors[PlacingDoor].Base.transform.eulerAngles*-1,
+                                new Vector3(1.4f, 2.5f, 0.05f), true, true);
+                            DoorMarkers[PlacingDoor] = Primitive.Create(settings);
+                            DoorMarkers[PlacingDoor].Collidable = false;
+                            DoorMarkers[PlacingDoor].AdminToyBase.gameObject.AddComponent<AdminToyCollisionHandler>().Init(DoorMarkers[PlacingDoor].AdminToyBase);
+                            LastPlaceTime = Time.time;
+                            Doors[PlacingDoor].IsOpen = true;
+                            Log.Info("New door in "+Doors[PlacingDoor].Room.Type);
+                            PlacingDoor = (PlacingDoor + 1) % DoorCount;
+                        }
+                        else
+                        {
+                            LastPlaceTime = Time.time;
+                            Doors[PlacingDoor].IsOpen = true;
+                        }
+                    }
+                
+                
+                
+                    if(Time.time-LastPlaceTime > MoveInterval-1f)
+                    {
+                        //Want to start fading the door that is changing to red to indicate it will be the next door to move
+                        DoorMarkers[PlacingDoor].Color = Color.Lerp(DoorMarkers[PlacingDoor].Color, new Color(0f,0f,0f, 0f), 0.1f);
+                        Doors[PlacingDoor].IsOpen = false;
+                    } else if(Time.time-LastPlaceTime > MoveInterval-10f)
+                    {
+                        //Want to start fading the door that is changing to red to indicate it will be the next door to move
+                        DoorMarkers[PlacingDoor].Color = Color.Lerp(DoorMarkers[PlacingDoor].Color, new Color(10f,0f,0f, 0.15f), 0.01f);
+                    }
+                } catch(Exception e)
+                {
+                    Log.Error("Error moving doors");
+                    Log.Error(e);
                 }
                 
-                
-                
-                if(Time.time-LastPlaceTime > MoveInterval-1f)
-                {
-                    //Want to start fading the door that is changing to red to indicate it will be the next door to move
-                    DoorMarkers[PlacingDoor].Color = Color.Lerp(DoorMarkers[PlacingDoor].Color, new Color(0f,0f,0f, 0f), 0.1f);
-                    Doors[PlacingDoor].IsOpen = false;
-                } else if(Time.time-LastPlaceTime > MoveInterval-10f)
-                {
-                    //Want to start fading the door that is changing to red to indicate it will be the next door to move
-                    DoorMarkers[PlacingDoor].Color = Color.Lerp(DoorMarkers[PlacingDoor].Color, new Color(10f,0f,0f, 0.15f), 0.01f);
-                }
                 
                 yield return Timing.WaitForOneFrame;
             }
@@ -151,7 +173,6 @@ namespace RoundModifiers.Modifiers
                         Pickup pickup = Pickup.Get(ev.GameObject);
                         pickup.Position = targetDoor.Position + Vector3.up;
                         //Pickup has touched a door
-                        
                     } else if(Projectile.Get(ev.GameObject) != null)
                     {
                         Log.Info("Projectile touched door");
@@ -201,6 +222,10 @@ namespace RoundModifiers.Modifiers
             }
         }
         
+        public void OnDetonated(DetonatingEventArgs ev)
+        {
+            Stop();
+        }
         
         public void OnRoundStart()
         {
@@ -212,7 +237,7 @@ namespace RoundModifiers.Modifiers
         public Door GetRandomDoor()
         {
             Door newDoor = null;
-            if(Map.DecontaminationState != DecontaminationState.Countdown && Map.DecontaminationState != DecontaminationState.Lockdown && Map.DecontaminationState != DecontaminationState.Finish)
+            if(Map.DecontaminationState != DecontaminationState.Countdown && Map.DecontaminationState != DecontaminationState.Lockdown && Map.DecontaminationState != DecontaminationState.Finish && Map.DecontaminationState != DecontaminationState.Remain1Minute)
                 newDoor = Door.Random(ZoneType.LightContainment);
             if(newDoor.Rooms.Count!=2)
                 newDoor = Door.Random(ZoneType.HeavyContainment);
@@ -220,8 +245,9 @@ namespace RoundModifiers.Modifiers
                 newDoor = Door.Random(ZoneType.Entrance);
             if (newDoor.Rooms.Count != 2)
                 newDoor = Door.Random(ZoneType.Surface);
-            if (newDoor.IsElevator || newDoor.IsGate) //Don't want to block an elevator, or use a gate since the marker will be the wrong size
-                newDoor=Door.Random(ZoneType.HeavyContainment); //Issue finding new door
+            if (newDoor.IsElevator ||
+                newDoor.IsGate) //Don't want to block an elevator, or use a gate since the marker will be the wrong size
+                newDoor = null; //Issue finding new door
             return newDoor;
         }
         
@@ -230,6 +256,7 @@ namespace RoundModifiers.Modifiers
         {
             Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
             TTCore.Events.Handlers.Custom.AdminToyCollision += OnCollideDoor;
+            Exiled.Events.Handlers.Warhead.Detonating += OnDetonated;
 
             LastTeleportTime = DictionaryPool<GameObject, float>.Pool.Get();
         }
@@ -239,6 +266,7 @@ namespace RoundModifiers.Modifiers
             Stop();
             Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
             TTCore.Events.Handlers.Custom.AdminToyCollision -= OnCollideDoor;
+            Exiled.Events.Handlers.Warhead.Detonating -= OnDetonated;
             
             DictionaryPool<GameObject, float>.Pool.Return(LastTeleportTime);
         }

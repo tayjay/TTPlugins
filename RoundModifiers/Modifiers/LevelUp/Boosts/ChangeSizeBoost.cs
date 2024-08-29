@@ -1,4 +1,5 @@
-﻿using Exiled.API.Features;
+﻿using System;
+using Exiled.API.Features;
 using TTCore.Extensions;
 using TTCore.Handlers;
 using UnityEngine;
@@ -24,7 +25,15 @@ public class ChangeSizeBoost : Boost
     {
         HasBoost[player.NetId] = true;
         //player.ChangeSize(NewScale);
-        player.Scale = player.Scale * NewScale;
+        
+        if (NewScale * player.Scale.y <= 1.1f)
+        {
+            player.Scale = player.Scale * NewScale;
+        }
+        else
+        {
+            player.Scale = Vector3.one * 1.1f;
+        }
         player.MaxHealth *= NewScale;
         player.Health *= NewScale;
         if (NewScale >= 1)

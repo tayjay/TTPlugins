@@ -50,14 +50,14 @@ public class Pills : Modifier
             candies.Add(CandyKindID.Purple);
             candies.Add(CandyKindID.Red);
             candies.Add(CandyKindID.Yellow);
-            if(pillCount[player.NetId] >= 2)
+            if(pillCount[player.NetId] >= 3)
             {
                 for(int i =0;i<pillCount[player.NetId];i++)
                 {
                     candies.Add(CandyKindID.None);
                 }
             }
-            if(pillCount[player.NetId] >= 5)
+            if(pillCount[player.NetId] >= 6)
             {
                 candies.Add(CandyKindID.Pink);
             }
@@ -66,17 +66,17 @@ public class Pills : Modifier
             {
                 List<EffectCategory> categories = Exiled.API.Features.Pools.ListPool<EffectCategory>.Pool.Get();
                 categories.Add(EffectCategory.Positive);
-                if (pillCount[player.NetId] >= 2)
+                if (pillCount[player.NetId] >= 3)
                 {
                     categories.Add(EffectCategory.Positive);
                     categories.Add(EffectCategory.Movement);
                 }
-                if(pillCount[player.NetId] >= 3)
+                if(pillCount[player.NetId] >= 5)
                 {
                     categories.Add(EffectCategory.Positive);
                     categories.Add(EffectCategory.Negative);
                 }
-                if(pillCount[player.NetId] >= 4)
+                if(pillCount[player.NetId] >= 7)
                 {
                     categories.Add(EffectCategory.Positive);
                     categories.Add(EffectCategory.Harmful);

@@ -127,6 +127,7 @@
         <Compile Include="Handlers\RoundManager.cs" />
         <Compile Include="Modifiers\Alive.cs" />
         <Compile Include="Modifiers\AntiCamping.cs" />
+        <Compile Include="Modifiers\BigWorld.cs" />
         <Compile Include="Modifiers\Blackout.cs" />
         <Compile Include="Modifiers\BodyBlock.cs" />
         <Compile Include="Modifiers\BoneZone.cs" />

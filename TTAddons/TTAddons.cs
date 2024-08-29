@@ -27,6 +27,8 @@ namespace TTAddons
         
         public RoleSelectorHandler RoleSelectorHandler { get; private set; }
         
+        public LateRespawnHandler LateRespawnHandler { get; private set; }
+        
 
         private TTAddons()
         {
@@ -57,6 +59,7 @@ namespace TTAddons
             NoBanHandler = new NoBanHandler();
             SavedVoicesHandler = new SavedVoicesHandler();
             RoleSelectorHandler = new RoleSelectorHandler();
+            LateRespawnHandler = new LateRespawnHandler();
             
             
             //Register objects
@@ -74,6 +77,7 @@ namespace TTAddons
             NoBanHandler.Register();
             SavedVoicesHandler.Register();
             RoleSelectorHandler.Register();
+            LateRespawnHandler.Register();
             
         }
         
@@ -95,6 +99,7 @@ namespace TTAddons
             NoBanHandler.Unregister();
             SavedVoicesHandler.Unregister();
             RoleSelectorHandler.Unregister();
+            LateRespawnHandler.Unregister();
             
             //Dispose objects
             Unstuck = null;
@@ -107,6 +112,7 @@ namespace TTAddons
             NoBanHandler = null;
             SavedVoicesHandler = null;
             RoleSelectorHandler = null;
+            LateRespawnHandler = null;
         }
         
         public override void OnDisabled()
@@ -126,7 +132,7 @@ namespace TTAddons
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTAddons";
-        public override System.Version Version { get; } = new System.Version(0, 6, 4);
+        public override System.Version Version { get; } = new System.Version(0, 7, 0);
 
     }
 }

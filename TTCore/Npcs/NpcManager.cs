@@ -19,7 +19,7 @@ namespace TTCore.Npcs
         }
         
         public bool SpawnNpc(string npcName, RoleTypeId npcRole, Vector3 npcPosition, out Npc npc,
-            bool isSmart = true, bool roundIgnored = true, bool isGodMode = true)
+            bool isSmart = false, bool roundIgnored = true, bool isGodMode = true)
         {
             Npc newNpc = Npc.Spawn(npcName, npcRole, position: npcPosition);
             newNpc.RemoteAdminPermissions = PlayerPermissions.AFKImmunity;
@@ -30,7 +30,7 @@ namespace TTCore.Npcs
             Timing.CallDelayed(1f, () =>
             {
                 if(isGodMode) newNpc.IsGodModeEnabled = true;
-                if (isSmart) newNpc.GameObject.AddComponent<Brain>().Init(newNpc);
+                //if (isSmart) newNpc.GameObject.AddComponent<Brain>().Init(newNpc);
             });
             npc = newNpc;
             Npcs.Add(npc);

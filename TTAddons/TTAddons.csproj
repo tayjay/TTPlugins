@@ -108,6 +108,7 @@
         <Compile Include="Config.cs" />
         <Compile Include="Handlers\ClassDHandler.cs" />
         <Compile Include="Handlers\LarryLagHandler.cs" />
+        <Compile Include="Handlers\LateRespawnHandler.cs" />
         <Compile Include="Handlers\LightFixHandler.cs" />
         <Compile Include="Handlers\NoBanHandler.cs" />
         <Compile Include="Handlers\RoleSelectorHandler.cs" />

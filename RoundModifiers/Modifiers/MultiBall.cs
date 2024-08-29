@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pickups.Projectiles;
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.ThrowableProjectiles;
 using MapGeneration.Distributors;
+using MEC;
 using Mirror;
 using RoundModifiers.API;
 using TTCore.API;
@@ -15,6 +19,8 @@ using TTCore.Components;
 using TTCore.Events.EventArgs;
 using TTCore.Utilities;
 using UnityEngine;
+using Utils.NonAllocLINQ;
+using Random = UnityEngine.Random;
 
 namespace RoundModifiers.Modifiers
 {
@@ -123,11 +129,32 @@ namespace RoundModifiers.Modifiers
                 projectile.GameObject.AddComponent<ProjectileCollisionHandler>().Init(owner, projectile.Base);
         }
 
+        public void OnOpenLocker(InteractingLockerEventArgs ev)
+        {
+            if (ev.Locker is not PedestalScpLocker) return;
+            Timing.CallDelayed(0.5f, () =>
+            {
+                double chance = Math.Min((Round.ElapsedTime.TotalMinutes * 0.03), 0.25f);
+                if(!ev.Chamber.IsOpen) return;
+                if (ev.Chamber._content.Any(i => i.Info.ItemId == ItemType.SCP018))
+                {
+                    if (Random.Range(0, 1) <= chance)
+                    {
+                        var oldItem = ev.Chamber._content.First(i => i.Info.ItemId == ItemType.SCP018);
+                        Projectile projectile = Projectile.CreateAndSpawn(ProjectileType.Scp018, oldItem.Position, oldItem.Rotation, true, ev.Player);
+                        projectile.PhysicsModule.Rb.velocity = Vector3Utils.Random(-2f, 3f);
+                        Pickup.Get(oldItem).UnSpawn();
+                    }
+                }
+            });
+        }
+
         protected override void RegisterModifier()
         {
             Exiled.Events.Handlers.Map.Generated += OnGenerated;
             Exiled.Events.Handlers.Map.FillingLocker += OnFillingLocker;
             Exiled.Events.Handlers.Player.ThrownProjectile += OnThrownProjectile;
+            Exiled.Events.Handlers.Player.InteractingLocker += OnOpenLocker;
             TTCore.Events.Handlers.Custom.Scp018Bounce += OnBounce;
             Generated = false;
         }
@@ -137,6 +164,7 @@ namespace RoundModifiers.Modifiers
             Exiled.Events.Handlers.Map.Generated -= OnGenerated;
             Exiled.Events.Handlers.Map.FillingLocker -= OnFillingLocker;
             Exiled.Events.Handlers.Player.ThrownProjectile -= OnThrownProjectile;
+            Exiled.Events.Handlers.Player.InteractingLocker -= OnOpenLocker;
             TTCore.Events.Handlers.Custom.Scp018Bounce -= OnBounce;
             Generated = false;
         }

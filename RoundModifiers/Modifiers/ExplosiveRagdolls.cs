@@ -138,7 +138,7 @@ public class ExplosiveRagdolls : Modifier
         Name = "ExplosiveRagdolls",
         Aliases = new []{"boom", "gruntbdayparty"},
         Description = "Ragdolls explode after 10 seconds",
-        FormattedName = "Birthday Party",
+        FormattedName = "Explosive Ragdolls",
         Impact = ImpactLevel.MajorGameplay,
         MustPreload = false,
         Balance = 1,

@@ -8,6 +8,7 @@ using Exiled.API.Features.Items;
 using Exiled.CustomRoles.API;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Warhead;
 using LightContainmentZoneDecontamination;
 using MapGeneration;
 using MEC;
@@ -57,7 +58,7 @@ public class Scp507 : Modifier
             }
 
             Ragdoll.CreateAndSpawn(ev.Player.Role.Type, ev.Player.DisplayNickname, ev.DamageHandler, ev.Player.Position,
-                ev.Player.Rotation, ev.Player);
+                ev.Player.Rotation, ev.Player).IsConsumed = true;
             ev.Player.RoleManager.ServerSetRole(RoleTypeId.ClassD, RoleChangeReason.Revived, RoleSpawnFlags.None); // Patching client assuming player dead and permanently blinding them
             //Teleport to random room in facility
             ev.Player.Teleport(FindSafeLocation(ev.Player));
@@ -91,7 +92,7 @@ public class Scp507 : Modifier
             }
             //Teleport to random room in facility
             Ragdoll.CreateAndSpawn(ev.Player.Role.Type, ev.Player.DisplayNickname, "SCP-507", ev.Player.Position,
-                ev.Player.Rotation, ev.Player);
+                ev.Player.Rotation, ev.Player).IsConsumed = true; // Patch infinite healing for zombies
             ev.Player.Teleport(FindSafeLocation(ev.Player));
             ev.Player.DisableAllEffects(EffectCategory.Negative);
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
@@ -125,7 +126,7 @@ public class Scp507 : Modifier
             }
             //Teleport to random room in facility
             Ragdoll.CreateAndSpawn(ev.Player.Role.Type, ev.Player.DisplayNickname, "SCP-507", ev.Player.Position,
-                ev.Player.Rotation, ev.Player);
+                ev.Player.Rotation, ev.Player).IsConsumed = true;
             ev.Player.Teleport(FindSafeLocation(ev.Player));
             ev.Player.DisableAllEffects(EffectCategory.Negative);
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
@@ -170,7 +171,7 @@ public class Scp507 : Modifier
             }
             //Teleport to random room in facility
             Ragdoll.CreateAndSpawn(player.Role.Type, player.DisplayNickname, "SCP-507", player.Position,
-                player.Rotation, player);
+                player.Rotation, player).IsConsumed = true;
             player.Teleport(FindSafeLocation(player));
             player.DisableAllEffects(EffectCategory.Negative);
             player.DisableAllEffects(EffectCategory.Harmful);

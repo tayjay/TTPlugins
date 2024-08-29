@@ -120,7 +120,7 @@ namespace RoundModifiers.Modifiers.LevelUp
             //_boosts.Add(new UpgradeWeaponBoost(Tier.Uncommon));
             _boosts.Add(new ChangeSizeBoost());
             _boosts.Add(new ChangeSizeBoost(0.8f,Tier.Rare));
-            _boosts.Add(new ChangeSizeBoost(1.2f,Tier.Rare));
+            _boosts.Add(new ChangeSizeBoost(1.25f,Tier.Rare));
             //SCP Boosts
             _boosts.Add(new HealBoost(Tier.Common));
             _boosts.Add(new HealBoost(Tier.Uncommon));

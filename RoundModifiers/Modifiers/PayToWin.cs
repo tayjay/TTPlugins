@@ -6,6 +6,7 @@ using Exiled.API.Features.Pickups;
 using Exiled.Events.EventArgs.Player;
 using InventorySystem.Items.Firearms.Attachments;
 using MapGeneration.Distributors;
+using PlayerRoles;
 using RoundModifiers.API;
 using TTCore.HUDs;
 using UnityEngine;
@@ -61,8 +62,16 @@ public class PayToWin : Modifier
             var transform = workstation.transform;
             for (int i = 0; i < PayToWinConfig.CoinsPerWorkstation; i++)
             {
-                Pickup.CreateAndSpawn(ItemType.Coin, transform.position + Vector3.up, transform.rotation);
+                Pickup.CreateAndSpawn(ItemType.Coin, transform.position + Vector3.up*2, transform.rotation);
             }
+        }
+    }
+
+    public void OnSpawned(SpawnedEventArgs ev)
+    {
+        if (ev.Player.Role == RoleTypeId.ChaosConscript || ev.Player.Role == RoleTypeId.NtfPrivate)
+        {
+            ev.Player.AddItem(ItemType.Coin);
         }
     }
     
@@ -71,6 +80,7 @@ public class PayToWin : Modifier
         Exiled.Events.Handlers.Player.InteractingLocker += OnInteractLocker;
         Exiled.Events.Handlers.Player.UnlockingGenerator += OnInteractGenerator;
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
+        Exiled.Events.Handlers.Player.Spawned += OnSpawned;
     }
 
     protected override void UnregisterModifier()
@@ -78,6 +88,7 @@ public class PayToWin : Modifier
         Exiled.Events.Handlers.Player.InteractingLocker -= OnInteractLocker;
         Exiled.Events.Handlers.Player.UnlockingGenerator -= OnInteractGenerator;
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
+        Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()
