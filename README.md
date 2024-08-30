@@ -1,3 +1,8 @@
+[![GitHub Release](https://img.shields.io/github/v/release/tayjay/TTPlugins?include_prereleases)](https://github.com/tayjay/TTPlugins/releases/latest)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/tayjay/TTPlugins/total)](https://github.com/tayjay/TTPlugins/releases/latest)
+
+
+
 # SCP:SL EXILED Plugin Collection
 
 **Introduction**
