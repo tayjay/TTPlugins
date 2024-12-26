@@ -16,14 +16,18 @@ public static class Custom
     
     public static Event<InspectFirearmEventArgs> InspectFirearm { get; set; } = new Event<InspectFirearmEventArgs>();
     
-    public static Event<AccessFirearmBaseStatsEventArgs> AccessFirearmBaseStats { get; set; } = new Event<AccessFirearmBaseStatsEventArgs>();
-    public static Event<ZombieAttackEventArgs> ZombieAttack { get; set; } = new Event<ZombieAttackEventArgs>();
+    //public static Event<AccessFirearmBaseStatsEventArgs> AccessFirearmBaseStats { get; set; } = new Event<AccessFirearmBaseStatsEventArgs>();
+    //public static Event<ZombieAttackEventArgs> ZombieAttack { get; set; } = new Event<ZombieAttackEventArgs>();
    
     public static Event<ChooseScpSpawnQueueEventArgs> ChooseScpSpawnQueue { get; set; } = new Event<ChooseScpSpawnQueueEventArgs>();
    
     public static Event<PlayerEffectsAwakeArgs> PlayerEffectsAwake { get; set; } = new Event<PlayerEffectsAwakeArgs>();
     
     public static Event<PickupCollisionEventArgs> PickupCollision { get; set; } = new Event<PickupCollisionEventArgs>();
+    
+    public static Event PreGenerateMap { get; set; } = new Event();
+    
+    //public static Event<PreGenerateZoneEventArgs> PreGenerateZone { get; set; } = new Event<PreGenerateZoneEventArgs>();
     
     public static Event Scp079BeginOvercharge { get; set; } = new Event();
     
@@ -47,15 +51,16 @@ public static class Custom
         InspectFirearm.InvokeSafely(ev);
     }
     
-    public static void OnAccessFirearmBaseStats(AccessFirearmBaseStatsEventArgs ev)
+    /*public static void OnAccessFirearmBaseStats(AccessFirearmBaseStatsEventArgs ev)
     {
         AccessFirearmBaseStats.InvokeSafely(ev);
     }
+    */
     
-    public static void OnZombieAttack(ZombieAttackEventArgs ev)
+    /*public static void OnZombieAttack(ZombieAttackEventArgs ev)
     {
         ZombieAttack.InvokeSafely(ev);
-    }
+    }*/
     
     public static void OnChooseScpSpawnQueue(ChooseScpSpawnQueueEventArgs ev)
     {
@@ -76,4 +81,14 @@ public static class Custom
     {
         Scp079BeginOvercharge.InvokeSafely();
     }
+    
+    public static void OnPreGenerateMap()
+    {
+        PreGenerateMap.InvokeSafely();
+    }
+    
+    /*public static void OnPreGenerateZone(PreGenerateZoneEventArgs ev)
+    {
+        PreGenerateZone.InvokeSafely(ev);
+    }*/
 }

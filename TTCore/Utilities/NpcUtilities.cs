@@ -85,9 +85,9 @@ public static class NpcUtilities
             AIFollow f = prof.WorldPlayer.ModuleRunner.AddModule<AIFollow>();
             AIWander w = prof.WorldPlayer.ModuleRunner.AddModule<AIWander>();
             AIChaseEnemy ce = prof.WorldPlayer.ModuleRunner.AddModule<AIChaseEnemy>();
-            AIFirearmShoot s = prof.WorldPlayer.ModuleRunner.AddModule<AIFirearmStrafeShoot>();
+            //AIFirearmShoot s = prof.WorldPlayer.ModuleRunner.AddModule<AIFirearmStrafeShoot>();
             AIGrenadeStrafeThrow g = prof.WorldPlayer.ModuleRunner.AddModule<AIGrenadeStrafeThrow>();
-            AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
+            //AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
             AIItemPickup ip = prof.WorldPlayer.ModuleRunner.AddModule<AIItemPickup>();
             ip.Enabled = false;
             prof.WorldPlayer.ModuleRunner.AddModule<AIZombieModule>();
@@ -96,7 +96,7 @@ public static class NpcUtilities
             prof.WorldPlayer.ModuleRunner.AddModule<AIScp939Module>();
             Log.Debug("Modules added.");
 
-            c.Enabled = false;
+            //c.Enabled = false;
             prof.WorldPlayer.ModuleRunner.AddModule<AIBehaviorBase>();
             Log.Debug("Behavior Enabled.");
             i.SearchRadiusEnemy = 70f;
@@ -164,9 +164,9 @@ public static class NpcUtilities
             prof.Position = position;
 
             AIScanner i = prof.WorldPlayer.ModuleRunner.AddModule<AIScanner>();
-            AIFirearmShoot s = prof.WorldPlayer.ModuleRunner.AddModule<AIFirearmShoot>();
+            //AIFirearmShoot s = prof.WorldPlayer.ModuleRunner.AddModule<AIFirearmShoot>();
             AIGrenadeThrow g = prof.WorldPlayer.ModuleRunner.AddModule<AIGrenadeThrow>();
-            AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
+            //AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
             prof.WorldPlayer.ModuleRunner.AddModule<AIBehaviorBase>();
 
             g.InfiniteGrenades = true;
@@ -201,7 +201,7 @@ public static class NpcUtilities
             AIPathfinder p = prof.WorldPlayer.ModuleRunner.AddModule<AIPathfinder>();
             AIFollow f = prof.WorldPlayer.ModuleRunner.AddModule<AIFollow>();
             AIGrenadeThrow s = prof.WorldPlayer.ModuleRunner.AddModule<AIGrenadeThrow>();
-            AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
+            //AIItemConsume c = prof.WorldPlayer.ModuleRunner.AddModule<AIItemConsume>();
             prof.WorldPlayer.ModuleRunner.AddModule<AIBehaviorBase>();
 
             return prof;

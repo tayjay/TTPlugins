@@ -25,6 +25,7 @@ using Room = Exiled.API.Features.Room;
 
 namespace RoundModifiers.Modifiers.GunGame;
 
+/*
 public class GunGame : Modifier
 {
     // Your bulk standard gun game gamemode
@@ -189,7 +190,7 @@ public class GunGame : Modifier
         {
             if(Weapons.Contains(item.Type))
                 ev.ItemsToDrop.Remove(item);
-        }*/
+        }#1#
         if(!IsGameActive) return; //All items will drop during overtime
         ev.ItemsToDrop.Clear();
         //ev.Player.RemoveItem(item => item !=null,true);
@@ -242,7 +243,7 @@ public class GunGame : Modifier
             }
             ev.Attacker.CurrentItem = ev.Attacker.Items.First(i => i.Type == Weapons[PlayerGunLevels[ev.Attacker]]);
             
-        }*/
+        }#1#
         ProcessKill(ev.Attacker, ev.Player);
     }
 
@@ -363,7 +364,7 @@ public class GunGame : Modifier
             _ => "th"
         };
         string displayText = $"You are in {playersWithMorePoints}{placeSuffix} place with {PlayerKillItems[ev.Player]}/{Weapons.Length} kills";
-        ev.Player.ShowHUDHint(displayText, 5f);*/
+        ev.Player.ShowHUDHint(displayText, 5f);#1#
     }
     
     
@@ -591,4 +592,5 @@ public class GunGame : Modifier
         [Description("Should guns be given in a sequential order (true) or randomly (false)? Default is true.")]
         public bool Sequential { get; set; } = true;
     }
-}
+
+}*/

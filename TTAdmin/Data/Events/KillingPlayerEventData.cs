@@ -9,9 +9,9 @@ public class KillingPlayerEventData : EventData
     public PlayerData Player { get; set; }
     public string Reason { get; set; }
     
-    public KillingPlayerEventData(KillingPlayerEventArgs ev)
+    public KillingPlayerEventData(DyingEventArgs ev)
     {
         Player = new PlayerData(ev.Player);
-        Reason = ev.Handler.ServerLogsText;
+        Reason = ev.DamageHandler.ServerLogsText;
     }
 }

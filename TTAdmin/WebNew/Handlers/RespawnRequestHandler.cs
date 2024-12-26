@@ -7,7 +7,7 @@ using TTAdmin.WebNew.DataTypes;
 
 namespace TTAdmin.WebNew.Handlers;
 
-public class RespawnRequestHandler : AllRequestHandler
+/*public class RespawnRequestHandler : AllRequestHandler
 {
     public override string Path { get; } = "/server/respawn";
     public override void ProcessGetRequest(HttpListenerContext context)
@@ -74,4 +74,4 @@ public class RespawnRequestHandler : AllRequestHandler
         public bool Enabled { get; set; } = false;
         public string Team { get; set; } = "";
     }
-}
+}*/

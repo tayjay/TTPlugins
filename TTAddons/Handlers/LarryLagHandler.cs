@@ -12,19 +12,22 @@ namespace TTAddons.Handlers
 
         public void OnWaitingForPlayers()
         {
-            Log.Info("Checking for Larry Lag...");
+            Log.Warn("===========================================");
+            Log.Warn("Checking for Larry Lag...");
             CustomEventHandler<ExitStalkingEventArgs> handler = Exiled.Events.Handlers.Scp106.ExitStalking.GetPrivateFieldValue<CustomEventHandler<ExitStalkingEventArgs>>("InnerEvent");
+            Log.Warn($"Found {handler.GetInvocationList().Length} handlers: ");
             foreach (Delegate item in handler.GetInvocationList())
             {
-                Log.Info("Found Handler: " + item.Method.Name);
+                Log.Warn("Found Handler: " + item.Method.Name);
             }
-            
+            Log.Warn("-------------------------------------------");
             CustomAsyncEventHandler<ExitStalkingEventArgs> asyncHandler = Exiled.Events.Handlers.Scp106.ExitStalking.GetPrivateFieldValue<CustomAsyncEventHandler<ExitStalkingEventArgs>>("InnerAsyncEvent");
-            
+            Log.Warn($"Found {asyncHandler.GetInvocationList().Length} async handlers: ");
             foreach (Delegate item in asyncHandler.GetInvocationList())
             {
-                Log.Info("Found Async Handler: " + item.Method.Name);
+                Log.Warn("Found Async Handler: " + item.Method.Name);
             }
+            Log.Warn("===========================================");
         }
         
         

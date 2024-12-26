@@ -28,6 +28,9 @@ namespace TTAddons
         public RoleSelectorHandler RoleSelectorHandler { get; private set; }
         
         public LateRespawnHandler LateRespawnHandler { get; private set; }
+        //public MapChangeHandler MapChangeHandler { get; private set; }
+        
+        public CombatLogHandler CombatLogHandler { get; private set; }
         
 
         private TTAddons()
@@ -60,6 +63,8 @@ namespace TTAddons
             SavedVoicesHandler = new SavedVoicesHandler();
             RoleSelectorHandler = new RoleSelectorHandler();
             LateRespawnHandler = new LateRespawnHandler();
+            //MapChangeHandler = new MapChangeHandler();
+            CombatLogHandler = new CombatLogHandler();
             
             
             //Register objects
@@ -68,8 +73,8 @@ namespace TTAddons
             if(Config.EnableSpectatorGame)
                 SpectatorHandler.Register();
             //ClassDHandler.Register();
-            if(Config.EnableWeaponStats)
-                WeaponStats.Register();
+            /*if(Config.EnableWeaponStats)
+                WeaponStats.Register();*/
             //LightFixHandler.Register();
             Scp3114Handler.Register();
             Scp0492Handler.Register();
@@ -78,6 +83,8 @@ namespace TTAddons
             SavedVoicesHandler.Register();
             RoleSelectorHandler.Register();
             LateRespawnHandler.Register();
+            //MapChangeHandler.Register();
+            CombatLogHandler.Register();
             
         }
         
@@ -90,8 +97,8 @@ namespace TTAddons
             if(Config.EnableSpectatorGame)
                 SpectatorHandler.Unregister();
             //ClassDHandler.Unregister();
-            if(Config.EnableWeaponStats)
-                WeaponStats.Unregister();
+            /*if(Config.EnableWeaponStats)
+                WeaponStats.Unregister();*/
             //LightFixHandler.Unregister();
             Scp3114Handler.Unregister();
             Scp0492Handler.Unregister();
@@ -100,6 +107,8 @@ namespace TTAddons
             SavedVoicesHandler.Unregister();
             RoleSelectorHandler.Unregister();
             LateRespawnHandler.Unregister();
+            //MapChangeHandler.Unregister();
+            CombatLogHandler.Unregister();
             
             //Dispose objects
             Unstuck = null;
@@ -113,6 +122,8 @@ namespace TTAddons
             SavedVoicesHandler = null;
             RoleSelectorHandler = null;
             LateRespawnHandler = null;
+            //MapChangeHandler = null;
+            CombatLogHandler = null;
         }
         
         public override void OnDisabled()
@@ -132,7 +143,7 @@ namespace TTAddons
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "TTAddons";
-        public override System.Version Version { get; } = new System.Version(0, 7, 0);
+        public override System.Version Version { get; } = new System.Version(0, 8, 0);
 
     }
 }

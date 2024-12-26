@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AdminToys;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Doors;
@@ -46,7 +47,8 @@ public class MoveBehaviour : AIBehaviour
 
     void Start()
     {
-        Log.Info("Loaded");
+        //todo: fix primitive settings
+        /*Log.Info("Loaded");
         player = Player.Get(GetComponent<ReferenceHub>());
         navMeshAgent = gameObject.AddComponent<NavMeshAgent>();
         var characterController = GetComponent<CharacterController>();
@@ -66,22 +68,22 @@ public class MoveBehaviour : AIBehaviour
         //((FpcRole)player.Role).IsNoclipEnabled = true;
         
         primitives = new List<Primitive>();
-        PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Sphere, Color.blue, Vector3.zero, Vector3.zero,
+        PrimitiveSettings settings = new PrimitiveSettings(PrimitiveType.Sphere,PrimitiveFlags.Visible, Color.blue, Vector3.zero, Quaternion.identity,
             Vector3.one * -0.1f, true);
         for(int i = 0; i < 10; i++)
         {
             primitives.Add(Primitive.Create(settings));
         }
         
-        MoveTargetPrim = Primitive.Create(new PrimitiveSettings(PrimitiveType.Sphere, Color.red, Vector3.zero, Vector3.zero,
+        MoveTargetPrim = Primitive.Create(new PrimitiveSettings(PrimitiveType.Sphere,PrimitiveFlags.Visible,  Color.red, Vector3.zero, Vector3.zero, Quaternion.identity,
             Vector3.one * 0.1f, true));
-        TempMoveTargetPrim = Primitive.Create(new PrimitiveSettings(PrimitiveType.Sphere, Color.green, Vector3.zero, Vector3.zero,
+        TempMoveTargetPrim = Primitive.Create(new PrimitiveSettings(PrimitiveType.Sphere,PrimitiveFlags.Visible,  Color.green, Vector3.zero, Vector3.zero, Quaternion.identity,
             Vector3.one * 0.1f, true));
         MoveTargetPrim.Collidable = false;
         TempMoveTargetPrim.Collidable = false;
         
         Path = new NavMeshPath();
-        gameObject.AddComponent<AgentLinkMover>();
+        gameObject.AddComponent<AgentLinkMover>();*/
     }
 
     public override void UpdateBehaviour()

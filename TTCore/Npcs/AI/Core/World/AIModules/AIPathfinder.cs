@@ -1,6 +1,5 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using Exiled.CustomRoles.Commands;
 using Interactables.Interobjects;
 using MapGeneration;
 using TTCore.Utilities;
@@ -113,7 +112,7 @@ public class AIPathfinder : AIFollowPath
         {
             Room closest = null;
             foreach (Room rid in NpcUtilities.ZoneElevatorRooms[zone])
-                if (closest == null || Vector3.Distance(closest.transform.position, Parent.Position) > Vector3.Distance(rid.transform.position, Parent.Position))
+                if (closest == null || Vector3.Distance(closest.Position, Parent.Position) > Vector3.Distance(rid.Position, Parent.Position))
                     closest = rid;
             return closest;
         }
@@ -122,7 +121,7 @@ public class AIPathfinder : AIFollowPath
         {
             if (!NpcUtilities.ZoneElevatorRooms[ZoneType.LightContainment].Contains(Parent.Room))
             {
-                dest = GetClosestElevator(ZoneType.LightContainment).transform.position;
+                dest = GetClosestElevator(ZoneType.LightContainment).Position;
                 return true;
             }
             dest = default;

@@ -24,12 +24,12 @@ namespace TTAdmin
         
         public override string Name { get; } = "TTAdmin";
         public override string Author { get; } = "TayTay";
-        public override Version Version { get; } = new Version(0, 4, 0);
+        public override Version Version { get; } = new Version(0, 5, 0);
         
         
         public SubscriptionHandler SubscriptionHandler;
         public EventsHandler EventsHandler;
-        public WsConsoleOutput WsConsoleOutput;
+        //public WsConsoleOutput WsConsoleOutput;
         
         protected internal APIKey ApiKey { get; private set; }
         
@@ -103,8 +103,8 @@ namespace TTAdmin
 
             if (Config.EnableConsoleOutput)
             {
-                WsConsoleOutput = new WsConsoleOutput();
-                WsConsoleOutput.Register();
+                //WsConsoleOutput = new WsConsoleOutput();
+                //WsConsoleOutput.Register();
             }
         }
         
@@ -117,8 +117,8 @@ namespace TTAdmin
             SubscriptionHandler.Subscriptions.Clear();
             if (Config.EnableConsoleOutput)
             {
-                WsConsoleOutput.Unregister();
-                WsConsoleOutput = null;
+                //WsConsoleOutput.Unregister();
+                //WsConsoleOutput = null;
             }
             EventsHandler = null;
             SubscriptionHandler = null;

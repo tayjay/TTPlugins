@@ -97,7 +97,7 @@ namespace RoundModifiers
             AddModifier(new Puppies());
             AddModifier(new RandomSpawnSize());
             AddModifier(new Scp249());
-            AddModifier(new MicroHIV());
+            //AddModifier(new MicroHIV());
             AddModifier(new NoScp914());
             AddModifier(new NoKOS());
             AddModifier(new RadioSilent());
@@ -117,20 +117,21 @@ namespace RoundModifiers
             AddModifier<Peanuts>();
             AddModifier<DoNotLook>();
             AddModifier<ExtraLife>();
-            AddModifier<GunGame>();
-            AddModifier<Flamingos>();
+            //AddModifier<GunGame>();
+            //AddModifier<Flamingos>();
             AddModifier<Nicknames>();
             //AddModifier<GhostHunting>();
             AddModifier<ScpChat>();
-            AddModifier<LowPower>();
+            //AddModifier<LowPower>();
             //AddModifier<ZombieSurvival>();
             //AddModifier<ScpBackup>();
             //AddModifier<ZombieSurvival>();
             //AddModifier<Debug>();
             AddModifier<PayToWin>();
-            AddModifier<BigWorld>();
+            //AddModifier<BigWorld>();
+            //AddModifier<BehindYou>();
             
-            AddModifier<ComboImposter>();
+            //AddModifier<ComboImposter>();
             
             BlacklistModifiers();
         }
@@ -228,6 +229,6 @@ namespace RoundModifiers
 
         public override string Author { get; } = "TayTay";
         public override string Name { get; } = "RoundModifiers";
-        public override System.Version Version { get; } = new System.Version(0, 7, 0);
+        public override System.Version Version { get; } = new System.Version(0, 8, 0);
     }
 }

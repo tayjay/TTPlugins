@@ -2,7 +2,7 @@
 
 namespace RoundModifiers.Modifiers.GunGame;
 
-public class GunGameHUDLayout : HUDLayout
+/*public class GunGameHUDLayout : HUDLayout
 {
     // Needed elements
     // Current place, current kills, player name, current weapon, next weapon,
@@ -65,4 +65,4 @@ public class GunGameHUDLayout : HUDLayout
         return hud;
 
     }
-}
+}*/

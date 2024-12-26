@@ -77,8 +77,8 @@ namespace RoundModifiers.Modifiers
                     return;
                 _scpRoles[ev.Player] = ev.NewRole;
 
-                TTCore.TTCore.Instance.NpcManager.SpawnNpc(ev.Player.Nickname, ev.NewRole, ev.Player.Position,
-                    out Npc clone);
+                /*TTCore.TTCore.Instance.NpcManager.SpawnNpc(ev.Player.Nickname, ev.NewRole, ev.Player.Position,
+                    out Npc clone);*/
                     
                 ev.NewRole = RoleTypeId.Spectator;
             }

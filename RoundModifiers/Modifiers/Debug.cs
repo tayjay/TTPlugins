@@ -14,7 +14,8 @@ public class Debug : Modifier
         //DEBUG CODE
         Room room = Room.Get(ev.Position);
         Vector3 relativePosition = TransformUtils.CalculateRelativePosition(ev.Position, room.Position, room.Rotation);
-        Log.Info($"Relative shot position: new Vector3({relativePosition.x}f, {relativePosition.y}f, {relativePosition.z}f) in {room.Type}");
+        //new RoomPosition(RoomType.EzIntercom, new Vector3(-0.09283455f, -5.81958f, -0.5506745f))
+        Log.Info($"Relative shot position: new RoomPosition(RoomType.{room.Type},new Vector3({relativePosition.x}f, {relativePosition.y}f, {relativePosition.z}f));");
         //END DEBUG CODE
     }
     

@@ -46,7 +46,10 @@ public class RestServer
         RegisterHandler<GetAIDataHandler>();
         RegisterHandler<CASSIEActionRequest>();
         RegisterHandler<WarheadRequestHandler>();
-        RegisterHandler<RespawnRequestHandler>();
+        //RegisterHandler<RespawnRequestHandler>();
+        //RegisterHandler<GetMapRequest>();
+        //RegisterHandler<GetMiniMapRequest>();
+        //RegisterHandler<GetAllMapsRequest>();
         
         
         

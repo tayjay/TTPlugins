@@ -28,7 +28,7 @@ using IDamageableDoor = Exiled.API.Interfaces.IDamageableDoor;
 
 namespace RoundModifiers.Modifiers.Scp1507;
 
-public class Flamingos : Modifier
+/*public class Flamingos : Modifier
 {
     public static Scp1507Role Scp1507Role { get; set; }
     public bool HasFlamingoed { get; set; }
@@ -374,4 +374,4 @@ public class Flamingos : Modifier
         Hidden = true,
         Category = Category.CustomRole
     };
-}
+}*/

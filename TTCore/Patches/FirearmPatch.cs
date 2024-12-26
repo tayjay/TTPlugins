@@ -6,7 +6,7 @@ using TTCore.Events.Handlers;
 
 namespace TTCore.Patches;
 
-public class FirearmPatch
+/*public class FirearmPatch
 {
     [HarmonyPatch(typeof(AutomaticFirearm), "BaseStats", MethodType.Getter)]
     public class AutomaticFirearmPatch
@@ -71,4 +71,4 @@ public class FirearmPatch
             return false;
         }
     }
-}
+}*/

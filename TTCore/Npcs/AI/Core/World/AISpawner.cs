@@ -62,8 +62,8 @@ public class AISpawner : SpawnerBase
         foreach (ItemType i in Items)
         {
             Item ite = prof.Player.AddItem(i);
-            if (ite is Firearm f)
-                f.Base.Status = new FirearmStatus(f.Base.AmmoManagerModule.MaxAmmo, f.Base.Status.Flags, AttachmentsUtils.GetRandomAttachmentsCode(i));
+            //if (ite is Firearm f)
+                //f.Base.Status = new FirearmStatus(f.Base.AmmoManagerModule.MaxAmmo, f.Base.Status.Flags, AttachmentsUtils.GetRandomAttachmentsCode(i));
         }
 
         NPCs.Add(prof.WorldPlayer);

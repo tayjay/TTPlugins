@@ -15,7 +15,7 @@ public class RoomUtils
     /// <param name="room">Room that should be destroyed</param>
     public static void DestroyRoom(Room room)
     {
-        foreach (var component in room.gameObject.GetComponentsInChildren<Component>())
+        foreach (var component in room.GameObject.GetComponentsInChildren<Component>())
         {
             try
             {

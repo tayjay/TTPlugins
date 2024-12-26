@@ -6,7 +6,7 @@ using Consumable = Exiled.API.Features.Items.Consumable;
 
 namespace TTCore.Npcs.AI.Core.World.AIModules;
 
-public class AIItemConsume : AIModuleBase
+/*public class AIItemConsume : AIModuleBase
     {
         public float HealPercentage = 0.5f;
 
@@ -84,4 +84,4 @@ public class AIItemConsume : AIModuleBase
             inUse = true;
             new StatusMessage(StatusMessage.StatusType.Start, item.Base.ItemSerial).SendToAuthenticated();
         }
-    }
+    }*/

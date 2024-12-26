@@ -89,10 +89,10 @@ public class ExtraLife : Modifier
         if (Round.ElapsedTime.TotalSeconds <= MinimumRoundTime)
         {
             if (ev.IsForceEnded) return;
-            if (!ev.IsRoundEnded) return;
+            if (!Round.IsEnded) return;
             EarlyWin = ev.LeadingTeam;
             ev.IsAllowed = false;
-            Respawn.ForceWave(Respawn.NextKnownTeam, true);
+            Respawn.ForceWave(Respawn.NextKnownSpawnableFaction);
         }
         else
         {

@@ -194,8 +194,8 @@ namespace RoundModifiers
         public ExtraLife.Config ExtraLife { get; set; } = new ExtraLife.Config();
         [Description("=====ScpChat=====")]
         public ScpChat.Config ScpChat { get; set; } = new ScpChat.Config();
-        [Description("=====MicroHIV=====")]
-        public MicroHIV.Config MicroHIV { get; set; } = new MicroHIV.Config();
+        /*[Description("=====MicroHIV=====")]
+        public MicroHIV.Config MicroHIV { get; set; } = new MicroHIV.Config();*/
         [Description("=====NoDecon=====")]
         public NoDecontamination.Config NoDecon { get; set; } = new NoDecontamination.Config();
         [Description("=====HealthBars=====")]
@@ -206,8 +206,8 @@ namespace RoundModifiers
         public Imposter.Config Imposter { get; set; } = new Imposter.Config();
         [Description("=====MysteryBox=====")]
         public MysteryBox.Config MysteryBox { get; set; } = new MysteryBox.Config();
-        [Description("=====GunGame=====")]
-        public GunGame.Config GunGame { get; set; } = new GunGame.Config();
+        /*[Description("=====GunGame=====")]
+        public GunGame.Config GunGame { get; set; } = new GunGame.Config();*/
         [Description("=====PayToWin=====")]
         public PayToWin.Config PayToWin { get; set; } = new PayToWin.Config();
         [Description("=====RandomSpawnSize=====")]
@@ -224,8 +224,8 @@ namespace RoundModifiers
         [Description("=====WeaponStats=====")]
         public WeaponStats2.Config WeaponStats { get; set; } = new WeaponStats2.Config();
         
-        [Description("=====ZombieSurvival=====")]
-        public ZombieSurvival.Config ZombieSurvival { get; set; } = new ZombieSurvival.Config();
+        /*[Description("=====ZombieSurvival=====")]
+        public ZombieSurvival.Config ZombieSurvival { get; set; } = new ZombieSurvival.Config();*/
 
     }
 }

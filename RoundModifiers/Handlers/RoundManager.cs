@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.API.Features.Pools;
 using Exiled.Events.EventArgs.Player;
 using MEC;
 using RoundModifiers.API;

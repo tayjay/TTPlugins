@@ -17,7 +17,7 @@ using TTCore.HUDs;
 using UnityEngine;
 using Firearm = Exiled.API.Features.Items.Firearm;
 using Random = UnityEngine.Random;
-
+/*
 namespace TTAddons.Handlers
 {
     public class WeaponStats
@@ -41,52 +41,52 @@ namespace TTAddons.Handlers
 
         public Dictionary<VariableType, Modification> Modifications = new Dictionary<VariableType, Modification>();
 
-        private Modification AdsInaccuracyMod { 
+        private Modification AdsInaccuracyMod {
             get => Modifications[VariableType.AdsInaccuracy]; set => Modifications[VariableType.AdsInaccuracy] = value;
         }
-        private Modification BaseDamageMod { 
+        private Modification BaseDamageMod {
             get => Modifications[VariableType.BaseDamage]; set => Modifications[VariableType.BaseDamage] = value;
         }
-        private Modification BaseDrawTimeMod { 
+        private Modification BaseDrawTimeMod {
             get => Modifications[VariableType.BaseDrawTime]; set => Modifications[VariableType.BaseDrawTime] = value;
         }
-        private Modification BasePenetrationPercentMod { 
+        private Modification BasePenetrationPercentMod {
             get => Modifications[VariableType.BasePenetrationPercent]; set => Modifications[VariableType.BasePenetrationPercent] = value;
         }
-        private Modification BulletInaccuracyMod { 
+        private Modification BulletInaccuracyMod {
             get => Modifications[VariableType.BulletInaccuracy]; set => Modifications[VariableType.BulletInaccuracy] = value;
         }
-        private Modification DamageFalloffMod { 
+        private Modification DamageFalloffMod {
             get => Modifications[VariableType.DamageFalloff]; set => Modifications[VariableType.DamageFalloff] = value;
         }
-        private Modification FullDamageDistanceMod { 
+        private Modification FullDamageDistanceMod {
             get => Modifications[VariableType.FullDamageDistance]; set => Modifications[VariableType.FullDamageDistance] = value;
         }
-        private Modification HipInaccuracyMod { 
+        private Modification HipInaccuracyMod {
             get => Modifications[VariableType.HipInaccuracy]; set => Modifications[VariableType.HipInaccuracy] = value;
         }
-        /*private Modification RateOfFireMod { 
+        /*private Modification RateOfFireMod {
             get => Modifications[VariableType.RateOfFire]; set => Modifications[VariableType.RateOfFire] = value;
         }
-        private Modification AmmoCapacityMod { 
+        private Modification AmmoCapacityMod {
             get => Modifications[VariableType.AmmoCapacity]; set => Modifications[VariableType.AmmoCapacity] = value;
-        }*/
-        
+        }#1#
+
         private bool _isChanged = false;
-        
+
         public ushort Serial { get; private set; }
 
         public Firearm Firearm => (Firearm)Item.Get(Serial);
-        
+
         public string Prefix { get; private set; }
         public byte Rarity { get; private set; }
-        
+
         public WeaponStats(Firearm firearm)
         {
             Serial = firearm.Serial;
             Initialize(firearm);
         }
-        
+
         public void Initialize(Firearm item)
         {
             Modifications[VariableType.AdsInaccuracy] = new Modification(ModType.Multiplicative, VariableType.AdsInaccuracy, 1f);
@@ -100,7 +100,7 @@ namespace TTAddons.Handlers
             //Modifications[VariableType.RateOfFire] = new Modification(ModType.Multiplicative, VariableType.RateOfFire, 1f);
             //Modifications[VariableType.AmmoCapacity] = new Modification(ModType.Multiplicative, VariableType.AmmoCapacity, 1f);
 
-            
+
             int random = Random.Range(0, 6);
             switch (random)
             {
@@ -131,14 +131,14 @@ namespace TTAddons.Handlers
             int rarity = Random.Range(0, 5);
             Prefix = "Harmful";
             Rarity = (byte)(rarity+1);
-            
+
             float rangeMin = 1+ 0.1f*rarity;
             float rangeMax = 1+ 0.5f*rarity;
-            
+
             Modifications[VariableType.BaseDamage] = new Modification(ModType.Multiplicative, VariableType.BaseDamage, rangeMax);
             Modifications[VariableType.BulletInaccuracy] = new Modification(ModType.Multiplicative, VariableType.BulletInaccuracy, 1+(0.2f*rarity));
             //Modifications[VariableType.AmmoCapacity] = new Modification(ModType.Multiplicative, VariableType.AmmoCapacity, rangeMin);
-            
+
         }
 
         public void SetupSpeedy()
@@ -146,18 +146,18 @@ namespace TTAddons.Handlers
             int rarity = Random.Range(0, 5);
             Prefix = "Speedy";
             Rarity = (byte)(rarity+1);
-            
+
             Modifications[VariableType.BaseDrawTime] = new Modification(ModType.Multiplicative, VariableType.BaseDrawTime, 1-(0.2f*rarity));
             //Modifications[VariableType.RateOfFire] = new Modification(ModType.Multiplicative, VariableType.RateOfFire, 1+(0.1f*rarity));
             Modifications[VariableType.BaseDamage] = new Modification(ModType.Additive, VariableType.BaseDamage, -2-(1*rarity));
         }
-        
+
         public void SetupBalanced()
         {
             int rarity = Random.Range(0, 5);
             Prefix = "Balanced";
             Rarity = (byte)(rarity+1);
-            
+
             Modifications[VariableType.AdsInaccuracy] = new Modification(ModType.Multiplicative, VariableType.AdsInaccuracy, 1-(0.05f*rarity));
             Modifications[VariableType.BaseDamage] = new Modification(ModType.Multiplicative, VariableType.BaseDamage, 1f+(0.05f*rarity));
             Modifications[VariableType.BaseDrawTime] = new Modification(ModType.Multiplicative, VariableType.BaseDrawTime, 1f-(0.05f*rarity));
@@ -168,15 +168,15 @@ namespace TTAddons.Handlers
             Modifications[VariableType.HipInaccuracy] = new Modification(ModType.Multiplicative, VariableType.HipInaccuracy, 1f-(0.05f*rarity));
             //Modifications[VariableType.RateOfFire] = new Modification(ModType.Multiplicative, VariableType.RateOfFire, 1f+(0.05f*rarity));
             //Modifications[VariableType.AmmoCapacity] = new Modification(ModType.Multiplicative, VariableType.AmmoCapacity, 1f+(0.05f*rarity));
-            
+
         }
-        
+
         public void SetupAccurate()
         {
             int rarity = Random.Range(0, 5);
             Prefix = "Accurate";
             Rarity = (byte)(rarity+1);
-            
+
             Modifications[VariableType.BulletInaccuracy] = new Modification(ModType.Multiplicative, VariableType.BulletInaccuracy, 0.8f-(0.2f*rarity));
             Modifications[VariableType.AdsInaccuracy] = new Modification(ModType.Multiplicative, VariableType.AdsInaccuracy, 0.8f-(0.2f*rarity));
             Modifications[VariableType.HipInaccuracy] = new Modification(ModType.Multiplicative, VariableType.HipInaccuracy, 0.8f-(0.2f*rarity));
@@ -185,13 +185,13 @@ namespace TTAddons.Handlers
             Modifications[VariableType.BaseDamage] = new Modification(ModType.Multiplicative, VariableType.BaseDamage, 1f+(0.2f*rarity));
             Modifications[VariableType.BaseDrawTime] = new Modification(ModType.Multiplicative, VariableType.BaseDrawTime, 1.2f+(0.5f*rarity));
         }
-        
+
         public void SetupPowerful()
         {
             int rarity = Random.Range(0, 5);
             Prefix = "Powerful";
             Rarity = (byte)(rarity+1);
-            
+
             Modifications[VariableType.AdsInaccuracy] = new Modification(ModType.Multiplicative, VariableType.AdsInaccuracy, 1-(0.1f*rarity));
             Modifications[VariableType.BaseDamage] = new Modification(ModType.Multiplicative, VariableType.BaseDamage, 1f+(0.1f*rarity));
             Modifications[VariableType.BaseDrawTime] = new Modification(ModType.Multiplicative, VariableType.BaseDrawTime, 1f-(0.1f*rarity));
@@ -203,7 +203,7 @@ namespace TTAddons.Handlers
             //Modifications[VariableType.RateOfFire] = new Modification(ModType.Multiplicative, VariableType.RateOfFire, 1f+(0.1f*rarity));
             //Modifications[VariableType.AmmoCapacity] = new Modification(ModType.Multiplicative, VariableType.AmmoCapacity, 1f+(0.1f*rarity));
         }
-        
+
         public void SetupRandom()
         {
             Prefix = "Random ";
@@ -223,18 +223,18 @@ namespace TTAddons.Handlers
             if(_isChanged) return;
             //Firearm.FireRate = (RateOfFireMod.Mod == ModType.Set) ? RateOfFireMod.Value : (RateOfFireMod.Mod == ModType.Additive) ? Firearm.FireRate + RateOfFireMod.Value : Firearm.FireRate * RateOfFireMod.Value;
             //Firearm.MaxAmmo = (byte)((AmmoCapacityMod.Mod == ModType.Set) ? AmmoCapacityMod.Value : (AmmoCapacityMod.Mod == ModType.Additive) ? Firearm.FireRate + AmmoCapacityMod.Value : Firearm.FireRate * AmmoCapacityMod.Value);
-            
+
             _isChanged = true;
         }
 
-        
+
         //====================================================================================================================//
 
         public static void OnRoundStart()
         {
             _tickHandle = Timing.RunCoroutine(Tick());
         }
-        
+
         public static void OnRoundRestart()
         {
             WeaponStatsDict.Clear();
@@ -254,17 +254,17 @@ namespace TTAddons.Handlers
                         if(!(Item.Get(pickup.Serial) is Firearm firearm)) continue;
                         WeaponStats stats = GetWeaponStats(firearm);
                         if(stats==null) continue;
-                        
+
                         string output = $"<size=70%>{stats.Prefix} {firearm.FirearmType} </size><size=90%>";
                         for(int i=0;i<5;i++)
                         {
-                            if(i<stats.Rarity) 
+                            if(i<stats.Rarity)
                                 output += "<color=#e6c300>*</color>";
                             else
                                 output += "<color=#616161>*</color>";
                         }
                         output+=$"</size>";
-                        
+
                         player.ShowHUDHint(output,2f);
                     }
 
@@ -299,7 +299,7 @@ namespace TTAddons.Handlers
             string stats = $"<size=50%>{weaponStats.Prefix} {ev.Firearm.FirearmType} </size><size=70%>";
                            for(int i=0;i<5;i++)
                            {
-                               if(i<weaponStats.Rarity) 
+                               if(i<weaponStats.Rarity)
                                    stats += "<color=#e6c300>*</color>";
                                else
                                    stats += "<color=#616161>*</color>";
@@ -313,7 +313,7 @@ namespace TTAddons.Handlers
             ev.Player.ShowHUDHint(stats, 10f);
         }
 
-        
+
 
         public static void ChangeWeaponStats(AccessFirearmBaseStatsEventArgs ev)
         {
@@ -344,9 +344,9 @@ namespace TTAddons.Handlers
             float HipInaccuracy = stats.HipInaccuracyMod.Mod == ModType.Set ? stats.HipInaccuracyMod.Value :
                 stats.HipInaccuracyMod.Mod == ModType.Additive ? ev.BaseStats.HipInaccuracy + stats.HipInaccuracyMod.Value :
                 ev.BaseStats.HipInaccuracy * stats.HipInaccuracyMod.Value;
-            
-            
-            
+
+
+
             //WeaponStats stats = GetWeaponStats(ev.Firearm);
 
             ev.BaseStats = new FirearmBaseStats()
@@ -360,7 +360,7 @@ namespace TTAddons.Handlers
                 FullDamageDistance = FullDamageDistance,
                 HipInaccuracy = HipInaccuracy,
             };
-            
+
         }
 
 
@@ -399,7 +399,7 @@ namespace TTAddons.Handlers
             //Exiled.Events.Handlers.Scp914.UpgradingPickup += UpgradeItemPickup;
             //Exiled.Events.Handlers.Scp914.UpgradingInventoryItem += UpgradeItemInventory;
         }
-        
+
         public static void Unregister()
         {
             TTCore.Events.Handlers.Custom.InspectFirearm -= OnInspectFirearm;
@@ -410,21 +410,21 @@ namespace TTAddons.Handlers
             Exiled.Events.Handlers.Map.PickupAdded -= OnSpawnPickup;
             //Exiled.Events.Handlers.Scp914.UpgradingPickup -= UpgradeItemPickup;
             //Exiled.Events.Handlers.Scp914.UpgradingInventoryItem -= UpgradeItemInventory;
-            
+
             WeaponStatsDict.Clear();
             Timing.KillCoroutines(_tickHandle);
         }
 
-        
-        
+
+
         //====================================================================================================================//
-        
+
         public struct Modification
         {
             public ModType Mod { get; set; }
             public VariableType Variable { get; set; }
             public float Value { get; set; }
-            
+
             public Modification(ModType type, VariableType variable, float value)
             {
                 Mod = type;
@@ -439,7 +439,7 @@ namespace TTAddons.Handlers
             Multiplicative,
             Set
         }
-        
+
         public enum VariableType
         {
             AdsInaccuracy,
@@ -454,4 +454,4 @@ namespace TTAddons.Handlers
             //AmmoCapacity
         }
     }
-}
+}*/

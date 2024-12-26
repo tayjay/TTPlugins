@@ -10,7 +10,7 @@ using Utf8Json;
 
 namespace TTAdmin.Admin;
 
-public class WsConsoleOutput : IOutput
+/*public class WsConsoleOutput : IOutput
 {
     public static string[] BlacklistedStrings = new[]
     {
@@ -80,4 +80,4 @@ public class WsConsoleOutput : IOutput
     {
         public string Text { get; set; }
     }
-}
+}*/

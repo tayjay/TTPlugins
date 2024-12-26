@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace TTCore.Npcs
 {
-    public class NpcManager
+    /*public class NpcManager
     {
         
         public List<Npc> Npcs;
@@ -25,7 +25,7 @@ namespace TTCore.Npcs
             newNpc.RemoteAdminPermissions = PlayerPermissions.AFKImmunity;
             newNpc.RankName = "NPC";
             newNpc.RankColor = "white";
-            if(roundIgnored) Round.IgnoredPlayers.Add(newNpc.ReferenceHub);
+            if(roundIgnored) Round.IgnoredPlayers.Add(newNpc);
             
             Timing.CallDelayed(1f, () =>
             {
@@ -45,7 +45,7 @@ namespace TTCore.Npcs
             /*if (npc.Role is FpcRole fpcRole)
             {
                 fpcRole.FirstPersonController.FpcModule.Motor.UpdatePosition();
-            }*/
+            }#1#
 
             Npcs.Add(npc);
             return true;
@@ -53,5 +53,5 @@ namespace TTCore.Npcs
         
         
         
-    }
+    }*/
 }

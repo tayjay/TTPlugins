@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace TTCore.Utilities;
 
-public class FileConsoleOutput : IOutput, IRegistered 
+public class FileConsoleOutput// : IOutput, IRegistered 
 {
     public string CurrentLogFile { get; private set; }
     
@@ -26,7 +26,7 @@ public class FileConsoleOutput : IOutput, IRegistered
         {
             yield return Timing.WaitForOneFrame;
         }
-        ServerConsole.ConsoleOutputs.Add(this);
+        //ServerConsole.ConsoleOutputs.Add(this);
     }
 
     public void StartNewLog()
@@ -95,7 +95,7 @@ public class FileConsoleOutput : IOutput, IRegistered
     {
         Exiled.Events.Handlers.Server.RestartingRound -= OnRoundRestart;
         Timing.KillCoroutines(_coroutineHandle);
-        if(ServerConsole.ConsoleOutputs!=null)
-            ServerConsole.ConsoleOutputs.Remove(this);
+        /*if(ServerConsole.ConsoleOutputs!=null)
+            ServerConsole.ConsoleOutputs.Remove(this);*/
     }
 }

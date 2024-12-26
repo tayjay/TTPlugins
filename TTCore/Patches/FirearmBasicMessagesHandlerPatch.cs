@@ -8,7 +8,7 @@ using TTCore.Events.Handlers;
 
 namespace TTCore.Patches;
 
-[HarmonyPatch(typeof(FirearmBasicMessagesHandler),"ServerRequestReceived")]
+/*[HarmonyPatch(typeof(FirearmBasicMessagesHandler),"ServerRequestReceived")]
 public class FirearmBasicMessagesHandlerPatch
 {
     [HarmonyPostfix]
@@ -25,4 +25,4 @@ public class FirearmBasicMessagesHandlerPatch
             }
         }
     }
-}
+}*/

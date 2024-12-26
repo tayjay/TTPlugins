@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Exiled.API.Features;
-using Exiled.CustomRoles.API;
 using MapGeneration;
 using PlayerRoles.RoleAssign;
 using RelativePositioning;
@@ -50,10 +49,10 @@ public class PlayerData
         SteamId = player.UserId;
         Role = player.Role.Type.ToString();
         CustomRoles = new List<string>();
-        foreach (var customRole in player.GetCustomRoles())
+        /*foreach (var customRole in player.CustomRoles) todo
         {
             CustomRoles.Add(customRole.Name);
-        }
+        }*/
         Position = player.Position;
         Rotation = player.Rotation;
         RelativePosition = player.RelativePosition;

@@ -2,6 +2,7 @@
 using Exiled.Events.EventArgs.Map;
 using Exiled.Events.EventArgs.Player;
 using RoundModifiers.API;
+using TTCore.Events.EventArgs;
 using UnityEngine;
 
 namespace RoundModifiers.Modifiers;
@@ -19,15 +20,28 @@ public class BigWorld : Modifier
         }
     }
     
+    /*public void OnAccessBaseStats(AccessFirearmBaseStatsEventArgs ev)
+    {
+        float hipInaccuracy = ev.BaseStats.HipInaccuracy;
+        float adsInaccuracy = ev.BaseStats.AdsInaccuracy;
+        ev.BaseStats = ev.BaseStats with
+        {
+            HipInaccuracy = hipInaccuracy * BigWorldConfig.Scale,
+            AdsInaccuracy = adsInaccuracy * BigWorldConfig.Scale
+        };
+    }*/
+    
     
     protected override void RegisterModifier()
     {
         Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+        //TTCore.Events.Handlers.Custom.AccessFirearmBaseStats += OnAccessBaseStats;
     }
 
     protected override void UnregisterModifier()
     {
         Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+        //TTCore.Events.Handlers.Custom.AccessFirearmBaseStats -= OnAccessBaseStats;
     }
 
     public override ModInfo ModInfo { get; } = new ModInfo()

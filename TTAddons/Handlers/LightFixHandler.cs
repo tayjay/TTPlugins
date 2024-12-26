@@ -12,7 +12,7 @@ namespace TTAddons.Handlers
         public void OnWaitingForPlayers()
         {
             Room room = Room.Get(RoomType.LczToilets);
-            foreach (Component c in room.gameObject.GetComponentsInChildren<Component>())
+            foreach (Component c in room.GameObject.GetComponentsInChildren<Component>())
             {
                 if(c==null || c.name == null) continue;
                 Log.Info(c.gameObject.name);

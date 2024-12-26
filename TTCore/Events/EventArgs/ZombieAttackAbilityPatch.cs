@@ -5,7 +5,7 @@ using TTCore.Events.Handlers;
 
 namespace TTCore.Events.EventArgs;
 
-[HarmonyPatch(typeof(ZombieAttackAbility), "DamagePlayers")]
+/*[HarmonyPatch(typeof(ZombieAttackAbility), "DamagePlayers")]
 public class ZombieAttackAbilityPatch
 {
     public static bool Prefix(ZombieAttackAbility __instance)
@@ -15,4 +15,4 @@ public class ZombieAttackAbilityPatch
         Custom.OnZombieAttack(ev);
         return ev.IsAllowed;
     }
-}
+}*/

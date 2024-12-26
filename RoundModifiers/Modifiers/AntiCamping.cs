@@ -17,7 +17,7 @@ using Scp939Role = Exiled.API.Features.Roles.Scp939Role;
 
 namespace RoundModifiers.Modifiers;
 
-public class AntiCamping : Modifier
+/*public class AntiCamping : Modifier
 {
     CoroutineHandle _scp939Tick, _tantrumTick;
     public void OnRoundStart()
@@ -157,4 +157,4 @@ public class AntiCamping : Modifier
     
     //Scp106
     //Can already walk through doors
-}
+}*/

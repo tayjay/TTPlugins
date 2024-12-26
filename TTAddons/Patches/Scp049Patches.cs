@@ -19,10 +19,10 @@ namespace TTAddons.Patches
         public static float HumanCorpseDuration => TTAddons.Instance.Config.Scp049HumanCorpseDuration;
         public static float ResurrectTargetReward => TTAddons.Instance.Config.Scp049ResurrectTargetReward;
         
-        [HarmonyPatch(typeof(Scp049ResurrectAbility), "CheckMaxResurrections", MethodType.Normal)]
+        //[HarmonyPatch(typeof(Scp049ResurrectAbility), "CheckMaxResurrections", MethodType.Normal)]
         public class Scp049ResurrectAbility_CheckMaxResurrections
         {
-            [HarmonyPrefix]
+            //[HarmonyPrefix]
             public static bool Prefix(Scp049ResurrectAbility __instance, ref ReferenceHub owner, ref Scp049ResurrectAbility.ResurrectError __result)
             {
                 if(!ShouldReplaceScp049ResurrectAbility) return true;
@@ -38,10 +38,10 @@ namespace TTAddons.Patches
             }
         }
         
-        [HarmonyPatch(typeof(Scp049ResurrectAbility), "CheckBeginConditions", MethodType.Normal)]
+        //[HarmonyPatch(typeof(Scp049ResurrectAbility), "CheckBeginConditions", MethodType.Normal)]
         public class Scp049ResurrectAbility_CheckBeginConditions
         {
-            [HarmonyPrefix]
+            //[HarmonyPrefix]
             public static bool Prefix(Scp049ResurrectAbility __instance, ref BasicRagdoll ragdoll, ref Scp049ResurrectAbility.ResurrectError __result)
             {
                 if(!ShouldReplaceScp049ResurrectAbility) return true;
@@ -92,10 +92,10 @@ namespace TTAddons.Patches
             }
         }
         
-        [HarmonyPatch(typeof(Scp049ResurrectAbility), "ServerComplete", MethodType.Normal)]
+        //[HarmonyPatch(typeof(Scp049ResurrectAbility), "ServerComplete", MethodType.Normal)]
         public class Scp049ResurrectAbility_ServerComplete
         {
-            [HarmonyPrefix]
+            //[HarmonyPrefix]
             public static bool Prefix(Scp049ResurrectAbility __instance)
             {
                 if(!ShouldReplaceScp049ResurrectAbility) return true;

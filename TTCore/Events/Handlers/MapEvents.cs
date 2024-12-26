@@ -15,12 +15,12 @@ namespace TTCore.Events.Handlers
 
         public void Register()
         {
-            SeedSynchronizer.OnMapGenerated += OnMapGenerated;
+            //SeedSynchronizer.OnMapGenerated += OnMapGenerated;
         }
 
         public void Unregister()
         {
-            SeedSynchronizer.OnMapGenerated -= OnMapGenerated;
+            //SeedSynchronizer.OnMapGenerated -= OnMapGenerated;
         }
     }
 }

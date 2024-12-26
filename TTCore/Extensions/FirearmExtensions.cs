@@ -6,7 +6,7 @@ namespace TTCore.Extensions
 {
     public static class FirearmExtensions
     {
-        public static bool Shoot(this Firearm firearm, Player shooter, Player target)
+        /*public static bool Shoot(this Firearm firearm, Player shooter, Player target)
         {
             ShotMessage msg = new ShotMessage();
             msg.ServerCreate(shooter, target);
@@ -18,7 +18,7 @@ namespace TTCore.Extensions
             firearm.Base.ActionModule.DoClientsideAction(true);
             return true;
             /*firearm.Base.ActionModule.ServerAuthorizeShot();
-            */
+            #1#
         }
 
         public static void ServerCreate(this ShotMessage msg, Player shooter, Player target)
@@ -29,6 +29,6 @@ namespace TTCore.Extensions
             msg.ShooterWeaponSerial = shooter.CurrentItem.Base.ItemSerial;
             msg.ShooterPosition = shooter.RelativePosition;
             msg.ShooterCameraRotation = shooter.Rotation;
-        }
+        }*/
     }
 }

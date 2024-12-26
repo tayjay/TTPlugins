@@ -58,7 +58,7 @@ namespace RoundModifiers.Modifiers.LevelUp.Boosts
                     Firearm newFirearm = Item.Create(newWeapon) as Firearm;
                     player.RemoveItem(item);
                     player.AddItem(newFirearm);
-                    player.AddAmmo(GetAmmoType(newFirearm), newFirearm.MaxAmmo);
+                    player.AddAmmo(GetAmmoType(newFirearm), (ushort)newFirearm.MaxMagazineAmmo);
                     toRemove.Add(netId);
                     processed = true;
                     break;

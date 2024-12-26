@@ -43,43 +43,43 @@
           <HintPath>..\..\ReplayPlugin\bin\Debug\0Harmony.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Assembly-CSharp-Publicized.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass">
           <HintPath>..\..\REFERENCE\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
         <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\CommandSystem.Core.dll</HintPath>
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\CommandSystem.Core.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.API, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.API.dll</HintPath>
+        <Reference Include="Exiled.API, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.API.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.CreditTags, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.CreditTags.dll</HintPath>
+        <Reference Include="Exiled.CreditTags, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.CreditTags.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.CustomItems, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.CustomItems.dll</HintPath>
+        <Reference Include="Exiled.CustomItems, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.CustomItems.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.CustomRoles, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.CustomRoles.dll</HintPath>
+        <Reference Include="Exiled.CustomRoles, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.CustomRoles.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.Events, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.Events.dll</HintPath>
+        <Reference Include="Exiled.Events, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.Events.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.Loader, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.Loader.dll</HintPath>
+        <Reference Include="Exiled.Loader, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.Loader.dll</HintPath>
         </Reference>
-        <Reference Include="Exiled.Permissions, Version=8.11.0.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\Exiled.Permissions.dll</HintPath>
+        <Reference Include="Exiled.Permissions, Version=9.1.0.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\Exiled.Permissions.dll</HintPath>
         </Reference>
         <Reference Include="Mirror">
           <HintPath>..\..\REFERENCE\Mirror.dll</HintPath>
         </Reference>
-        <Reference Include="NorthwoodLib, Version=1.3.0.0, Culture=neutral, processorArchitecture=MSIL">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\NorthwoodLib.dll</HintPath>
+        <Reference Include="NorthwoodLib, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\NorthwoodLib.dll</HintPath>
         </Reference>
-        <Reference Include="PluginAPI, Version=13.1.3.0, Culture=neutral, processorArchitecture=Amd64">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\PluginAPI.dll</HintPath>
+        <Reference Include="PluginAPI, Version=13.1.5.0, Culture=neutral, processorArchitecture=Amd64">
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\PluginAPI.dll</HintPath>
         </Reference>
         <Reference Include="Pooling">
           <HintPath>..\..\REFERENCE\Pooling.dll</HintPath>
@@ -101,7 +101,7 @@
           <HintPath>..\..\REFERENCE\UnityEngine.PhysicsModule.dll</HintPath>
         </Reference>
         <Reference Include="YamlDotNet, Version=11.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-          <HintPath>..\packages\EXILEDOFFICIAL.8.11.0\lib\net48\YamlDotNet.dll</HintPath>
+          <HintPath>..\packages\ExMod.Exiled.9.1.0\lib\net48\YamlDotNet.dll</HintPath>
         </Reference>
     </ItemGroup>
     <ItemGroup>
@@ -127,6 +127,7 @@
         <Compile Include="Handlers\RoundManager.cs" />
         <Compile Include="Modifiers\Alive.cs" />
         <Compile Include="Modifiers\AntiCamping.cs" />
+        <Compile Include="Modifiers\BehindYou.cs" />
         <Compile Include="Modifiers\BigWorld.cs" />
         <Compile Include="Modifiers\Blackout.cs" />
         <Compile Include="Modifiers\BodyBlock.cs" />
@@ -168,6 +169,7 @@
         <Compile Include="Modifiers\PayToWin.cs" />
         <Compile Include="Modifiers\Peanuts.cs" />
         <Compile Include="Modifiers\Pogo.cs" />
+        <Compile Include="Modifiers\RandomScp914.cs" />
         <Compile Include="Modifiers\RogueAI\Abilities\BallsAbility.cs" />
         <Compile Include="Modifiers\Scp1507\Flamingos.cs" />
         <Compile Include="Modifiers\Scp1507\Scp1507Role.cs" />
@@ -283,7 +285,6 @@
         <Compile Include="Modifiers\WeaponStats\TargetShotEffectStat.cs" />
         <Compile Include="Modifiers\WeaponStats\VampireStat.cs" />
         <Compile Include="Modifiers\WeaponStats\WeaponStats2.cs" />
-        <Compile Include="Modifiers\ZombieSurvival.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="RoundModifiers.cs" />
     </ItemGroup>

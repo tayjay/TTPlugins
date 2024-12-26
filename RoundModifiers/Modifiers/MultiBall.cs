@@ -42,7 +42,8 @@ namespace RoundModifiers.Modifiers
             };
             Log.Debug("Replacing SCP018 lockers");
             List<Transform> lockerTransforms = new List<Transform>();
-            foreach (Locker locker in Map.Lockers)
+            //todo: fix this
+            /*foreach (Locker locker in Map.Lockers)
             {
                 if (locker.GetType() == typeof(PedestalScpLocker))
                 {
@@ -51,7 +52,7 @@ namespace RoundModifiers.Modifiers
                     NetworkServer.UnSpawn(locker.gameObject);
                 }
                 Log.Debug("Found other locker");
-            }
+            }*/
             foreach (Transform lockerTransform in lockerTransforms)
             {
                 Log.Debug("Placing SCP018 pedestal");
@@ -131,7 +132,7 @@ namespace RoundModifiers.Modifiers
 
         public void OnOpenLocker(InteractingLockerEventArgs ev)
         {
-            if (ev.Locker is not PedestalScpLocker) return;
+            /*if (ev.Locker is not PedestalScpLocker) return;
             Timing.CallDelayed(0.5f, () =>
             {
                 double chance = Math.Min((Round.ElapsedTime.TotalMinutes * 0.03), 0.25f);
@@ -146,7 +147,7 @@ namespace RoundModifiers.Modifiers
                         Pickup.Get(oldItem).UnSpawn();
                     }
                 }
-            });
+            });*/
         }
 
         protected override void RegisterModifier()

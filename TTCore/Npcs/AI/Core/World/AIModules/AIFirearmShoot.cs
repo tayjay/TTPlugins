@@ -7,7 +7,7 @@ using Utils.Networking;
 
 namespace TTCore.Npcs.AI.Core.World.AIModules;
 
-public class AIFirearmShoot : AIModuleBase
+/*public class AIFirearmShoot : AIModuleBase
     {
         public override float Duration => 4f;
 
@@ -172,4 +172,4 @@ public class AIFirearmShoot : AIModuleBase
             Standby,
             Shooting
         }
-    }
+    }*/

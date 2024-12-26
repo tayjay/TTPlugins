@@ -23,13 +23,16 @@ public static class AIPlayerManager
             /*GameObject playerBody = Object.Instantiate(NetworkManager.singleton.playerPrefab);
             var fakeClient = new FakeClient(id);
             NetworkServer.AddPlayerForConnection(fakeClient, playerBody);*/
-            Npc npc = Npc.Spawn("AI-" + id, role, id);
+            //todo: new Dummy spawn logic
+            /*Npc npc = Npc.Spawn("AI-" + id, role, id);
             ReferenceHub hub = npc.GameObject.GetComponent<ReferenceHub>();
             AIPlayer aiCont = npc.GameObject.AddComponent<AIPlayer>();
             AIPlayerProfile prof = new(npc.Connection, id, hub, aiCont, profile);
             Registered.Add(prof);
             profile.Name = "AI-" + id;
             return prof;
+            */
+            return null;
         }
 
         public static AIPlayerProfile GetAIPlayer(this int aiId)

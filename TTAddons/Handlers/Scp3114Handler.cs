@@ -22,7 +22,8 @@ namespace TTAddons.Handlers
             double spawnChance = TTAddons.Instance.Config.Scp3114Chance;
             if (Random.Range(0f,1f) < spawnChance)
             {
-                SpawnScp3114(Player.List.Where(p=>p.Role.Team==(TTAddons.Instance.Config.Scp3114ReplaceScp?Team.SCPs:Team.ClassD)).GetRandomValue());
+                SpawnScp3114(Player.List.Where(p =>
+                    p.Role.Team == (TTAddons.Instance.Config.Scp3114ReplaceScp ? Team.SCPs : Team.ClassD)).GetRandomValue());
             }
         }
         
@@ -38,7 +39,7 @@ namespace TTAddons.Handlers
             {
                 Exiled.API.Features.Roles.Scp3114Role role = (Exiled.API.Features.Roles.Scp3114Role) player.Role;
                 Ragdoll.TryCreate(disguise,player.Nickname,"Spawned", out Ragdoll ragdoll);
-                role.Ragdoll = ragdoll;
+                role.Ragdoll = ragdoll.Base;
             }
         }
         

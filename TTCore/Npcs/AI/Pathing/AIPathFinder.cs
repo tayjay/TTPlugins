@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 namespace TTCore.Npcs.AI.Pathing;
 
-public class AIPathFinder : MonoBehaviour
+/*public class AIPathFinder : MonoBehaviour
 {
    //private List<ActionPF> actionList = new List<ActionPF>();
    private int currentActionIndex = 0;
@@ -59,10 +59,10 @@ public class AIPathFinder : MonoBehaviour
                if (currentAction.IsDone())
                {
                    currentActionIndex++;
-               }*/
+               }#1#
            }
 
            yield return Timing.WaitForOneFrame;
        }
    }
-}
+}*/

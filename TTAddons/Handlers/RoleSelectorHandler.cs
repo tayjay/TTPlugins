@@ -2,6 +2,7 @@
 using Exiled.API.Enums;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
 using PlayerRoles.RoleAssign;
 using TTCore.API;
 
@@ -34,8 +35,15 @@ namespace TTAddons.Handlers
             _tickets.Clear();
         }
 
+        public void OnChooseTeams(ChoosingStartTeamQueueEventArgs ev)
+        {
+            
+            
+        }
+
         public void OnLeft(LeftEventArgs ev)
         {
+            if(ev.Player==null || ev.Player.UserId == null) return;
             using (ScpTicketsLoader loader = new ScpTicketsLoader())
             {
                 if (_tickets.ContainsKey(ev.Player.UserId))
@@ -46,31 +54,32 @@ namespace TTAddons.Handlers
         }
         
         // Save player points
-        public bool SetSCP(Player player)
+        public bool SetSCP(Player player, out int oldTickets, out int newTickets)
         {
             using (ScpTicketsLoader loader = new ScpTicketsLoader())
             {
                 
                 if (_tickets.TryGetValue(player.UserId, out var ticket))
                 {
-                    if (ticket <= 5)
-                    {
-                        return false;
-                    }
                     loader.ModifyTickets(player.ReferenceHub, ticket);
-                } else if (loader.GetTickets(player.ReferenceHub, 10) <= 4)
+                } 
+                if (loader.GetTickets(player.ReferenceHub, 10) <= 4)
                 {
                     // Was an SCP too recently, every round a player isn't an SCP they get 2 tickets
+                    oldTickets = loader.GetTickets(player.ReferenceHub, 10);
+                    newTickets = loader.GetTickets(player.ReferenceHub, 10);
                     return false;
                 }
                 _tickets[player.UserId] = loader.GetTickets(player.ReferenceHub,10);
                 loader.ModifyTickets(player.ReferenceHub, _tickets[player.UserId] + 10);
                 Log.Info($"Player {player.Nickname} now has {loader.GetTickets(player.ReferenceHub,10)} SCP tickets.");
+                oldTickets = _tickets[player.UserId];
+                newTickets = loader.GetTickets(player.ReferenceHub, 10);
+                return true;
             }
-            return true;
         }
         
-        public void SetHuman(Player player)
+        public void SetHuman(Player player, out int oldTickets, out int newTickets)
         {
             using (ScpTicketsLoader loader = new ScpTicketsLoader())
             {
@@ -81,6 +90,37 @@ namespace TTAddons.Handlers
                 _tickets[player.UserId] = loader.GetTickets(player.ReferenceHub,10);
                 loader.ModifyTickets(player.ReferenceHub, 0);
                 Log.Info($"Player {player.Nickname} now has {loader.GetTickets(player.ReferenceHub,10)} SCP tickets.");
+                oldTickets = _tickets[player.UserId];
+                newTickets = loader.GetTickets(player.ReferenceHub,10);
+            }
+        }
+        
+        public void Reset(Player player, out int newTickets)
+        {
+            using (ScpTicketsLoader loader = new ScpTicketsLoader())
+            {
+                if (_tickets.ContainsKey(player.UserId))
+                {
+                    loader.ModifyTickets(player.ReferenceHub, _tickets[player.UserId]);
+                    _tickets.Remove(player.UserId);
+                }
+                newTickets = loader.GetTickets(player.ReferenceHub,10);
+            }
+        }
+        
+        public bool HasRequestedSCP(Player player)
+        {
+            using (ScpTicketsLoader loader = new ScpTicketsLoader())
+            {
+                return _tickets.ContainsKey(player.UserId) && loader.GetTickets(player.ReferenceHub,10) > 0;
+            }
+        }
+        
+        public bool HasRequestedHuman(Player player)
+        {
+            using (ScpTicketsLoader loader = new ScpTicketsLoader())
+            {
+                return _tickets.ContainsKey(player.UserId) && loader.GetTickets(player.ReferenceHub,10) == 0;
             }
         }
 

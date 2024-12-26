@@ -5,7 +5,7 @@ using RoundModifiers.API;
 
 namespace RoundModifiers.Modifiers
 {
-    public class MicroHIV : Modifier
+    /*public class MicroHIV : Modifier
     {
         public void OnUsingHID(UsingMicroHIDEnergyEventArgs ev)
         {
@@ -62,5 +62,5 @@ namespace RoundModifiers.Modifiers
             [Description("The amount of health drained when Firing the MicroHID. Default is 3.5f.")]
             public float FireDrain { get; set; } = 3.5f;
         }
-    }
+    }*/
 }

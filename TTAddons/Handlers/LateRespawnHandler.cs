@@ -20,7 +20,7 @@ namespace TTAddons.Handlers
         public static float RespawnTime => TTAddons.Instance.Config.LateRespawnTime;
 
         public float LastRespawnTime { get; set; }
-        public SpawnableTeamType TeamType { get; set; }
+        public Faction TeamType { get; set; }
         public List<uint> WasSuicide { get; set; }
         
         
@@ -46,10 +46,10 @@ namespace TTAddons.Handlers
                     {
                         switch (TeamType)
                         {
-                            case SpawnableTeamType.ChaosInsurgency:
+                            case Faction.FoundationEnemy:
                                 ev.Player.RoleManager.ServerSetRole(RoleTypeId.ChaosConscript,RoleChangeReason.Respawn);
                                 break;
-                            case SpawnableTeamType.NineTailedFox:
+                            case Faction.FoundationStaff:
                                 ev.Player.RoleManager.ServerSetRole(RoleTypeId.NtfPrivate,RoleChangeReason.Respawn);
                                 break;
                             default:

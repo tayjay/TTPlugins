@@ -311,11 +311,11 @@ public class WeaponStats2 : Modifier
         AllStats.Add(new ExtraAmmoStat(2));
         AllStats.Add(new ExtraAmmoStat(1.5f));
         AllStats.Add(new ExtraAmmoStat(1.75f));
-        AllStats.Add(new ExtraDamageStat());
-        AllStats.Add(new InstantReloadStat());
+        //AllStats.Add(new ExtraDamageStat());
+        //AllStats.Add(new InstantReloadStat());
         AllStats.Add(new DangerStat());
         AllStats.Add(new VampireStat());
-        AllStats.Add(new PaintBallStat());
+        //AllStats.Add(new PaintBallStat());
         
         WeighStats();
         

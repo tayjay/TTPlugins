@@ -65,7 +65,8 @@ public class Scp507 : Modifier
             ev.Player.DisableAllEffects(EffectCategory.Negative);
             ev.Player.DisableAllEffects(EffectCategory.Harmful);
             ev.Player.Health = ev.Player.MaxHealth;
-            ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 7f);
+            ev.Player.EnableEffect(EffectType.SpawnProtected, 1, 7f); 
+            ev.Player.ShowHUDHint("If your vision goes dark use the ~ command '.507' to reset your role.", 17f);
         }
     }
     

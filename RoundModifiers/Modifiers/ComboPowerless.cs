@@ -17,7 +17,7 @@ public class ComboPowerless : ComboModifier
         AddModifier<NoScp914>();
         AddModifier<Insurrection>();
         AddModifier<NoDecontamination>();
-        AddModifier<MicroHIV>();
+        //AddModifier<MicroHIV>();
         AddModifier<NoKOS>();
     }
 

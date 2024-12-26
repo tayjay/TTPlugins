@@ -16,9 +16,9 @@ using Room = Exiled.API.Features.Room;
 
 namespace RoundModifiers.Modifiers
 {
-    public class Alive : Modifier
+    /*public class Alive : Modifier
     {
-        public static readonly LayerMask HitregMask = (LayerMask) LayerMask.GetMask("Default", "Glass"/*"Hitbox", "CCTV","Door" */);
+        public static readonly LayerMask HitregMask = (LayerMask) LayerMask.GetMask("Default", "Glass"/*"Hitbox", "CCTV","Door" #1#);
         
         public static Dictionary<RoomType,List<Vector3>> RoomMovePositions = new Dictionary<RoomType, List<Vector3>>();
         public List<Npc> Npcs = new List<Npc>();
@@ -33,11 +33,11 @@ namespace RoundModifiers.Modifiers
                 new Vector3(3.11f, 1.28f, 0.79f),
                 new Vector3(0.83f, 0.91f, 0.78f),
                 new Vector3(-5.77f, 1.40f, -3.42f),
-                new Vector3(1.62f, 1.05f, -3.15f),#1#
+                new Vector3(1.62f, 1.05f, -3.15f),#2#
                 new Vector3(1.03f, 0.00f, 2.27f),
                 new Vector3(-1.49f, 0.00f, 2.46f),
                 new Vector3(-1.26f, 0.00f, 4.83f),
-            };*/
+            };#1#
             RoomMovePositions[RoomType.LczClassDSpawn] = new List<Vector3>()
             {
                 new Vector3(3.51f, 0.00f, 0.00f),
@@ -155,7 +155,7 @@ namespace RoundModifiers.Modifiers
             Vector3 LczPlantsGlobalPos = TransformUtils.CalculateGlobalPosition(pos, Room.Get(RoomType.LczPlants).Position, Room.Get(RoomType.LczPlants).Rotation);
             TTCore.TTCore.Instance.NpcManager.SpawnNpc("Dr. Plantera", RoleTypeId.Scientist,
                 LczPlantsGlobalPos+Vector3.one,out Npc npc5, isGodMode:false);
-            Npcs.Add(npc5);*/
+            Npcs.Add(npc5);#1#
             
             pos = RoomMovePositions[RoomType.Hcz049][0];
             Vector3 Hcz049GlobalPos = TransformUtils.CalculateGlobalPosition(pos, Room.Get(RoomType.Hcz049).Position, Room.Get(RoomType.Hcz049).Rotation);
@@ -292,5 +292,5 @@ namespace RoundModifiers.Modifiers
             MustPreload = true,
             Impact = ImpactLevel.MajorGameplay
         };
-    }
+    }*/
 }

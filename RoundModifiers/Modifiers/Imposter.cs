@@ -89,7 +89,7 @@ namespace RoundModifiers.Modifiers
         {
             foreach(ImposterInfo info in Imposters.Values)
             {
-                if (ev.NextKnownTeam == SpawnableTeamType.NineTailedFox)
+                if (ev.NextKnownTeam == Faction.FoundationStaff)
                 {
                     Timing.CallDelayed(3f, () =>
                     {
@@ -97,7 +97,7 @@ namespace RoundModifiers.Modifiers
                         info.Hide();
                     });
                 }
-                else if(ev.NextKnownTeam == SpawnableTeamType.ChaosInsurgency)
+                else if(ev.NextKnownTeam == Faction.FoundationEnemy)
                 {
                     Timing.CallDelayed(3f, () =>
                     {

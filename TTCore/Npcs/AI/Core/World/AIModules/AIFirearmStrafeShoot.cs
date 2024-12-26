@@ -1,6 +1,6 @@
 ﻿namespace TTCore.Npcs.AI.Core.World.AIModules;
 
-public class AIFirearmStrafeShoot : AIFirearmShoot
+/*public class AIFirearmStrafeShoot : AIFirearmShoot
 {
     public Strafer Strafer { get; private set; }
 
@@ -27,4 +27,4 @@ public class AIFirearmStrafeShoot : AIFirearmShoot
 
         Strafer.Tick();
     }
-}
+}*/

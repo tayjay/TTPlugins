@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RoundModifiers.Modifiers.WeaponStats;
 
-public class PortalStat : Stat, IShooting
+/*public class PortalStat : Stat, IShooting
 {
     public override string Name => "Portal";
     public override int Rarity { get; } = 4;
@@ -51,4 +51,4 @@ public class PortalStat : Stat, IShooting
         }
         
     }
-}
+}*/

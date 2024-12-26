@@ -6,7 +6,7 @@ using TTCore.HUDs;
 
 namespace RoundModifiers.Modifiers.WeaponStats;
 
-public class PaintBallStat : Stat, IShooting, IInitializing
+/*public class PaintBallStat : Stat, IShooting, IInitializing
 {
     
     
@@ -41,4 +41,4 @@ public class PaintBallStat : Stat, IShooting, IInitializing
     {
         firearm.MaxAmmo /= 2;
     }
-}
+}*/

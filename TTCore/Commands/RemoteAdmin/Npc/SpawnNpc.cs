@@ -61,10 +61,11 @@ namespace TTCore.Commands.RemoteAdmin.Npc
                     return false;
                 }
             }
-            if(role.IsAlive())
+            //todo: Replace NPC logic
+            /*if(role.IsAlive())
                 TTCore.Instance.NpcManager.SpawnNpc(name, role, position,out Exiled.API.Features.Npc npc);
             else
-                TTCore.Instance.NpcManager.SpawnNpc(name, role, Vector3.zero, out Exiled.API.Features.Npc npc);
+                TTCore.Instance.NpcManager.SpawnNpc(name, role, Vector3.zero, out Exiled.API.Features.Npc npc);*/
             response = $"Spawned NPC with name '{name}', role '{role}', for player '{sender.LogName}'";
             return true;
         }

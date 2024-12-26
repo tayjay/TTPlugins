@@ -7,7 +7,7 @@ using TTCore.HUDs;
 
 namespace RoundModifiers.Modifiers.WeaponStats;
 
-public class InstantReloadStat : Stat, IReloading
+/*public class InstantReloadStat : Stat, IReloading
 {
     
 
@@ -38,4 +38,4 @@ public class InstantReloadStat : Stat, IReloading
     public override string Name => "Instant Reload";
     public override int Rarity => 4;
     public override string Description => "This weapon reloads instantly";
-}
+}*/

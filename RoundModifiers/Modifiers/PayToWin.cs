@@ -20,9 +20,9 @@ public class PayToWin : Modifier
 
     public void OnInteractLocker(InteractingLockerEventArgs ev)
     {
-        if(ev.Locker is PedestalScpLocker pedestalScpLocker)
+        if(ev.InteractingLocker.Base is PedestalScpLocker pedestalScpLocker)
         {
-            if (ev.Chamber.IsOpen)
+            if (ev.InteractingChamber.IsOpen)
             {
                 ev.IsAllowed = false; // Prevent closing a paid locker
                 return;

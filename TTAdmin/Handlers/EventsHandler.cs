@@ -45,7 +45,7 @@ public class EventsHandler : IRegistered
         BroadcastEvent(data);
     }
 
-    public void OnSpawned(SpawnedEventArgs ev)
+    public void OnSpawned(SpawningEventArgs ev)
     {
         SpawnedEventData data = new SpawnedEventData(ev);
         BroadcastEvent(data);
@@ -210,7 +210,7 @@ public class EventsHandler : IRegistered
     public void Register()
     {
         Exiled.Events.Handlers.Server.RoundStarted += OnRoundStart;
-        Exiled.Events.Handlers.Player.Spawned += OnSpawned;
+        Exiled.Events.Handlers.Player.Spawning += OnSpawned;
         Exiled.Events.Handlers.Player.Kicked += OnKicked;
         Exiled.Events.Handlers.Player.Banned += OnBanned;
         Exiled.Events.Handlers.Player.Joined += OnJoined;
@@ -237,7 +237,7 @@ public class EventsHandler : IRegistered
     public void Unregister()
     {
         Exiled.Events.Handlers.Server.RoundStarted -= OnRoundStart;
-        Exiled.Events.Handlers.Player.Spawned -= OnSpawned;
+        Exiled.Events.Handlers.Player.Spawning -= OnSpawned;
         Exiled.Events.Handlers.Player.Kicked -= OnKicked;
         Exiled.Events.Handlers.Player.Banned -= OnBanned;
         Exiled.Events.Handlers.Player.Joined -= OnJoined;

@@ -131,7 +131,7 @@ namespace TTCore.Extensions
         public static bool CanSee(this Player player, Player target, float range = 100)
         {
             RaycastHit[] hits = new RaycastHit[30];
-            Physics.RaycastNonAlloc(new Ray(player.Position, target.Position - player.Position), hits,range, StandardHitregBase.HitregMask);
+            Physics.RaycastNonAlloc(new Ray(player.Position, target.Position - player.Position), hits,range, HitscanHitregModuleBase.HitregMask);
             float wallDistance = 1000;
             float targetDistance = 1000;
             foreach(RaycastHit hit in hits)

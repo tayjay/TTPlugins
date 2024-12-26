@@ -20,11 +20,11 @@ public class SlipperyStat : Stat, IShooting
         if (chance < 2)
         {
             ev.Player.DropHeldItem(true);
-            ev.Damage *= 10;
+            //ev.Damage *= 10;
         }
         else
         {
-            ev.Damage *= 2f;
+            //ev.Damage *= 2f;
         }
     }
 

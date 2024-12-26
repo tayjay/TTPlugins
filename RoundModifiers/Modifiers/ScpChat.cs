@@ -13,6 +13,7 @@ using TTCore.HUDs;
 using UnityEngine;
 using VoiceChat;
 using VoiceChat.Networking;
+using IVoiceRole = PlayerRoles.Voice.IVoiceRole;
 
 namespace RoundModifiers.Modifiers;
 

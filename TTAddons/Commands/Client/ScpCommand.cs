@@ -28,14 +28,21 @@ namespace TTAddons.Commands.Client
                 return false;
             }
 
-            if (TTAddons.Instance.RoleSelectorHandler.SetSCP(player))
+            if (TTAddons.Instance.RoleSelectorHandler.HasRequestedSCP(player))
             {
-                response = "You have requested to be an SCP next round.";
+                TTAddons.Instance.RoleSelectorHandler.Reset(player,out int newTickets1);
+                response = "You have reset your SCP request.\nYou have "+newTickets1+" tickets.";
+                return true;
+            }
+
+            if (TTAddons.Instance.RoleSelectorHandler.SetSCP(player, out int oldTickets, out int newTickets))
+            {
+                response = "You have requested to be an SCP next round.\nYou have "+newTickets+" tickets.\nYou had "+oldTickets+" tickets.";
                 return true;
             }
             else
             {
-                response = "You were an SCP too recently to request to be one again.";
+                response = "You were an SCP too recently to request to be one again.\nYou have "+newTickets+" tickets.";
                 return false;
             }
             

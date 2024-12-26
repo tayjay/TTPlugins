@@ -20,8 +20,8 @@ public class ExtraAmmoStat : Stat, IInitializing
     
     public void Initializing(Firearm firearm)
     {
-        firearm.MaxAmmo = (byte)(firearm.MaxAmmo*AmmoMultiplier);
-        firearm.Ammo = firearm.MaxAmmo;
+        firearm.MaxMagazineAmmo = (byte)(firearm.TotalMaxAmmo*AmmoMultiplier);
+        firearm.MagazineAmmo = firearm.MaxMagazineAmmo;
     }
 
     public override double CalculateWeight()

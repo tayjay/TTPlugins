@@ -69,7 +69,7 @@ public class RoomTriggerHandler : MonoBehaviour
                 Log.Debug("Adding room trigger to "+room.Name);
                 try
                 {
-                    room.gameObject.AddComponent<RoomTriggerHandler>().Init(room);
+                    room.GameObject.AddComponent<RoomTriggerHandler>().Init(room);
                 } catch (Exception e)
                 {
                     Log.Error("Error adding room trigger to "+room.Name+": "+e);

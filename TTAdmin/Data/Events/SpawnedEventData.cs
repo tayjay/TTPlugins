@@ -10,11 +10,11 @@ public class SpawnedEventData : EventData
     public string OldRole { get; set; }
     public string SpawnFlags { get; set; }
 
-    public SpawnedEventData(SpawnedEventArgs ev)
+    public SpawnedEventData(SpawningEventArgs ev) //todo: find new spawned event
     {
         PlayerData = new PlayerData(ev.Player);
-        Reason = ev.Reason.ToString();
+        //Reason = ev.Reason.ToString();
         OldRole = ev.OldRole.Type.ToString();
-        SpawnFlags = ev.SpawnFlags.ToString();
+        //SpawnFlags = ev.SpawnFlags.ToString();
     }
 }

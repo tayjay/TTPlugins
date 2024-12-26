@@ -457,15 +457,15 @@ public class AIModuleRunner : AIAddon
         {
             hasCollider = false;
             return !IsDisarmed(out _)
-            && !HasEffect<Blinded>()
+            //&& !HasEffect<Blinded>()
             && p != null
             && p.CanTarget(this, out hasCollider);
         }
 
         public bool CanFollow(TargetableBase p)
         {
-            return !HasEffect<Blinded>()
-            && p != null
+            return //!HasEffect<Blinded>()
+            p != null
             && p.CanFollow(this);
         }
 
